@@ -40,18 +40,17 @@ body {
 }
 
 /* —— Header / Hero ——
-   Figma: Main Page → Header-v1 (node 256:17990). Spacing matches auto-layout gaps:
-   kicker↔H1 10px, H1↔sub block 32px, sub↔body 16px, body↔CTA 40px; copy block bottom 106px, left 203px @1920. */
+   Figma: Main Page → Header-v1 (256:17990). Odstępy pionowe: --hero-gap-* (desktop + breakpointy). */
 .hero-wrap {
   position: relative;
   min-height: 788px;
   overflow: hidden;
   color: var(--white);
-  /* Figma Header-v1 vertical rhythm (scaled on smaller breakpoints below) */
-  --hero-gap-kicker-h1: 10px;
-  --hero-gap-h1-desc: 32px;
-  --hero-gap-sub-body: 16px;
-  --hero-gap-body-btn: 40px;
+  /* Odstępy pionowe między blokami treści (luźniej niż minimalne wartości z Figmy) */
+  --hero-gap-kicker-h1: 16px;
+  --hero-gap-h1-desc: 40px;
+  --hero-gap-sub-body: 22px;
+  --hero-gap-body-btn: 48px;
 }
 .hero-photo {
   position: absolute;
@@ -103,7 +102,7 @@ body {
   position: absolute;
   z-index: 3;
   left: clamp(20px, 10.573vw, 203px);
-  bottom: clamp(72px, 5.521vw, 106px);
+  bottom: clamp(80px, 5.521vw, 118px);
   right: auto;
   max-width: min(1376px, calc(100vw - clamp(20px, 10.573vw, 203px) - 24px));
   width: 100%;
@@ -143,7 +142,7 @@ body {
   display: inline-flex; align-items: center;
   background: var(--white); color: var(--text);
   font-weight: 600; font-size: 18px; line-height: 28px;
-  padding: 14px 20px; border-radius: 120px; text-decoration: none;
+  padding: 16px 22px; border-radius: 120px; text-decoration: none;
   margin: 0;
 }
 
@@ -910,14 +909,14 @@ body {
   /* — Nav — */
   .nav-logo img { height: 26px; }
 
-  /* — Hero — (Figma gaps scaled; bottom clears home indicator) */
+  /* — Hero — wyżej na wąskich ekranach: większy bottom + odstępy (mniej „przyklejone” do dołu) */
   .hero-wrap {
     min-height: 100svh;
     min-height: 100dvh;
-    --hero-gap-kicker-h1: 10px;
-    --hero-gap-h1-desc: clamp(22px, 4.5vw, 28px);
-    --hero-gap-sub-body: clamp(12px, 2.8vw, 16px);
-    --hero-gap-body-btn: clamp(28px, 6vw, 36px);
+    --hero-gap-kicker-h1: clamp(16px, 3.5vw, 22px);
+    --hero-gap-h1-desc: clamp(32px, 6vw, 44px);
+    --hero-gap-sub-body: clamp(18px, 3.8vw, 24px);
+    --hero-gap-body-btn: clamp(40px, 8vw, 52px);
   }
   .hero-photo { height: 100%; top: 0; min-height: 100%; }
   .hero-photo img { object-position: 70% center; }
@@ -928,9 +927,9 @@ body {
     right: max(16px, env(safe-area-inset-right, 0px));
     width: auto;
     max-width: none;
-    bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+    bottom: max(112px, calc(10svh + 56px + env(safe-area-inset-bottom, 0px)));
     z-index: 3;
-    padding-top: 4px;
+    padding-top: 16px;
   }
   .hero-kicker { font-size: clamp(13px, 2.8vw, 15px); line-height: 1.35; }
   .hero-h1 {
@@ -945,7 +944,7 @@ body {
     font-size: clamp(14px, 2.9vw, 16px);
     line-height: 1.45;
   }
-  .hero-btn { font-size: 16px; line-height: 24px; padding: 14px 22px; }
+  .hero-btn { font-size: 16px; line-height: 24px; padding: 16px 24px; }
 
   /* — Event band — */
   .event-band { height: auto; margin-top: -20px; }
@@ -1077,15 +1076,17 @@ body {
    ============================================================ */
 @media (max-width: 480px) {
   .hero-wrap {
-    --hero-gap-h1-desc: clamp(18px, 5vw, 24px);
-    --hero-gap-body-btn: clamp(24px, 6vw, 32px);
+    --hero-gap-kicker-h1: clamp(14px, 4vw, 20px);
+    --hero-gap-h1-desc: clamp(26px, 7vw, 36px);
+    --hero-gap-sub-body: clamp(16px, 4.5vw, 22px);
+    --hero-gap-body-btn: clamp(36px, 9vw, 48px);
   }
   .hero-h1 { font-size: clamp(26px, 7.2vw, 30px); line-height: 1.2; }
   .hero-sub { font-size: clamp(16px, 4.2vw, 18px); line-height: 1.35; }
   .hero-body { font-size: clamp(14px, 3.6vw, 15px); line-height: 1.45; }
   .hero-copy {
-    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-    bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    bottom: max(104px, calc(9svh + 52px + env(safe-area-inset-bottom, 0px)));
   }
 
   .event-inner h2 { font-size: 28px; line-height: 36px; }
@@ -1128,9 +1129,10 @@ body {
 /* Hero: krótki viewport (landscape, małe okno) — mniejsza typografia i niższy bottom */
 @media (max-width: 1024px) and (max-height: 520px) {
   .hero-wrap {
-    --hero-gap-h1-desc: 12px;
-    --hero-gap-sub-body: 8px;
-    --hero-gap-body-btn: 14px;
+    --hero-gap-kicker-h1: 10px;
+    --hero-gap-h1-desc: 16px;
+    --hero-gap-sub-body: 12px;
+    --hero-gap-body-btn: 18px;
   }
   .hero-copy {
     bottom: calc(40px + env(safe-area-inset-bottom, 0px));
