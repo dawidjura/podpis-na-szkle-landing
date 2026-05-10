@@ -15,7 +15,7 @@ export default function Guests() {
         </article>
         <article className="guest">
           <div className="guest-photo">
-            <img src="/assets/ph1-gacioch.jpg" alt="Janina Gacioch‑Gruszecka" />
+            <img src="/assets/Janina Gacioch Gruszecka.jpg" alt="Janina Gacioch‑Gruszecka" />
           </div>
           <h3>Janina Gacioch&#8209;Gruszecka</h3>
           <p className="role">prelegent</p>
@@ -24,7 +24,7 @@ export default function Guests() {
         </article>
         <article className="guest">
           <div className="guest-photo">
-            <img src="/assets/ph2-rusinek.png" alt="Zbigniew Rusinek" style={{ objectPosition: "center 35%" }} />
+            <img src="/assets/ph2-rusinek.png" alt="Zbigniew Rusinek" className="rusinek-photo" />
           </div>
           <h3>Zbigniew Rusinek</h3>
           <p className="role">Moderator spotkania</p>

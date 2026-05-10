@@ -9,6 +9,7 @@ import Audience from "@/components/Audience";
 import Guests from "@/components/Guests";
 import RegistrationForm from "@/components/RegistrationForm";
 import Consult from "@/components/Consult";
+import Organizers from "@/components/Organizers";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <Hero />
       <EventBand />
       <Program />
+      <RegistrationForm variant="dark" />
       <Agenda />
       <Learn />
       <Scenarios />
@@ -25,6 +27,7 @@ export default function Home() {
       <Guests />
       <RegistrationForm />
       <Consult />
+      <Organizers />
       <Footer />
     </div>
   );

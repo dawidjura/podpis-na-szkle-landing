@@ -5,7 +5,7 @@ export default function Scenarios() {
       <div className="scenarios-inner">
         <div className="scenarios-intro">
           <h2 id="scenarios-title">Ty wybierasz scenariusz do omówienia</h2>
-          <p className="sub">Z jakimi problemami mierzysz się najczęściej? Wybierz temat, który przeanalizujemy na żywo.</p>
+          <p className="sub">Z jakimi problemami mierzysz się najczęściej? Podczas sesji Q&amp;A możesz wybrać temat, który przeanalizujemy na żywo.</p>
         </div>
         <div className="scenario-cols">
           <div className="scenario-col">

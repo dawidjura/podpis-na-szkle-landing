@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/marcinrzepiel/Downloads/Sincerity_myfonts_order_5121242661034 8/Licenses/**)",
+      "Read(//private/tmp/**)",
+      "Bash(mkdir -p resized)",
+      "Bash(sips -Z 1400 -s format jpeg -s formatOptions 78 hero-woman.jpg --out resized/hero-woman.jpg)",
+      "Bash(sips -Z 1400 -s format jpeg -s formatOptions 78 truck-data.jpg --out resized/truck-data.jpg)",
+      "Bash(sips -Z 1400 -s format jpeg -s formatOptions 78 team-meeting.jpg --out resized/team-meeting.jpg)",
+      "Bash(sips -Z 900 -s format jpeg -s formatOptions 80 zbigniew-portrait.jpg --out resized/zbigniew-portrait.jpg)",
+      "Bash(cp \"/Users/marcinrzepiel/Downloads/Sincerity_myfonts_order_5121242661034 8/Sincerity-Regular.otf\" .)",
+      "Bash(echo \"data:font/otf;base64,$\\(base64 -i Sincerity-Regular.otf\\)\")",
+      "Bash(echo \"data:image/jpeg;base64,$\\(base64 -i resized/hero-woman.jpg\\)\")",
+      "Bash(echo \"data:image/jpeg;base64,$\\(base64 -i resized/truck-data.jpg\\)\")",
+      "Bash(echo \"data:image/jpeg;base64,$\\(base64 -i resized/team-meeting.jpg\\)\")",
+      "Bash(python3 build_cyber.py)",
+      "Bash(open \"/Users/marcinrzepiel/Library/CloudStorage/OneDrive-Euvic/Documents/Euvic Landings copy 2/cyberbezpieczenstwo-landing/index.html\")"
+    ]
+  }
+}

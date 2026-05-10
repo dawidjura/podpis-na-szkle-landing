@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<!--
+  ════════════════════════════════════════════════════════════════════════
+  Euvic Campaign Landing — single-file HTML template
+  ────────────────────────────────────────────────────────────────────────
+  Brand rules baked in:
+    - Hero (variant 4.1) with the 5% step + bottom-right chevron ribbon
+    - CTA / registration (variant 4.2) with NO step
+    - Rounded SVG chevrons everywhere (no CSS triangles, no emojis)
+    - Inline brand SVG icons (calendar / clock / users / shield / etc.)
+    - Logos as base64 data URLs (load `assets/euvic-logo.base64.txt` and
+      paste the entire `data:image/png;base64,…` string into every
+      `src=""` marked with `__EUVIC_LOGO_DATA_URL__`)
+    - Inter font from Google Fonts CDN (only allowed external dep)
+    - Alternating bg rhythm: white → diagonal → white → diagonal → white → CTA
+    - polish-layer.md patterns ON: scroll progress, sticky CTA, count-up, floating
+      labels, success state, stagger reveal, tilt cards, parallax orbs
+
+  Workflow when using this template (agent: do these in order):
+    1. Read `assets/euvic-logo.base64.txt`, replace every
+       __EUVIC_LOGO_DATA_URL__ token with the contents.
+    2. Encode any partner logo / speaker photos to base64 (see assets.md)
+       and replace the matching __PARTNER_LOGO_DATA_URL__ /
+       __SPEAKER_N_PHOTO_DATA_URL__ tokens.
+    3. Replace every TODO comment with the campaign copy.
+    4. Decide which polish-layer patterns to KEEP (default: all). Delete the
+       ones you don't want from <head> CSS, markup, and bottom <script>.
+    5. Verify: open via file://, no console errors, no missing assets,
+       Hero has the step + ribbon, CTA does NOT have the step.
+  ════════════════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><!-- TODO: Page title (Campaign Name – Euvic) --></title>
+  <meta name="description" content="<!-- TODO: 140–160 char description -->" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Brand tokens ───────────────────────────────────────────────── */
+    :root {
+      --color-bg: #F9FAFD;
+      --color-bg-card: #ffffff;
+      --color-euvic: #0072CE;
+      --color-euvic-blue: #0E6CAB;
+      --color-euvic-dark: #0870B2;
+      --color-hero-deep: #003B73;
+      --color-text-primary: #1a1a2e;
+      --color-text-secondary: #4a5568;
+      --color-text-dim: #718096;
+      --color-footer-bg: #323639;
+      --color-border: rgba(0, 0, 0, 0.08);
+      --color-border-hover: rgba(0, 114, 206, 0.3);
+      --color-diagonal-left: #F3F3F3;
+      --color-diagonal-right: #F1F1F1;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: "ss01", "cv11";
+      line-height: 1.6;
+    }
+
+    /* ── Layout primitives ──────────────────────────────────────────── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+    @media (min-width: 768px) { .container { padding: 0 40px; } }
+
+    /* ── Typography ─────────────────────────────────────────────────── */
+    .text-gradient { color: var(--color-euvic-blue); }
+    .text-balance { text-wrap: balance; }
+    .text-pretty  { text-wrap: pretty; }
+
+    .kicker {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: var(--color-footer-bg);
+    }
+    .kicker-light { color: rgba(255, 255, 255, 0.85); }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 700; line-height: 1.15;
+    }
+
+    .hero-title {
+      font-size: clamp(1.625rem, 3.8vw, 3.25rem);
+      font-weight: 700; line-height: 1.14;
+      letter-spacing: -0.02em; color: #fff;
+    }
+
+    /* ── Surface card ───────────────────────────────────────────────── */
+    .surface-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+      transition: all 0.5s var(--ease-soft);
+    }
+    .surface-card:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: 0 4px 16px rgba(0, 114, 206, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    @media (min-width: 768px) {
+      .surface-card-lift:hover { transform: translateY(-4px); }
+    }
+
+    /* ── Buttons ────────────────────────────────────────────────────── */
+    .btn-premium {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 36px; border-radius: 999px;
+      font-weight: 600; font-size: 0.95rem; letter-spacing: 0.01em;
+      transition: all 0.26s var(--ease-soft);
+      cursor: pointer; border: none; text-decoration: none;
+    }
+    .btn-premium-white { background: #fff; color: var(--color-hero-deep); }
+    .btn-premium-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+    }
+    .btn-premium-blue { background: var(--color-euvic-blue); color: #fff; }
+    .btn-premium-blue:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(14, 108, 171, 0.3);
+    }
+
+    /* ── Hero DNA — variant 4.1 (with the 5% step) ─────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 120px 0 100px; min-height: 560px;
+      display: flex; align-items: center;
+    }
+    .hero-figure-left {
+      position: absolute; inset: 0;
+      background: var(--color-euvic-blue);
+      clip-path: polygon(0 0, 40% 0, 60.9% 95%, 0 95%);
+      z-index: 0;
+    }
+    .hero-figure-right {
+      position: absolute; inset: 0;
+      background: var(--color-euvic-dark);
+      clip-path: polygon(40% 0, 100% 0, 100% 100%, 62% 100%);
+      z-index: 0;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 1;
+      opacity: 0.18; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .hero-content { position: relative; z-index: 3; }
+
+    /* Parallax orbs (polish §1) — delete if you don't want them */
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(60px);
+      opacity: 0.35; pointer-events: none; z-index: 1;
+      animation: orb-drift 22s ease-in-out infinite;
+    }
+    .hero-orb-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, #4FA8E0 0%, transparent 70%);
+      top: -120px; left: -80px;
+    }
+    .hero-orb-2 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #003B73 0%, transparent 70%);
+      bottom: -200px; right: -120px;
+      animation-delay: -8s; animation-duration: 28s;
+    }
+    @keyframes orb-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(40px, -30px) scale(1.08); }
+    }
+
+    /* ── CTA / registration — variant 4.2 (NO step) ─────────────────── */
+    .cta-blue { position: relative; overflow: hidden; padding: 80px 0; }
+    .cta-figure-left {
+      position: absolute; inset: 0;
+      background: var(--color-euvic-blue);
+      clip-path: polygon(0 0, 40% 0, 62% 100%, 0 100%);
+      z-index: 0;
+    }
+    .cta-figure-right {
+      position: absolute; inset: 0;
+      background: var(--color-euvic-dark);
+      clip-path: polygon(40% 0, 100% 0, 100% 100%, 62% 100%);
+      z-index: 0;
+    }
+
+    /* ── Chevron arrows — rounded SVG ───────────────────────────────── */
+    .chevron-arrows { display: inline-flex; gap: 10px; align-items: center; }
+    .chevron-arrows svg {
+      width: 14px; height: 18px; flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    /* Hero bottom-right ribbon — mandatory in every Hero */
+    .chevron-ribbon {
+      position: absolute; bottom: 32px; right: 32px;
+      display: inline-flex; gap: 10px; z-index: 5;
+      pointer-events: none;
+    }
+    @media (max-width: 767px) { .chevron-ribbon { display: none; } }
+    .chevron-ribbon svg {
+      width: 14px; height: 18px; flex-shrink: 0;
+      fill: rgba(255, 255, 255, 0.4);
+      animation: chevron-shimmer 5s ease-in-out infinite;
+    }
+    .chevron-ribbon svg:nth-child(2n) { fill: rgba(255, 255, 255, 0.85); }
+    @keyframes chevron-shimmer {
+      0%, 100% { opacity: 0.6; transform: translateX(0); }
+      50%      { opacity: 1;   transform: translateX(2px); }
+    }
+
+    /* ── Inline icons ───────────────────────────────────────────────── */
+    .icon { width: 1rem; height: 1rem; flex-shrink: 0; }
+    .icon-md { width: 1.25rem; height: 1.25rem; }
+    .icon-lg { width: 2rem; height: 2rem; }
+
+    /* ── Diagonal bg ────────────────────────────────────────────────── */
+    .diagonal-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+    .diagonal-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--color-diagonal-left);
+      clip-path: polygon(0 0, 55% 0, 73% 100%, 0 100%);
+    }
+    .diagonal-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--color-diagonal-right);
+      clip-path: polygon(55% 0, 100% 0, 100% 100%, 73% 100%);
+    }
+
+    /* ── Scroll reveal + stagger (polish §8) ────────────────────────── */
+    .animate-on-scroll {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s var(--ease-soft), transform 0.6s var(--ease-soft);
+    }
+    .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+
+    .stagger > * {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.55s var(--ease-soft), transform 0.55s var(--ease-soft);
+    }
+    .stagger.is-visible > * { opacity: 1; transform: translateY(0); }
+    .stagger.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+    .stagger.is-visible > *:nth-child(2) { transition-delay: 80ms; }
+    .stagger.is-visible > *:nth-child(3) { transition-delay: 160ms; }
+    .stagger.is-visible > *:nth-child(4) { transition-delay: 240ms; }
+    .stagger.is-visible > *:nth-child(5) { transition-delay: 320ms; }
+    .stagger.is-visible > *:nth-child(6) { transition-delay: 400ms; }
+    .stagger.is-visible > *:nth-child(n+7) { transition-delay: 480ms; }
+
+    /* ── Tilt (polish §7) ───────────────────────────────────────────── */
+    .tilt {
+      transition: transform 0.2s var(--ease-soft);
+      will-change: transform; transform-style: preserve-3d;
+    }
+
+    /* ── Gradient frame (polish §9) ─────────────────────────────────── */
+    .gradient-frame { position: relative; isolation: isolate; }
+    .gradient-frame::before {
+      content: ""; position: absolute; inset: -2px;
+      border-radius: 18px; padding: 2px;
+      background: conic-gradient(from 0deg, #0E6CAB, #4FA8E0, #003B73, #0870B2, #0E6CAB);
+      animation: gradient-spin 8s linear infinite;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      z-index: -1;
+    }
+    @keyframes gradient-spin { to { transform: rotate(1turn); } }
+
+    /* ── Navbar ─────────────────────────────────────────────────────── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 16px 0; transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(14, 108, 171, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px 0;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    footer {
+      background: var(--color-footer-bg);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 48px 0 32px;
+    }
+    footer a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: #fff; }
+
+    /* ── Event detail pill ──────────────────────────────────────────── */
+    .event-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 0.85rem; font-weight: 500;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── Speaker photo ──────────────────────────────────────────────── */
+    .speaker-photo {
+      width: 100px; height: 100px; border-radius: 50%;
+      object-fit: cover; object-position: center top;
+      border: 3px solid var(--color-border);
+      transition: border-color 0.3s;
+    }
+    .surface-card:hover .speaker-photo {
+      border-color: var(--color-border-hover);
+    }
+
+    /* ── Bonus check (use check-circle SVG) ─────────────────────────── */
+    .bonus-check {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 8px 0;
+    }
+    .bonus-check-icon {
+      flex-shrink: 0; width: 28px; height: 28px;
+      color: var(--color-euvic-blue);
+    }
+
+    /* ── Floating-label form (polish §6) ────────────────────────────── */
+    .field { position: relative; }
+    .field input {
+      width: 100%; padding: 22px 18px 10px;
+      border: 1px solid var(--color-border);
+      border-radius: 12px; background: #fff;
+      font: 0.95rem var(--font-body); color: var(--color-text-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus {
+      outline: none; border-color: var(--color-euvic);
+      box-shadow: 0 0 0 4px rgba(0, 114, 206, 0.12);
+    }
+    .field label {
+      position: absolute; left: 18px; top: 16px;
+      color: var(--color-text-dim); font-size: 0.95rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+      pointer-events: none; transform-origin: 0 0;
+    }
+    .field input:focus + label,
+    .field input:not(:placeholder-shown) + label {
+      transform: translateY(-10px) scale(0.78);
+      color: var(--color-euvic);
+    }
+
+    /* ── Form success state (polish §10) ────────────────────────────── */
+    .form-success { display: none; text-align: center; padding: 32px 24px; }
+    .form-success.is-visible { display: block; animation: pop-in 0.4s var(--ease-soft); }
+    @keyframes pop-in { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+    .success-check { width: 72px; height: 72px; margin: 0 auto 16px; color: #16a34a; }
+    .success-check circle { stroke-dasharray: 64; stroke-dashoffset: 64; animation: draw-circle 0.6s ease forwards; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .success-check polyline { stroke-dasharray: 36; stroke-dashoffset: 36; animation: draw-check 0.4s 0.5s ease forwards; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    @keyframes draw-circle { to { stroke-dashoffset: 0; } }
+    @keyframes draw-check  { to { stroke-dashoffset: 0; } }
+
+    /* ── Scroll progress bar (polish §3) ────────────────────────────── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: linear-gradient(90deg, var(--color-euvic-blue), #4FA8E0);
+      z-index: 100; transition: width 0.05s linear;
+      pointer-events: none;
+    }
+
+    /* ── Sticky CTA bar (polish §4) ─────────────────────────────────── */
+    .sticky-cta {
+      position: fixed; left: 50%; bottom: 24px;
+      transform: translate(-50%, 120%);
+      display: inline-flex; align-items: center; gap: 16px;
+      padding: 12px 20px 12px 24px; border-radius: 999px;
+      background: rgba(14, 108, 171, 0.96);
+      color: #fff; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(12px);
+      transition: transform 0.5s var(--ease-soft);
+      z-index: 40; font-size: 0.9rem; font-weight: 500;
+    }
+    .sticky-cta.is-visible { transform: translate(-50%, 0); }
+    .sticky-cta a {
+      background: #fff; color: var(--color-euvic-blue);
+      padding: 8px 18px; border-radius: 999px;
+      font-weight: 600; text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .sticky-cta a:hover { transform: translateY(-1px); }
+    @media (max-width: 600px) {
+      .sticky-cta { left: 16px; right: 16px; transform: translate(0, 120%); }
+      .sticky-cta.is-visible { transform: translate(0, 0); }
+    }
+
+    /* ── Reduced motion ─────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-on-scroll, .stagger > * { opacity: 1; transform: none; transition: none; }
+      .hero-orb, .chevron-ribbon svg, .gradient-frame::before { animation: none; }
+      .tilt { transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ── Responsive grid adjustments (mobile-first defaults above) ──── */
+    @media (min-width: 768px) {
+      .hero { padding: 160px 0 120px; min-height: 640px; }
+      section { padding-top: 80px; padding-bottom: 80px; }
+      .cta-blue { padding: 100px 0; }
+      .grid-2  { grid-template-columns: 1fr 1fr; align-items: start; }
+      .grid-3  { grid-template-columns: repeat(3, 1fr); }
+      .grid-4  { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      section { padding-top: 100px; padding-bottom: 100px; }
+      .hero   { padding: 180px 0 140px; }
+    }
+    .grid-2, .grid-3, .grid-4 {
+      display: grid; grid-template-columns: 1fr; gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { gap: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- polish-layer §3: scroll progress bar -->
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     NAVBAR
+     ════════════════════════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:24px;">
+      <!-- TODO: replace __EUVIC_LOGO_DATA_URL__ with the contents of assets/euvic-logo.base64.txt -->
+      <img src="__EUVIC_LOGO_DATA_URL__" alt="Euvic" style="height:28px;width:auto;filter:brightness(0) invert(1);" />
+      <!-- Optional partner mark — delete if no partner -->
+      <span style="color:rgba(255,255,255,0.3);font-size:1.2rem;font-weight:200;">|</span>
+      <img src="__PARTNER_LOGO_DATA_URL__" alt="<!-- TODO: partner name -->" style="height:26px;width:auto;filter:brightness(0) invert(1);" />
+    </div>
+    <a href="#registration" class="btn-premium btn-premium-white" style="padding:10px 24px;font-size:0.85rem;">
+      <!-- TODO: short CTA verb, e.g. Register -->Register
+    </a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HERO  —  variant 4.1 (with 5% step) + bottom-right chevron ribbon
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-figure-left"  aria-hidden="true"></div>
+  <div class="hero-figure-right" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="hero-content container" style="max-width:960px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div class="chevron-arrows" style="color:rgba(255,255,255,0.75);">
+        <!-- 6 rounded-chevron SVGs (kicker row inside hero) -->
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        <svg viewBox="0 0 13.2 18" aria-hidden="true"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+      </div>
+      <span class="kicker kicker-light" style="letter-spacing:5px;"><!-- TODO: kicker, e.g. Webinar GS1 & Euvic --></span>
+    </div>
+
+    <h1 class="hero-title text-balance" style="margin-bottom:20px;">
+      <!-- TODO: 6–12 word title; use a soft sub-line in white/75 if needed -->
+      Cyber risks in logistics<br />
+      <span style="color:rgba(255,255,255,0.78);font-weight:300;">— how to protect operations and data across the supply chain</span>
+    </h1>
+
+    <p class="text-pretty" style="color:rgba(255,255,255,0.85);font-size:clamp(1rem,1.8vw,1.15rem);line-height:1.7;max-width:680px;margin-bottom:32px;">
+      <!-- TODO: 25–45 word subtitle -->
+      See how GS1 standards structure data and how to spot cyber risks before they become disruption and loss.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;">
+      <!-- TODO: event pills — calendar + clock + duration + format -->
+      <span class="event-pill">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Wednesday, 8 Apr 2026
+      </span>
+      <span class="event-pill">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        12:00
+      </span>
+      <span class="event-pill">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2h12M6 22h12M6 2v4a6 6 0 0 0 12 0V2M6 22v-4a6 6 0 0 1 12 0v4"/>
+        </svg>
+        45 min + Q&amp;A
+      </span>
+      <span class="event-pill">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        Free online webinar
+      </span>
+    </div>
+
+    <a href="#registration" class="btn-premium btn-premium-white btn-magnetic" style="font-size:1rem;">
+      <!-- TODO: primary CTA verb -->Register for the webinar
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Hero bottom-right chevron ribbon — MANDATORY in every Hero -->
+  <div class="chevron-ribbon" aria-hidden="true">
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+    <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 1 — Problem / context (white bg)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;background:var(--color-bg);overflow:hidden;padding:64px 0;" id="problem">
+  <div class="container" style="position:relative;z-index:10;">
+    <div class="animate-on-scroll">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div class="chevron-arrows" style="color:var(--color-text-dim);opacity:0.6;">
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        </div>
+        <span class="kicker"><!-- TODO: kicker, e.g. Challenge --></span>
+      </div>
+      <h2 class="section-title text-balance" style="margin-bottom:20px;">
+        <!-- TODO: H2 with single accent --> How data change and cyber risk affect <span class="text-gradient">logistics operations.</span>
+      </h2>
+      <p class="text-pretty" style="color:var(--color-text-secondary);font-size:clamp(1rem,1.6vw,1.1rem);line-height:1.7;max-width:740px;margin-bottom:40px;">
+        <!-- TODO: 1–2 sentences -->
+      </p>
+    </div>
+
+    <div class="grid-2 stagger animate-on-scroll">
+      <!-- Cards 01–04. Replace numerals + copy. Tilt class makes them tilt on hover (polish §7). -->
+      <div class="surface-card surface-card-lift tilt" style="padding:24px 28px;border-radius:16px;">
+        <div style="font-size:2rem;font-weight:700;margin-bottom:8px;" class="text-gradient">01</div>
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:6px;">Card title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Card body.</p>
+      </div>
+      <div class="surface-card surface-card-lift tilt" style="padding:24px 28px;border-radius:16px;">
+        <div style="font-size:2rem;font-weight:700;margin-bottom:8px;" class="text-gradient">02</div>
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:6px;">Card title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Card body.</p>
+      </div>
+      <div class="surface-card surface-card-lift tilt" style="padding:24px 28px;border-radius:16px;">
+        <div style="font-size:2rem;font-weight:700;margin-bottom:8px;" class="text-gradient">03</div>
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:6px;">Card title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Card body.</p>
+      </div>
+      <div class="surface-card surface-card-lift tilt" style="padding:24px 28px;border-radius:16px;">
+        <div style="font-size:2rem;font-weight:700;margin-bottom:8px;" class="text-gradient">04</div>
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:6px;">Card title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Card body.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 2 — Agenda / timeline (diagonal bg)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;overflow:hidden;padding:64px 0;" id="agenda">
+  <div class="diagonal-bg" aria-hidden="true"></div>
+  <div class="container" style="max-width:960px;position:relative;z-index:10;">
+    <div class="animate-on-scroll">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div class="chevron-arrows" style="color:var(--color-text-dim);opacity:0.6;">
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        </div>
+        <span class="kicker">Program</span>
+      </div>
+      <h2 class="section-title text-balance" style="margin-bottom:40px;">
+        Webinar <span class="text-gradient">agenda.</span>
+      </h2>
+    </div>
+
+    <div class="stagger animate-on-scroll" style="display:flex;flex-direction:column;gap:16px;">
+      <!-- TODO: agenda blocks. Each = surface-card with eyebrow + title + 1-line body. -->
+      <div class="surface-card" style="padding:24px 28px;border-radius:16px;">
+        <span style="font-size:0.65rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--color-euvic);">Block 1</span>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-top:8px;margin-bottom:6px;">Block title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Block description.</p>
+      </div>
+      <div class="surface-card" style="padding:24px 28px;border-radius:16px;">
+        <span style="font-size:0.65rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--color-euvic);">Block 2</span>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-top:8px;margin-bottom:6px;">Block title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Block description.</p>
+      </div>
+      <div class="surface-card" style="padding:24px 28px;border-radius:16px;">
+        <span style="font-size:0.65rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--color-euvic);">Block 3</span>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-top:8px;margin-bottom:6px;">Block title</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Block description.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 3 — Numbers / social proof (white bg, count-up polish §5)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;background:var(--color-bg);overflow:hidden;padding:64px 0;">
+  <div class="container">
+    <div class="animate-on-scroll" style="text-align:center;">
+      <h2 class="section-title text-balance" style="margin-bottom:40px;">
+        <!-- TODO: numbers H2 --> Euvic in <span class="text-gradient">numbers.</span>
+      </h2>
+    </div>
+
+    <div class="grid-3 stagger animate-on-scroll">
+      <!-- Use data-count-to + data-suffix. JS at bottom animates from 0. -->
+      <div class="surface-card" style="text-align:center;padding:24px;border-radius:16px;">
+        <div class="text-gradient" style="font-size:clamp(2rem,4vw,3rem);font-weight:700;" data-count-to="2400" data-suffix="+">0</div>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;margin-top:6px;">specialists in the group</p>
+      </div>
+      <div class="surface-card" style="text-align:center;padding:24px;border-radius:16px;">
+        <div class="text-gradient" style="font-size:clamp(2rem,4vw,3rem);font-weight:700;" data-count-to="25" data-suffix=" yrs">0</div>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;margin-top:6px;">on the market</p>
+      </div>
+      <div class="surface-card" style="text-align:center;padding:24px;border-radius:16px;">
+        <div class="text-gradient" style="font-size:clamp(2rem,4vw,3rem);font-weight:700;" data-count-to="1000" data-suffix="+">0</div>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;margin-top:6px;">delivered projects</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 4 — For whom / two-col narrative (diagonal bg)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;overflow:hidden;padding:64px 0;" id="audience">
+  <div class="diagonal-bg" aria-hidden="true"></div>
+  <div class="container" style="position:relative;z-index:10;">
+    <div class="grid-2" style="gap:40px;align-items:start;">
+      <div class="animate-on-scroll">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <div class="chevron-arrows" style="color:var(--color-text-dim);opacity:0.6;">
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          </div>
+          <span class="kicker">Audience</span>
+        </div>
+        <h2 class="section-title text-balance" style="margin-bottom:20px;">
+          Who is this <span class="text-gradient">webinar for.</span>
+        </h2>
+        <p class="text-pretty" style="color:var(--color-text-secondary);font-size:1rem;line-height:1.7;">
+          <!-- TODO: 1–2 sentences. -->
+        </p>
+      </div>
+      <div class="animate-on-scroll" style="animation-delay:120ms;">
+        <div class="surface-card" style="border-radius:16px;padding:28px 32px;">
+          <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;">Roles and titles</h3>
+          <div class="stagger animate-on-scroll" style="display:flex;flex-direction:column;gap:10px;">
+            <!-- TODO: each row = chevron (count=2) + label -->
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <div class="chevron-arrows" style="color:var(--color-euvic-blue);opacity:0.6;margin-top:4px;">
+                <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+                <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+              </div>
+              <p style="color:var(--color-text-secondary);font-size:0.9rem;">Audience role 1</p>
+            </div>
+            <!-- repeat … -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 5 — Speakers (white bg, tilt cards polish §7)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;background:var(--color-bg);overflow:hidden;padding:64px 0;" id="speakers">
+  <div class="container">
+    <div class="animate-on-scroll">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div class="chevron-arrows" style="color:var(--color-text-dim);opacity:0.6;">
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+        </div>
+        <span class="kicker">Experts</span>
+      </div>
+      <h2 class="section-title text-balance" style="margin-bottom:40px;">
+        Your webinar <span class="text-gradient">hosts.</span>
+      </h2>
+    </div>
+
+    <div class="grid-2 stagger animate-on-scroll">
+      <!-- TODO: speaker cards. Replace each __SPEAKER_N_PHOTO_DATA_URL__ with a base64 jpg.
+           Use Presenter / Moderator label as the eyebrow. -->
+      <div class="surface-card surface-card-lift tilt" style="padding:28px;border-radius:16px;">
+        <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px;">
+          <img src="__SPEAKER_1_PHOTO_DATA_URL__" alt="Speaker name" class="speaker-photo" />
+          <div>
+            <span style="font-size:0.65rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--color-euvic);">Presenter</span>
+            <h3 style="font-size:1.1rem;font-weight:700;margin-top:4px;">Speaker name</h3>
+            <p style="font-size:0.8rem;color:var(--color-text-dim);margin-top:2px;">Affiliation</p>
+          </div>
+        </div>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Speaker bio. 2–3 sentences. Plain language; no honorifics in body, just the title above.</p>
+      </div>
+      <!-- repeat … -->
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 6 — Bonus / lead magnet (diagonal bg, gradient frame polish §9)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;overflow:hidden;padding:64px 0;" id="bonus">
+  <div class="diagonal-bg" aria-hidden="true"></div>
+  <div class="container" style="position:relative;z-index:10;">
+    <div class="grid-2" style="gap:40px;align-items:start;">
+      <div class="animate-on-scroll">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <div class="chevron-arrows" style="color:var(--color-text-dim);opacity:0.6;">
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+            <svg viewBox="0 0 13.2 18"><path d="M 1.6 1.6 Q 0 2.7 0 4.4 L 0 13.6 Q 0 15.3 1.6 16.4 L 11.6 10.6 Q 13.2 9.7 13.2 9 Q 13.2 8.3 11.6 7.4 Z"/></svg>
+          </div>
+          <span class="kicker">Bonus</span>
+        </div>
+        <h2 class="section-title text-balance" style="margin-bottom:20px;">
+          <!-- TODO: Lead-magnet H2 --> Free data integrity <span class="text-gradient">audit.</span>
+        </h2>
+        <p class="text-pretty" style="color:var(--color-text-secondary);font-size:1rem;line-height:1.7;">
+          <!-- TODO: 1–2 sentences -->
+        </p>
+      </div>
+
+      <div class="animate-on-scroll">
+        <div class="surface-card gradient-frame" style="border-radius:16px;padding:28px 32px;">
+          <!-- check-circle SVG, NOT '✓' character -->
+          <div class="bonus-check">
+            <svg class="bonus-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/>
+            </svg>
+            <p style="color:var(--color-text-secondary);font-size:0.95rem;line-height:1.6;">Check-list item 1.</p>
+          </div>
+          <div class="bonus-check">
+            <svg class="bonus-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/>
+            </svg>
+            <p style="color:var(--color-text-secondary);font-size:0.95rem;line-height:1.6;">Check-list item 2.</p>
+          </div>
+          <div class="bonus-check">
+            <svg class="bonus-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/>
+            </svg>
+            <p style="color:var(--color-text-secondary);font-size:0.95rem;line-height:1.6;">Check-list item 3.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 7 — Additional offers (white bg) — uses brand SVG icons (NOT emojis)
+     ════════════════════════════════════════════════════════════════════ -->
+<section style="position:relative;background:var(--color-bg);overflow:hidden;padding:64px 0;">
+  <div class="container">
+    <div class="animate-on-scroll" style="text-align:center;">
+      <h2 class="section-title text-balance" style="margin-bottom:16px;">
+        More for <span class="text-gradient">attendees.</span>
+      </h2>
+      <p class="text-pretty" style="color:var(--color-text-secondary);font-size:1rem;line-height:1.7;max-width:640px;margin:0 auto 40px;">
+        <!-- TODO: lead-in line -->
+      </p>
+    </div>
+
+    <div class="grid-2 stagger animate-on-scroll">
+      <div class="surface-card surface-card-lift tilt" style="padding:28px;border-radius:16px;text-align:center;">
+        <!-- award SVG (replaces 🏆) -->
+        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-euvic-blue);margin:0 auto 12px;display:block;" aria-hidden="true">
+          <circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 22 12 19 17 22 15.79 13.88"/>
+        </svg>
+        <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:8px;">Knowledge quiz</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Prize description.</p>
+      </div>
+      <div class="surface-card surface-card-lift tilt" style="padding:28px;border-radius:16px;text-align:center;">
+        <!-- search SVG (replaces 🔍) -->
+        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-euvic-blue);margin:0 auto 12px;display:block;" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:8px;">Free audit</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.9rem;line-height:1.6;">Audit description.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SECTION 8 — REGISTRATION / CTA  —  variant 4.2 (NO step)
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="cta-blue" id="registration">
+  <div class="cta-figure-left"  aria-hidden="true"></div>
+  <div class="cta-figure-right" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="container" style="max-width:640px;position:relative;z-index:10;">
+    <div class="animate-on-scroll" style="text-align:center;margin-bottom:36px;">
+      <h2 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.1;color:#fff;margin-bottom:16px;" class="text-balance">
+        <!-- TODO: registration H2 --> Register for the webinar
+      </h2>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
+        <span class="event-pill"><!-- date --></span>
+        <span class="event-pill"><!-- time --></span>
+        <span class="event-pill"><!-- duration --></span>
+        <span class="event-pill"><!-- price/format --></span>
+      </div>
+    </div>
+
+    <div class="animate-on-scroll" style="background:rgba(255,255,255,0.95);border-radius:20px;padding:32px;backdrop-filter:blur(12px);">
+      <form id="registration-form" style="display:flex;flex-direction:column;gap:14px;">
+        <!-- Floating-label fields (polish §6). Each placeholder MUST be a single space. -->
+        <div class="field"><input type="text"  id="f-first-name" placeholder=" " required /><label for="f-first-name">First name</label></div>
+        <div class="field"><input type="text"  id="f-last-name"  placeholder=" " required /><label for="f-last-name">Last name</label></div>
+        <div class="field"><input type="text"  id="f-company"    placeholder=" " required /><label for="f-company">Company</label></div>
+        <div class="field"><input type="text"  id="f-job-title"  placeholder=" " /><label for="f-job-title">Job title</label></div>
+        <div class="field"><input type="email" id="f-email"      placeholder=" " required /><label for="f-email">Email address</label></div>
+
+        <label style="display:flex;align-items:flex-start;gap:10px;margin-top:6px;cursor:pointer;">
+          <input type="checkbox" required style="margin-top:4px;accent-color:var(--color-euvic);" />
+          <span style="font-size:0.8rem;color:var(--color-text-dim);line-height:1.5;">
+            <!-- TODO: GDPR consent copy — keep verbatim from marketing/legal -->
+            I consent to Euvic S.A. processing my personal data for marketing purposes. <!-- Replace with final legal copy from marketing. -->
+          </span>
+        </label>
+
+        <button type="submit" class="btn-premium btn-premium-blue" style="width:100%;margin-top:8px;font-size:1rem;padding:16px;">
+          <!-- TODO: CTA verb -->Register for the webinar
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Success state (polish §10) — shown after submit -->
+      <div class="form-success" id="form-success" role="status">
+        <svg class="success-check" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/>
+        </svg>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">Thank you for registering.</h3>
+        <p style="color:var(--color-text-secondary);font-size:0.95rem;">
+          <!-- TODO: post-submit confirmation copy -->
+          We will email the webinar link no later than 24 hours before the start.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     FOOTER  (Euvic legal, partner mark optional)
+     ════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:20px;">
+        <img src="__EUVIC_LOGO_DATA_URL__" alt="Euvic" style="height:24px;width:auto;filter:brightness(0) invert(1);opacity:0.85;" />
+        <span style="color:rgba(255,255,255,0.2);font-size:1.1rem;font-weight:200;">|</span>
+        <img src="__PARTNER_LOGO_DATA_URL__" alt="<!-- TODO: partner -->" style="height:22px;width:auto;filter:brightness(0) invert(1);opacity:0.85;" />
+      </div>
+      <div style="display:flex;gap:16px;font-size:0.85rem;">
+        <a href="https://www.euvic.com/" target="_blank" rel="noopener">euvic.com</a>
+        <a href="https://www.euvic.com/gdpr/" target="_blank" rel="noopener">Privacy policy</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;">
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.6;">
+        Euvic S.A. · ul. Przewozowa 32, 44-100 Gliwice · NIP: 5272604418 · KRS: 0000332547 · REGON: 141905973
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- polish-layer §4: sticky CTA — appears after scrolling past the Hero -->
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <span><!-- TODO: short pitch, e.g. Webinar Apr 8, 12:00 — free. --></span>
+  <a href="#registration"><!-- TODO: short verb -->Register</a>
+</div>
+
+<script>
+(function () {
+  // ── Navbar scrolled state ───────────────────────────────────────────
+  var nav = document.getElementById('navbar');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ── Scroll progress bar (polish §3) ─────────────────────────────────
+  var progress = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', function () {
+    var h = document.documentElement;
+    var pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    progress.style.width = pct + '%';
+  }, { passive: true });
+
+  // ── Reveal observer ─────────────────────────────────────────────────
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+  document.querySelectorAll('.animate-on-scroll').forEach(function (el) {
+    revealObserver.observe(el);
+  });
+
+  // ── Sticky CTA (polish §4) ─────────────────────────────────────────
+  var stickyCta = document.getElementById('sticky-cta');
+  var heroEl = document.getElementById('hero');
+  if (stickyCta && heroEl) {
+    var heroObserver = new IntersectionObserver(function (entries) {
+      stickyCta.classList.toggle('is-visible', !entries[0].isIntersecting);
+    }, { threshold: 0.1 });
+    heroObserver.observe(heroEl);
+  }
+
+  // ── Count-up stats (polish §5) ─────────────────────────────────────
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function countUp(el) {
+    var target = parseInt(el.dataset.countTo, 10);
+    var suffix = el.dataset.suffix || '';
+    var duration = 1600;
+    var start = performance.now();
+    function tick(now) {
+      var t = Math.min(1, (now - start) / duration);
+      el.textContent = Math.round(target * easeOut(t)).toLocaleString('pl-PL') + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var statObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { countUp(e.target); statObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('[data-count-to]').forEach(function (el) {
+    statObserver.observe(el);
+  });
+
+  // ── 3D tilt on hover (polish §7) ───────────────────────────────────
+  document.querySelectorAll('.tilt').forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var r = card.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width  - 0.5;
+      var y = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform =
+        'perspective(900px) rotateX(' + (-y * 4).toFixed(2) + 'deg) rotateY(' + (x * 6).toFixed(2) + 'deg) translateZ(2px)';
+    });
+    card.addEventListener('mouseleave', function () { card.style.transform = ''; });
+  });
+
+  // ── Magnetic CTA (polish §11) ──────────────────────────────────────
+  document.querySelectorAll('.btn-magnetic').forEach(function (btn) {
+    btn.addEventListener('mousemove', function (e) {
+      var r = btn.getBoundingClientRect();
+      var x = e.clientX - r.left - r.width / 2;
+      var y = e.clientY - r.top  - r.height / 2;
+      btn.style.transform = 'translate(' + (x * 0.18).toFixed(1) + 'px, ' + (y * 0.22).toFixed(1) + 'px)';
+    });
+    btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
+  });
+
+  // ── Form submit → success state (polish §10) ───────────────────────
+  var form = document.getElementById('registration-form');
+  var success = document.getElementById('form-success');
+  if (form && success) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // TODO: replace with real Marketo/HubSpot endpoint POST
+      form.style.display = 'none';
+      success.classList.add('is-visible');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

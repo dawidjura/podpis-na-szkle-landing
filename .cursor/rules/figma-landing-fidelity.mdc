@@ -1,0 +1,22 @@
+---
+description: Figma MCP → HTML/TSX landings — verbatim copy, no invented sections, optional 1:1 design master
+alwaysApply: true
+---
+
+# Figma → landing fidelity
+
+When implementing a **campaign landing** or standalone HTML **from a Figma file** (Figma MCP: `get_design_context`, `get_metadata`, `use_figma`, `get_screenshot`):
+
+1. **Intent** — Confirm with the user: **Figma + brand chrome** (Euvic Hero 4.1, Inter-first, DiagonalBg, CTA 4.2; Figma owns copy + section list) vs **Figma 1:1 (design master)** (full visual/spec parity: typography, spacing, colours, hero, chrome, assets from the file). See [.cursor/skills/euvic-campaign-landing/SKILL.md](.cursor/skills/euvic-campaign-landing/SKILL.md) → **Campaign intent** and **Hard rules — applicability**.
+
+2. **Copy** — Ship **exact** text from Figma text layers (`TextNode.characters` via `use_figma` after loading fonts). Do not paraphrase, “improve”, merge/split lines, or apply editorial Playbook rules unless the user asked for **Playbook** mode, not Figma-master mode. Treat `get_design_context` output as **layout/asset reference only** for strings; **overwrite** any string that differs from Figma.
+
+3. **Structure** — Sections = **only** the agreed list of frames / `node-id`s (lock with `get_metadata` before coding). Do **not** add Value Props, FAQ, timeline blocks, eyebrow+kicker rows, or labels like “Knowledge” / “Participants” unless that **exact visible text** exists in that Figma section. If a frame only has a title, render **only** the title.
+
+4. **Visual parity (Figma 1:1)** — Drive padding, gap, type scale, colours, radii, and effects from **`get_design_context`** / Dev Mode; load Figma fonts; do **not** substitute the brand template Hero, forced Inter-only body, alternating DiagonalBg rhythm, or token remapping unless values match Figma. **`get_screenshot`** for QA.
+
+5. **Legal/firm facts** — Registry IDs, addresses, headcount, etc. still **verbatim** from `company-facts.md` when cited; never invent.
+
+6. **Polish layer** — No extra `polish-layer` patterns unless the user or Figma design clearly includes them.
+
+Workflow: **MCP checklist** in [.cursor/skills/euvic-campaign-landing/SKILL.md](.cursor/skills/euvic-campaign-landing/SKILL.md) — `get_metadata` → `use_figma` (characters) → `get_design_context` → `get_screenshot`.
