@@ -59,7 +59,7 @@ export default function RegistrationForm({ variant = "default" }: RegistrationFo
     } finally {
       setSending(false);
     }
-  }, []);
+  }, [consent1, consent2]);
 
   return (
     <>
@@ -99,10 +99,16 @@ export default function RegistrationForm({ variant = "default" }: RegistrationFo
                   <p className="admin-notice">Administratorem danych osobowych przetwarzanych w celu organizacji webinaru oraz w zakresie kontaktu telefonicznego jest Euvic S.A. Zobacz <a href="/assets/2026-01-02-klauzula-EUV-dla-osob-rejestrujacych-sie-na-wydarzenia.pdf" target="_blank" rel="noopener noreferrer">politykę prywatności</a>.</p>
                   <div className="obl"><span className="req">*</span><span>Pola obowiązkowe</span></div>
                 </div>
-                {error && <p className="form-error">{error}</p>}
-                <button type="submit" className="form-submit" disabled={sending}>
-                  {sending ? "Wysyłanie…" : "Zapisz się na webinar"}
-                </button>
+                <div className="form-actions">
+                  {error ? (
+                    <p className="form-error" role="alert">
+                      {error}
+                    </p>
+                  ) : null}
+                  <button type="submit" className="form-submit" disabled={sending}>
+                    {sending ? "Wysyłanie…" : "Zapisz się na webinar"}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

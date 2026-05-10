@@ -363,9 +363,11 @@ body {
 
 /* —— Agenda dark —— */
 .sec-agenda {
-  min-height: 916px; padding: 132px 0 120px;
+  min-height: 1046px;
+  padding: 132px 0 120px;
   background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
-  color: var(--white); position: relative;
+  color: var(--white);
+  position: relative;
 }
 .sec-agenda h2 {
   font-family: var(--font-serif); font-weight: 400;
@@ -376,11 +378,16 @@ body {
 .timeline-outer {
   container-type: inline-size; container-name: agenda-timeline;
   width: 100%; max-width: none; margin: 0;
-  aspect-ratio: 1920 / 430; position: relative; overflow: hidden;
+  /* Było 430px — za nisko dla .tl-item.bot (.tl-body od top: 364px); tekst był obcinany przez overflow */
+  aspect-ratio: 1920 / 560;
+  position: relative;
+  overflow: hidden;
 }
 .timeline-track {
   position: absolute; left: 50%; top: 0;
-  width: 1920px; height: 430px; min-height: 430px;
+  width: 1920px;
+  height: 560px;
+  min-height: 560px;
   transform-origin: top center;
   transform: translateX(-50%) scale(calc(100cqi / 1920px));
 }
@@ -392,9 +399,12 @@ body {
 .tl-grid {
   display: grid; grid-template-columns: 325px 487px 325px 583px;
   column-gap: 0; row-gap: 0; position: relative; z-index: 2;
-  min-height: 430px; width: 1920px; box-sizing: border-box; padding-left: 200px;
+  min-height: 560px;
+  width: 1920px;
+  box-sizing: border-box;
+  padding-left: 200px;
 }
-.tl-item { position: relative; min-height: 430px; }
+.tl-item { position: relative; min-height: 560px; }
 .tl-num {
   font-family: var(--font-serif); font-weight: 400;
   font-size: 64px; line-height: 72px;
@@ -418,7 +428,12 @@ body {
 .tl-item.top .tl-body { top: 10px; width: 308.62px; max-width: 308.62px; }
 .tl-item.bot .tl-body { top: 364px; width: 400px; max-width: 400px; }
 .tl-body h3 { font-weight: 600; font-size: 22px; line-height: 30px; margin: 0; color: var(--white); }
-.tl-body p { font-size: 14px; line-height: 18px; margin: 0; color: rgba(255, 255, 255, 0.95); }
+.tl-body p {
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+}
 .tl-item.top .tl-body h3 { max-width: 308.62px; }
 .tl-item.top .tl-body p { margin-top: 0; max-width: 240.261px; }
 .tl-item.top .tl-num { top: 0; transform: translateX(-50%); }
@@ -430,26 +445,80 @@ body {
 .tl-item.bot:nth-child(4) .tl-body { width: 328px; max-width: 328px; }
 .tl-item.bot:nth-child(4) .tl-body p { max-width: 296px; }
 .tl-item.bot:nth-child(4) .tl-body h3 { max-width: 328px; }
-.tl-item.bot .tl-body p { margin-bottom: 0; }
-.tl-item.bot .tl-body h3 { margin-top: 6px; }
+.tl-item.bot .tl-body h3 { margin: 0 0 6px; }
+.tl-item.bot .tl-body p { margin: 0; }
 .tl-item.bot .tl-connector { left: 88px; top: 223.5px; }
 .tl-item.bot .tl-dot { left: 81px; top: 212.15px; }
 @media (max-width: 1200px) {
-  .sec-agenda { padding: 80px 24px 80px; }
-  .sec-agenda h2 { margin-left: 0; margin-right: 0; margin-bottom: 48px; }
+  .sec-agenda {
+    min-height: 0;
+    padding: clamp(56px, 8vw, 80px) clamp(20px, 3vw, 32px) clamp(56px, 8vw, 80px);
+  }
+  .sec-agenda h2 {
+    margin: 0 0 clamp(32px, 5vw, 48px);
+    max-width: none;
+    font-size: clamp(32px, 4.2vw + 1rem, 64px);
+    line-height: 1.15;
+  }
   .timeline { max-width: none; overflow: visible; }
   .timeline-outer { container-type: normal; aspect-ratio: auto; overflow: visible; max-width: none; }
   .timeline-track { position: static; left: auto; top: auto; transform: none; width: 100%; height: auto; min-height: 0; }
   .timeline-line { position: relative; left: 0; top: 0; width: 100%; max-width: none; margin-bottom: 24px; }
-  .tl-grid { display: flex; flex-direction: column; gap: 40px; padding-left: 0; min-height: 0; width: 100%; max-width: none; }
-  .tl-item { min-height: 0; padding-bottom: 8px; }
-  .tl-num, .tl-connector, .tl-dot, .tl-body { position: static; width: auto; left: auto; top: auto; right: auto; max-width: none; }
-  .tl-item { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .tl-num { text-align: left; width: auto; transform: none; }
+  .tl-grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 44px);
+    padding-left: 0;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
+  }
+  .tl-item {
+    min-height: 0;
+    padding-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .tl-num, .tl-connector, .tl-dot, .tl-body {
+    position: static;
+    left: auto;
+    top: auto;
+    right: auto;
+  }
+  .tl-num {
+    text-align: left;
+    width: auto;
+    max-width: none;
+    transform: none;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.1;
+  }
   .tl-connector img { height: 120px !important; width: 5px !important; }
-  .tl-item.bot .tl-body { display: flex; flex-direction: column; }
-  .tl-item.bot .tl-body p { order: -1; margin-bottom: 8px; margin-top: 0; }
-  .tl-item.bot .tl-body h3 { margin-top: 0; }
+  .tl-body {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .tl-body h3 {
+    font-size: clamp(16px, 0.55rem + 1.35vw, 22px);
+    line-height: 1.25;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .tl-body p {
+    font-size: clamp(14px, 0.35vw + 0.85rem, 16px);
+    line-height: 1.45;
+    margin: 0;
+    max-width: none;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
 }
 
 /* —— Learn split —— */
@@ -765,6 +834,14 @@ body {
   align-items: flex-end;
   gap: 16px 24px;
 }
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex: 0 1 auto;
+  min-width: min(100%, 220px);
+}
 .form-extras {
   display: flex;
   flex-direction: column;
@@ -808,6 +885,7 @@ body {
 .form-error {
   color: #ff6b6b; font-size: 14px; line-height: 20px;
   margin: 0; font-family: var(--font-sans);
+  text-align: left; max-width: min(100%, 360px);
 }
 .form-submit {
   display: inline-flex; align-items: center; justify-content: center;
@@ -1090,7 +1168,15 @@ body {
   .sec-agenda { padding: 60px 20px; min-height: 0; }
   .sec-agenda h2 { font-size: 36px; line-height: 44px; margin: 0 0 40px; }
   .tl-num { font-size: 40px; line-height: 48px; }
-  .tl-body h3 { font-size: 18px; line-height: 26px; }
+  .tl-body h3 {
+    font-size: clamp(16px, 0.5rem + 2.4vw, 18px);
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+  .tl-body p {
+    font-size: clamp(14px, 0.35rem + 2vw, 16px);
+    line-height: 1.45;
+  }
   .tl-connector { display: none; }
   .tl-dot { display: none; }
   .timeline-line { display: none; }
@@ -1164,6 +1250,12 @@ body {
   .field { min-width: 0; width: 100%; }
   .form-bottom { flex-direction: column; align-items: stretch; gap: 20px; }
   .form-extras { flex: 1 1 auto; min-width: 0; }
+  .form-actions {
+    align-items: stretch;
+    min-width: 0;
+    width: 100%;
+  }
+  .form-error { max-width: none; }
   .form-submit {
     width: 100%;
     justify-content: center;
@@ -1237,7 +1329,11 @@ body {
 
   .sec-agenda h2 { font-size: 28px; line-height: 36px; }
   .tl-num { font-size: 32px; line-height: 40px; }
-  .tl-body h3 { font-size: 16px; line-height: 24px; }
+  .tl-body h3 {
+    font-size: 16px;
+    line-height: 1.35;
+    white-space: normal;
+  }
 
   .learn-copy h2 { font-size: 26px; line-height: 34px; }
   .learn-visual { max-height: 200px; }

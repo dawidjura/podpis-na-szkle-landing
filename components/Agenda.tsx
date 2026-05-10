@@ -22,8 +22,8 @@ export default function Agenda() {
                 <div className="tl-connector"><img src="/assets/union.74fd3637.svg" alt="" /></div>
                 <div className="tl-dot"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
                 <div className="tl-body">
-                  <p>Jednoznaczna identyfikacja jednostki logistycznej jako fundament wiarygodnych danych o dostawie</p>
                   <h3>Standardy GS1 (SSCC, GTIN, GLN)</h3>
+                  <p>Jednoznaczna identyfikacja jednostki logistycznej jako fundament wiarygodnych danych o dostawie</p>
                 </div>
               </div>
               <div className="tl-item top">
@@ -40,8 +40,8 @@ export default function Agenda() {
                 <div className="tl-connector"><img src="/assets/union.74fd3637.svg" alt="" /></div>
                 <div className="tl-dot"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
                 <div className="tl-body">
-                  <p>Dyskusja o realnych scenariuszach, reklamacjach i wyzwaniach w logistyce.</p>
                   <h3>Panel Q&amp;A</h3>
+                  <p>Dyskusja o realnych scenariuszach, reklamacjach i wyzwaniach w logistyce.</p>
                 </div>
               </div>
             </div>
