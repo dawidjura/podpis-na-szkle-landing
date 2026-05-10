@@ -4,7 +4,12 @@ export default function Program() {
     <section className="sec-program" id="program">
       <div className="sec-program-inner">
         <div className="sec-program-stack">
-          <h2>W programie czeka na Ciebie:</h2>
+          <div className="sec-program-heading-row">
+            <h2>W programie czeka na Ciebie:</h2>
+            <div className="sec-program-trytytka" aria-hidden="true">
+              <img src="/assets/trytytka.5b2eace9.svg" alt="" width={612} height={29} />
+            </div>
+          </div>
           <div className="program-cols">
             <div className="program-col">
               <div className="program-min">30 min</div>
@@ -21,9 +26,6 @@ export default function Program() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="sec-program-trytytka" aria-hidden="true">
-          <img src="/assets/trytytka.5b2eace9.svg" alt="" width={612} height={29} />
         </div>
       </div>
     </section>
