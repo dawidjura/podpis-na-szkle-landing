@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+// Figma: „Szczegóły wydarzenia” — Group 2623 (256:18029), layout treści 256:18034; style `.event-band` w globals.css.
 export default function EventBand() {
   return (
     <section className="event-band" id="szczegoly" aria-labelledby="ev-title">

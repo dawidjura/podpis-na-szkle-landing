@@ -39,12 +39,19 @@ body {
   overflow-x: hidden;
 }
 
-/* —— Header / Hero —— */
+/* —— Header / Hero ——
+   Figma: Main Page → Header-v1 (node 256:17990). Spacing matches auto-layout gaps:
+   kicker↔H1 10px, H1↔sub block 32px, sub↔body 16px, body↔CTA 40px; copy block bottom 106px, left 203px @1920. */
 .hero-wrap {
   position: relative;
   min-height: 788px;
   overflow: hidden;
   color: var(--white);
+  /* Figma Header-v1 vertical rhythm (scaled on smaller breakpoints below) */
+  --hero-gap-kicker-h1: 10px;
+  --hero-gap-h1-desc: 32px;
+  --hero-gap-sub-body: 16px;
+  --hero-gap-body-btn: 40px;
 }
 .hero-photo {
   position: absolute;
@@ -58,7 +65,7 @@ body {
 }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 .nav-bar {
   position: relative; z-index: 5;
@@ -93,47 +100,87 @@ body {
 .nav-cta:hover { background: var(--white); color: var(--text); }
 .nav-cta img { width: 16px; height: 16px; }
 .hero-copy {
-  position: absolute; left: 203px; bottom: 106px;
-  z-index: 3; max-width: 1376px;
+  position: absolute;
+  z-index: 3;
+  left: clamp(20px, 10.573vw, 203px);
+  bottom: clamp(72px, 5.521vw, 106px);
+  right: auto;
+  max-width: min(1376px, calc(100vw - clamp(20px, 10.573vw, 203px) - 24px));
+  width: 100%;
   padding: 0; margin: 0; box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .hero-kicker {
   font-size: 20px; line-height: 14px;
+  font-weight: 400;
   text-transform: uppercase; color: var(--white);
-  margin-bottom: 10px;
+  margin: 0 0 var(--hero-gap-kicker-h1);
 }
 .hero-h1 {
   font-family: var(--font-serif); font-weight: 400;
   font-size: 76px; line-height: 88px;
-  color: #e6e6e7; margin-bottom: 32px; max-width: 1376px;
+  color: #e6e6e7;
+  margin: 0 0 var(--hero-gap-h1-desc);
+  max-width: 1376px;
 }
 .hero-sub {
   font-size: 30px; line-height: 38px;
-  color: var(--white); margin-bottom: 16px; max-width: 1243px;
+  font-weight: 400;
+  color: var(--white);
+  margin: 0 0 var(--hero-gap-sub-body);
+  max-width: 1243px;
 }
 .hero-body {
   font-size: 18px; line-height: 28px;
-  color: var(--white); max-width: 1105px; margin-bottom: 40px;
+  font-weight: 400;
+  color: var(--white);
+  max-width: 1105px;
+  margin: 0 0 var(--hero-gap-body-btn);
 }
 .hero-btn {
   display: inline-flex; align-items: center;
   background: var(--white); color: var(--text);
   font-weight: 600; font-size: 18px; line-height: 28px;
   padding: 14px 20px; border-radius: 120px; text-decoration: none;
+  margin: 0;
 }
 
-/* —— Event details —— */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .hero-h1 {
+    font-size: clamp(44px, 3.6vw + 20px, 76px);
+    line-height: 1.15;
+  }
+  .hero-sub {
+    font-size: clamp(22px, 1.4vw + 14px, 30px);
+    line-height: 1.27;
+  }
+  .hero-body {
+    font-size: clamp(16px, 0.5vw + 15px, 18px);
+    line-height: 1.56;
+  }
+}
+
+/* —— Event details ——
+   Tło z Figmy to SVG (bg-details): lewy blok #256BA1 + prawy gradient w wektorze.
+   Jednolity kolor bazowy #256BA1 pod spodem — inaczej przezroczyste fragmenty SVG
+   prześwietlają stary gradient CSS i powstają pionowe „smugi” innego odcienia. */
 .event-band {
   position: relative; margin-top: -37px; z-index: 4;
   min-height: 573px; overflow: hidden;
-  background: linear-gradient(135deg, #1a5a8a 0%, #006eb8 40%, #2b7bba 100%);
+  background-color: #256ba1;
 }
 .event-bg {
   position: absolute; left: 0; right: 0; top: 0; bottom: 0;
   width: 100%; height: 100%;
   pointer-events: none;
+  background-color: #256ba1;
 }
-.event-bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.event-bg img {
+  display: block; width: 100%; height: 100%;
+  object-fit: fill;
+}
 .event-inner {
   position: relative; z-index: 2; box-sizing: border-box;
   width: 100%; max-width: 1920px; margin: 0 auto;
@@ -857,27 +904,48 @@ body {
 .hamburger-line.open::after { top: 0; transform: rotate(-45deg); }
 
 /* ============================================================
-   TABLET — 768px
+   TABLET / MOBILE LAYOUT — 1024px
    ============================================================ */
 @media (max-width: 1024px) {
   /* — Nav — */
   .nav-logo img { height: 26px; }
 
-  /* — Hero — */
-  .hero-wrap { min-height: 100svh; }
-  .hero-photo { height: 100%; top: 0; }
+  /* — Hero — (Figma gaps scaled; bottom clears home indicator) */
+  .hero-wrap {
+    min-height: 100svh;
+    min-height: 100dvh;
+    --hero-gap-kicker-h1: 10px;
+    --hero-gap-h1-desc: clamp(22px, 4.5vw, 28px);
+    --hero-gap-sub-body: clamp(12px, 2.8vw, 16px);
+    --hero-gap-body-btn: clamp(28px, 6vw, 36px);
+  }
+  .hero-photo { height: 100%; top: 0; min-height: 100%; }
   .hero-photo img { object-position: 70% center; }
   .nav-bar { position: absolute; top: 0; left: 0; right: 0; padding: 0 20px; height: 72px; }
   .hero-copy {
-    position: absolute; left: 20px; right: 20px; bottom: 94px;
-    max-width: none; z-index: 3;
-    padding-top: 8px;
+    position: absolute;
+    left: max(16px, env(safe-area-inset-left, 0px));
+    right: max(16px, env(safe-area-inset-right, 0px));
+    width: auto;
+    max-width: none;
+    bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+    z-index: 3;
+    padding-top: 4px;
   }
-  .hero-kicker { font-size: 14px; line-height: 20px; margin-bottom: 18px; }
-  .hero-h1 { font-size: 36px; line-height: 44px; margin-bottom: 28px; }
-  .hero-sub { font-size: 20px; line-height: 28px; margin-bottom: 20px; }
-  .hero-body { font-size: 15px; line-height: 22px; margin-bottom: 40px; }
-  .hero-btn { font-size: 16px; padding: 14px 22px; }
+  .hero-kicker { font-size: clamp(13px, 2.8vw, 15px); line-height: 1.35; }
+  .hero-h1 {
+    font-size: clamp(28px, 6.2vw, 40px);
+    line-height: 1.18;
+  }
+  .hero-sub {
+    font-size: clamp(17px, 3.6vw, 22px);
+    line-height: 1.35;
+  }
+  .hero-body {
+    font-size: clamp(14px, 2.9vw, 16px);
+    line-height: 1.45;
+  }
+  .hero-btn { font-size: 16px; line-height: 24px; padding: 14px 22px; }
 
   /* — Event band — */
   .event-band { height: auto; margin-top: -20px; }
@@ -1008,10 +1076,17 @@ body {
    SMALL PHONE — 480px
    ============================================================ */
 @media (max-width: 480px) {
-  .hero-h1 { font-size: 28px; line-height: 36px; }
-  .hero-sub { font-size: 17px; line-height: 24px; }
-  .hero-body { font-size: 14px; line-height: 20px; }
-  .hero-copy { padding-bottom: 36px; bottom: 94px; }
+  .hero-wrap {
+    --hero-gap-h1-desc: clamp(18px, 5vw, 24px);
+    --hero-gap-body-btn: clamp(24px, 6vw, 32px);
+  }
+  .hero-h1 { font-size: clamp(26px, 7.2vw, 30px); line-height: 1.2; }
+  .hero-sub { font-size: clamp(16px, 4.2vw, 18px); line-height: 1.35; }
+  .hero-body { font-size: clamp(14px, 3.6vw, 15px); line-height: 1.45; }
+  .hero-copy {
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+  }
 
   .event-inner h2 { font-size: 28px; line-height: 36px; }
   .event-stats { gap: 20px 24px; }
@@ -1048,6 +1123,23 @@ body {
 
   .consult-content h2 { font-size: 26px; line-height: 34px; }
   .consult-content .lead { font-size: 16px; line-height: 24px; }
+}
+
+/* Hero: krótki viewport (landscape, małe okno) — mniejsza typografia i niższy bottom */
+@media (max-width: 1024px) and (max-height: 520px) {
+  .hero-wrap {
+    --hero-gap-h1-desc: 12px;
+    --hero-gap-sub-body: 8px;
+    --hero-gap-body-btn: 14px;
+  }
+  .hero-copy {
+    bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    padding-top: 0;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  .hero-h1 { font-size: clamp(20px, 4.2vh, 28px); line-height: 1.12; }
+  .hero-sub { font-size: clamp(14px, 2.6vh, 18px); line-height: 1.25; }
+  .hero-body { font-size: clamp(12px, 2.2vh, 15px); line-height: 1.35; }
 }
 
 /* —— Thank-you Modal —— */
