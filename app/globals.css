@@ -859,7 +859,7 @@ body {
 /* ============================================================
    TABLET — 768px
    ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   /* — Nav — */
   .nav-logo img { height: 26px; }
 
@@ -869,14 +869,15 @@ body {
   .hero-photo img { object-position: 70% center; }
   .nav-bar { position: absolute; top: 0; left: 0; right: 0; padding: 0 20px; height: 72px; }
   .hero-copy {
-    position: absolute; left: 20px; right: 20px; bottom: 32px;
+    position: absolute; left: 20px; right: 20px; bottom: 94px;
     max-width: none; z-index: 3;
+    padding-top: 8px;
   }
-  .hero-kicker { font-size: 14px; line-height: 20px; margin-bottom: 12px; }
-  .hero-h1 { font-size: 36px; line-height: 44px; margin-bottom: 20px; }
-  .hero-sub { font-size: 20px; line-height: 28px; margin-bottom: 12px; }
-  .hero-body { font-size: 15px; line-height: 22px; margin-bottom: 28px; }
-  .hero-btn { font-size: 16px; padding: 12px 20px; }
+  .hero-kicker { font-size: 14px; line-height: 20px; margin-bottom: 18px; }
+  .hero-h1 { font-size: 36px; line-height: 44px; margin-bottom: 28px; }
+  .hero-sub { font-size: 20px; line-height: 28px; margin-bottom: 20px; }
+  .hero-body { font-size: 15px; line-height: 22px; margin-bottom: 40px; }
+  .hero-btn { font-size: 16px; padding: 14px 22px; }
 
   /* — Event band — */
   .event-band { height: auto; margin-top: -20px; }
@@ -1010,7 +1011,7 @@ body {
   .hero-h1 { font-size: 28px; line-height: 36px; }
   .hero-sub { font-size: 17px; line-height: 24px; }
   .hero-body { font-size: 14px; line-height: 20px; }
-  .hero-copy { padding-bottom: 28px; }
+  .hero-copy { padding-bottom: 36px; bottom: 94px; }
 
   .event-inner h2 { font-size: 28px; line-height: 36px; }
   .event-stats { gap: 20px 24px; }
