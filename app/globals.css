@@ -641,27 +641,51 @@ body {
   }
 }
 
-/* —— Learn split —— */
+/* —— Learn split ——
+   Figma: Main Page → „Czego dowiesz się” (256:18210). Układ 1920: foto −1/34/1095×651,
+   wektor 580×744 od dołu, Paragraph 1038×119 / 697px, trytytka 1675×169 / 611.542px. */
 .sec-learn {
   position: relative;
-  min-height: max(741px, calc(741 / 1920 * 100vw));
-  overflow: visible;
+  overflow: hidden;
   background: linear-gradient(100deg, #0d3d5c 0%, #006eb1 45%, #2b7bba 100%);
 }
-.sec-learn::before {
-  content: ""; position: absolute; left: 0; top: 0;
-  width: 100%; height: max(34px, calc(34 / 1920 * 100vw));
-  background: #0d3d5c; z-index: 1; pointer-events: none;
+/* Pasek jak Agenda — nad obszarem zdjęcia (Figma y 0–34 przy szer. zdjęcia). */
+.sec-learn-top-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(1095 / 1920 * 100%);
+  height: calc(34 / 1920 * 100vw);
+  background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
+  z-index: 6;
+  pointer-events: none;
+}
+/* Pas jak Scenarios (#fff) — szerokość do dolnego „styku” gradientu SVG:
+   learn-vector path: dół niebieskiego od x≈464.5 w viewBox → świat 580+464.543 ≈ 1044px / 1920. */
+.sec-learn-bottom-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(1044.543 / 1920 * 100%);
+  height: calc(56 / 1920 * 100vw);
+  background: #fff;
+  z-index: 1;
+  pointer-events: none;
 }
 .learn-inner {
-  position: relative; width: 100%; max-width: none; margin: 0 auto;
-  min-height: max(741px, calc(741 / 1920 * 100vw)); height: auto;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: max(500px, calc(741 / 1920 * 100vw));
 }
 .learn-visual {
-  position: absolute; left: -1px;
-  top: max(34px, calc(34 / 1920 * 100vw));
-  width: calc(1095 / 1920 * 100%); max-width: none;
-  aspect-ratio: 1095 / 651; height: auto; overflow: hidden; z-index: 0;
+  position: absolute;
+  left: -1px;
+  top: calc(34 / 1920 * 100vw);
+  width: calc(1095 / 1920 * 100%);
+  aspect-ratio: 1095 / 651;
+  z-index: 2;
+  overflow: hidden;
 }
 .learn-visual-flip { width: 100%; height: 100%; transform: rotate(180deg) scaleY(-1); transform-origin: center center; }
 .learn-visual-crop { position: relative; width: 100%; height: 100%; overflow: hidden; }
@@ -671,62 +695,120 @@ body {
   object-position: center; max-width: none; display: block;
 }
 .learn-split-svg {
-  position: absolute; left: calc(580 / 1920 * 100%);
-  bottom: 0; top: auto; width: calc(1462 / 1920 * 100%);
-  max-width: none; height: auto; aspect-ratio: 1462 / 744;
-  pointer-events: none; z-index: 2;
+  position: absolute;
+  left: calc(580 / 1920 * 100%);
+  bottom: 0;
+  width: calc(1462 / 1920 * 100%);
+  height: auto;
+  aspect-ratio: 1462 / 744;
+  pointer-events: none;
+  z-index: 4;
 }
 .learn-split-svg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; display: block; }
 .learn-copy {
-  position: absolute; left: calc(1038 / 1920 * 100%);
-  top: calc(119 / 741 * 100%); width: calc(697 / 1920 * 100%);
-  max-width: none; box-sizing: border-box; z-index: 3;
-  margin: 0; padding: 0 24px 0 0; color: var(--white);
+  position: relative;
+  z-index: 5;
+  box-sizing: border-box;
+  width: calc(697 / 1920 * 100%);
+  margin-left: calc(1038 / 1920 * 100%);
+  padding: calc(119 / 1920 * 100vw) 0 clamp(48px, 6vw, 120px);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.learn-body .intro {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 12px;
+  font-weight: 400;
 }
 .learn-copy h2 {
-  font-family: var(--font-serif); font-weight: 400;
+  font-family: var(--font-serif);
+  font-weight: 400;
   font-size: clamp(32px, calc(64 / 1920 * 100vw), 64px);
-  line-height: 80px; margin: 0 0 20px;
-  max-width: calc(732 / 697 * 100%); font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1.25;
+  margin: 0;
+  max-width: 732px;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
-.learn-copy .intro { font-size: 16px; line-height: 24px; margin: 0 0 12px; font-weight: 400; }
-.learn-copy ul { list-style: disc; padding-left: 0; margin: 0; font-size: 16px; line-height: 24px; }
-.learn-copy li { margin: 0 0 12px 24px; padding-left: 0.25em; }
-.learn-copy li:last-child { margin-bottom: 0; }
-.learn-copy li strong { font-weight: 600; display: block; margin-bottom: 0; }
-.learn-copy li .light { font-weight: 300; display: block; margin-top: 0; }
+.learn-body ul {
+  list-style: disc;
+  padding-left: 0;
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.learn-body li { margin: 0 0 0 24px; padding-left: 0.25em; }
+.learn-body li:last-child { margin-bottom: 0; }
+.learn-body li strong { font-weight: 600; display: block; margin-bottom: 0; }
+.learn-body li .light { font-weight: 300; display: block; margin-top: 0; }
 .learn-try {
-  position: absolute; left: calc(1675 / 1920 * 100%);
-  top: calc(169 / 741 * 100%); width: calc(611.542 / 1920 * 100%);
-  max-width: none; height: auto; transform: rotate(180deg);
-  transform-origin: center center; z-index: 4;
-  pointer-events: none; display: block;
+  position: absolute;
+  left: calc(1675 / 1920 * 100%);
+  top: calc(169 / 1920 * 100vw);
+  width: calc(611.542 / 1920 * 100%);
+  height: auto;
+  transform: rotate(180deg);
+  transform-origin: center center;
+  z-index: 7;
+  pointer-events: none;
+  display: block;
+}
+/* Desktop (Figma 1920×741): foto i wektor muszą rozciągać się z wysokością bloku treści —
+   sztywne aspect-ratio rozjeżdża warstwy przy wyższym kolumnie tekstu. */
+@media (min-width: 1101px) {
+  .learn-visual {
+    aspect-ratio: unset;
+    top: calc(34 / 1920 * 100vw);
+    bottom: calc(56 / 1920 * 100vw);
+    height: auto;
+  }
+  .learn-visual img {
+    min-width: 100%;
+    min-height: 100%;
+  }
+  .learn-split-svg {
+    top: 0;
+    bottom: 0;
+    height: auto;
+    aspect-ratio: unset;
+  }
 }
 @media (max-width: 1400px) {
-  .learn-copy h2 { line-height: 1.2; }
+  .learn-copy h2 { line-height: 1.15; }
   .learn-try { display: none; }
 }
 @media (max-width: 1100px) {
-  .sec-learn { min-height: 0; overflow: hidden; }
-  .sec-learn::before { display: none; }
   .learn-inner {
-    min-height: 0; display: flex; flex-direction: column;
+    min-height: 0;
   }
   .learn-visual {
-    position: relative; left: 0; top: 0;
-    width: 100%; max-width: none;
-    height: 50vw; max-height: 380px;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
     aspect-ratio: auto;
+    height: clamp(250px, 50vw, 380px);
   }
   .learn-split-svg { display: none; }
   .learn-copy {
-    position: relative; left: auto; top: auto;
-    width: 100%; max-width: none;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
     padding: 48px 40px 56px;
+    gap: 20px;
   }
-  .learn-copy h2 { font-size: 44px; line-height: 1.2; margin-bottom: 20px; }
-  .learn-copy .intro { font-size: 16px; margin-bottom: 16px; }
+  .learn-copy h2 {
+    font-size: 44px;
+    line-height: 1.2;
+    max-width: none;
+  }
   .learn-try { display: none; }
+  .sec-learn-top-bar,
+  .sec-learn-bottom-bar { display: none; }
 }
 
 /* —— Scenarios —— */
@@ -1327,7 +1409,7 @@ body {
   }
 
   /* — Learn — */
-  .learn-visual { max-height: 260px; }
+  .learn-visual { height: clamp(200px, 40vw, 280px); }
   .learn-copy { padding: 36px 20px 48px; }
   .learn-copy h2 { font-size: 32px; line-height: 40px; }
 
@@ -1484,7 +1566,7 @@ body {
   }
 
   .learn-copy h2 { font-size: 26px; line-height: 34px; }
-  .learn-visual { max-height: 200px; }
+  .learn-visual { height: clamp(180px, 50vw, 220px); }
 
   .sec-scenarios h2 { font-size: 26px; line-height: 34px; }
   .sec-scenarios .sub { font-size: 16px; line-height: 24px; }
