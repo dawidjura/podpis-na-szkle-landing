@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Nav from "./Nav";
 
 export default function Hero() {
   return (
@@ -8,7 +7,6 @@ export default function Hero() {
         <img src="/assets/hero.22c2ffda.png" alt="" width={1920} height={1047} />
       </div>
       <div className="hero-overlay" aria-hidden="true"></div>
-      <Nav />
       <div className="hero-copy">
         <p className="hero-kicker">Webinar GS1 &amp; Euvic</p>
         <h1 className="hero-h1">Podpis na szkle<br />– dowód dostawy nie do podważenia</h1>

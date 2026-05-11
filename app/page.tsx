@@ -1,3 +1,4 @@
+import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import EventBand from "@/components/EventBand";
 import Program from "@/components/Program";
@@ -14,21 +15,24 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className="page">
-      <Hero />
-      <EventBand />
-      <Program />
-      <RegistrationForm variant="dark" />
-      <Agenda />
-      <Learn />
-      <Scenarios />
-      <Why />
-      <Audience />
-      <Guests />
-      <RegistrationForm />
-      <Consult />
-      <Organizers />
-      <Footer />
-    </div>
+    <>
+      <Nav />
+      <div className="page">
+        <Hero />
+        <EventBand />
+        <Program />
+        <RegistrationForm variant="dark" />
+        <Agenda />
+        <Learn />
+        <Scenarios />
+        <Why />
+        <Audience />
+        <Guests />
+        <RegistrationForm />
+        <Consult />
+        <Organizers />
+        <Footer />
+      </div>
+    </>
   );
 }
