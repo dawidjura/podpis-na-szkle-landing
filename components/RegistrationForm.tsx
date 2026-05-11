@@ -93,7 +93,7 @@ export default function RegistrationForm({ variant = "default" }: RegistrationFo
               </div>
               <div className="form-grid2">
                 <div className="field"><label>Telefon <span className="req">*</span></label><input type="tel" name="phone" placeholder="Twój numer telefonu" autoComplete="tel" required /></div>
-                <div className="field"><label>E-mail <span className="req">*</span></label><input type="email" name="email" placeholder="Your working email" autoComplete="email" required /></div>
+                <div className="field"><label>E-mail <span className="req">*</span></label><input type="email" name="email" placeholder="Twój e-mail" autoComplete="email" required /></div>
               </div>
               <div className="form-bottom">
                 <div className="form-extras">
