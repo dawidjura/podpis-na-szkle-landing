@@ -1,25 +1,50 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const close = useCallback(() => setOpen(false), []);
 
+  useEffect(() => {
+    const updateScrolled = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      setScrolled(scrollTop > 4);
+    };
+
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+    window.addEventListener("resize", updateScrolled);
+
+    return () => {
+      window.removeEventListener("scroll", updateScrolled);
+      window.removeEventListener("resize", updateScrolled);
+    };
+  }, []);
+
   return (
-    <nav className="nav-bar" aria-label="Główna nawigacja">
+    <nav className={`nav-bar${scrolled ? " nav-scrolled" : ""}${open ? " nav-opened" : ""}`} aria-label="Główna nawigacja">
       <a className="nav-logo" href="#top">
         <img src="/assets/logo.8fea627a.svg" alt="Euvic" width={178} height={32} />
       </a>
 
-      <button
+      <input
+        id="nav-toggle"
+        className="nav-toggle"
+        type="checkbox"
+        checked={open}
+        onChange={(event) => setOpen(event.target.checked)}
+      />
+      <label
+        htmlFor="nav-toggle"
         className="nav-hamburger"
         aria-label={open ? "Zamknij menu" : "Otwórz menu"}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        role="button"
       >
         <span className={`hamburger-line ${open ? "open" : ""}`} />
-      </button>
+      </label>
 
       <div className={`nav-right ${open ? "nav-open" : ""}`}>
         <div className="nav-links">

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { normalizePhoneNumber } from "@/lib/phone-validation";
 import { insertWebinarSignup } from "@/lib/supabase-admin";
 import { sendRegistrationEmail, type WebinarFormData } from "@/lib/send-registration-email";
 
@@ -17,6 +18,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const normalizedPhone = normalizePhoneNumber(phone);
+    if (!normalizedPhone.ok) {
+      return NextResponse.json(
+        { error: normalizedPhone.error },
+        { status: 400 },
+      );
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -30,11 +39,11 @@ export async function POST(request: Request) {
     await insertWebinarSignup({
       name: firstName,
       surname: lastName,
-      phone_number: phone,
+      phone_number: normalizedPhone.phone,
       email: emailNorm,
     });
 
-    await sendRegistrationEmail({ firstName, lastName, phone, email: emailNorm });
+    await sendRegistrationEmail({ firstName, lastName, phone: normalizedPhone.phone, email: emailNorm });
 
     return NextResponse.json({ ok: true });
   } catch (err) {

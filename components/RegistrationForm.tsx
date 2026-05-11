@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useState, useCallback } from "react";
+import { normalizePhoneNumber } from "@/lib/phone-validation";
 import ThankYouModal from "./ThankYouModal";
 
 type RegistrationFormProps = {
@@ -20,15 +21,23 @@ export default function RegistrationForm({ variant = "default" }: RegistrationFo
     setError(null);
 
     const form = e.currentTarget;
+    const phoneInput = form.elements.namedItem("phone") as HTMLInputElement;
     const data = {
       firstName: (form.elements.namedItem("firstName") as HTMLInputElement).value.trim(),
       lastName: (form.elements.namedItem("lastName") as HTMLInputElement).value.trim(),
-      phone: (form.elements.namedItem("phone") as HTMLInputElement).value.trim(),
+      phone: phoneInput.value.trim(),
       email: (form.elements.namedItem("email") as HTMLInputElement).value.trim(),
     };
 
     if (!data.firstName || !data.lastName || !data.phone || !data.email) {
       setError("Wypełnij wszystkie wymagane pola.");
+      return;
+    }
+
+    const normalizedPhone = normalizePhoneNumber(data.phone);
+    if (!normalizedPhone.ok) {
+      setError(normalizedPhone.error);
+      phoneInput.focus();
       return;
     }
 

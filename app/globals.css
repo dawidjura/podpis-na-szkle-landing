@@ -67,12 +67,30 @@ body {
   background: rgba(0, 0, 0, 0.5);
 }
 .nav-bar {
-  position: relative; z-index: 5;
+  position: fixed; z-index: 1000;
+  top: 0; left: 0; right: 0;
   height: 96px; display: flex;
   align-items: center; justify-content: space-between;
   padding: 0 48px;
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, backdrop-filter 0.28s ease;
 }
-.nav-logo img { display: block; height: 32px; width: auto; }
+.nav-bar.nav-scrolled,
+.nav-bar:hover,
+.nav-bar.nav-opened {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.14);
+  backdrop-filter: blur(12px);
+}
+.nav-logo { position: relative; z-index: 1002; }
+.nav-logo img {
+  display: block; height: 32px; width: auto;
+  transition: filter 0.28s ease;
+}
+.nav-bar.nav-scrolled .nav-logo img,
+.nav-bar:hover .nav-logo img,
+.nav-bar.nav-opened .nav-logo img {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(9%) saturate(537%) hue-rotate(169deg) brightness(93%) contrast(90%);
+}
 .nav-right { display: flex; align-items: center; gap: 40px; }
 .nav-links {
   display: flex; align-items: center; gap: 32px;
@@ -84,19 +102,40 @@ body {
   color: var(--white); text-decoration: none;
   display: inline-flex; align-items: center;
   gap: 8px; white-space: nowrap;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, color 0.28s ease;
 }
+.nav-bar.nav-scrolled .nav-links a,
+.nav-bar:hover .nav-links a,
+.nav-bar.nav-opened .nav-links a { color: var(--text); }
 .nav-links a:hover { opacity: 0.7; }
 .nav-links a img { width: 16px; height: 16px; display: block; }
+.nav-toggle {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.nav-menu-close { display: none; }
 .nav-cta {
   border: 1px solid var(--white); border-radius: 80px;
   padding: 15px 32px; display: inline-flex;
   align-items: center; gap: 8px;
   font-weight: 500; font-size: 18px;
   color: var(--white); text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.28s ease;
+}
+.nav-bar.nav-scrolled .nav-cta,
+.nav-bar:hover .nav-cta,
+.nav-bar.nav-opened .nav-cta {
+  border-color: var(--text);
+  color: var(--text);
 }
 .nav-cta:hover { background: var(--white); color: var(--text); }
+.nav-bar.nav-scrolled .nav-cta:hover,
+.nav-bar:hover .nav-cta:hover,
+.nav-bar.nav-opened .nav-cta:hover { background: var(--text); color: var(--white); }
 .nav-cta img { width: 16px; height: 16px; }
 .hero-copy {
   position: absolute;
@@ -745,7 +784,7 @@ body {
   line-height: 24px;
   font-weight: 400;
 }
-.learn-body li { margin: 0 0 0 24px; padding-left: 0.25em; }
+.learn-body li { margin: 0 0 0 24px; }
 .learn-body li:last-child { margin-bottom: 0; }
 .learn-body li strong { font-weight: 600; display: block; margin-bottom: 0; }
 .learn-body li .light { font-weight: 300; display: block; margin-top: 0; }
@@ -1202,6 +1241,18 @@ body {
   font-family: var(--font-sans); font-weight: 300; font-size: 16px;
   line-height: 20px; margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
 }
+.consult-contact {
+  display: flex; flex-wrap: wrap; gap: 16px 28px; margin-top: 16px;
+}
+.consult-contact-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans); font-weight: 400; font-size: 15px;
+  line-height: 20px; color: var(--text); text-decoration: none;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  transition: color 0.2s ease;
+}
+.consult-contact-item:hover { color: var(--blue-light); }
+.consult-contact-item svg { flex-shrink: 0; }
 @media (max-width: 1200px) {
   .sec-consult { aspect-ratio: auto; min-height: 0; padding: 40px 0; }
   .consult-photo { position: relative; top: auto; left: auto; width: 60%; max-width: 500px; margin: 0 auto; }
@@ -1289,28 +1340,35 @@ body {
 .nav-hamburger {
   display: none;
   background: none; border: none; cursor: pointer;
-  width: 40px; height: 40px; position: relative; z-index: 12;
+  width: 40px; height: 40px; position: relative; z-index: 1002;
   padding: 0; flex-shrink: 0;
 }
 @media (max-width: 1530px) {
   .nav-hamburger { display: block; }
   .nav-right {
-    position: fixed; inset: 0; z-index: 11;
-    background: rgba(44, 49, 53, 0.97);
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 32px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    position: fixed; top: 0; left: 0; right: 0; bottom: auto; z-index: 1001;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 10px 30px rgba(17, 24, 39, 0.12);
+    flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    gap: 22px; padding: 112px 48px 34px;
+    opacity: 0; pointer-events: none; transform: translateY(-12px);
+    max-height: 100dvh; overflow-y: auto;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .nav-right.nav-open { opacity: 1; pointer-events: auto; }
-  .nav-links { flex-direction: column; align-items: center; gap: 24px; }
-  .nav-links a { font-size: 22px; line-height: 32px; }
-  .nav-cta { font-size: 18px; padding: 14px 36px; }
+  .nav-right.nav-open,
+  .nav-toggle:checked ~ .nav-right {
+    opacity: 1; pointer-events: auto; transform: translateY(0);
+  }
+  .nav-links { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .nav-links a { font-size: 18px; line-height: 26px; color: var(--text); }
+  .nav-cta { font-size: 18px; padding: 14px 36px; border-color: var(--text); color: var(--text); }
 }
 .hamburger-line,
 .hamburger-line::before,
 .hamburger-line::after {
   display: block; width: 24px; height: 2px;
   background: var(--white); border-radius: 2px;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, background-color 0.28s ease;
   position: absolute; left: 8px;
 }
 .hamburger-line { top: 50%; transform: translateY(-50%); }
@@ -1319,6 +1377,21 @@ body {
 .hamburger-line.open { background: transparent; }
 .hamburger-line.open::before { top: 0; transform: rotate(45deg); }
 .hamburger-line.open::after { top: 0; transform: rotate(-45deg); }
+.nav-toggle:checked + .nav-hamburger .hamburger-line { background: transparent; }
+.nav-toggle:checked + .nav-hamburger .hamburger-line::before { top: 0; transform: rotate(45deg); }
+.nav-toggle:checked + .nav-hamburger .hamburger-line::after { top: 0; transform: rotate(-45deg); }
+.nav-bar.nav-scrolled .hamburger-line:not(.open),
+.nav-bar:hover .hamburger-line:not(.open) {
+  background: var(--text);
+}
+.nav-bar.nav-scrolled .hamburger-line::before,
+.nav-bar.nav-scrolled .hamburger-line::after,
+.nav-bar:hover .hamburger-line::before,
+.nav-bar:hover .hamburger-line::after,
+.nav-bar.nav-opened .hamburger-line::before,
+.nav-bar.nav-opened .hamburger-line::after {
+  background: var(--text);
+}
 
 /* ============================================================
    TABLET / MOBILE LAYOUT — 1024px
@@ -1326,6 +1399,7 @@ body {
 @media (max-width: 1024px) {
   /* — Nav — */
   .nav-logo img { height: 26px; }
+  .nav-right { padding: 88px 20px 28px; }
 
   /* — Hero — wyżej na wąskich ekranach: większy bottom + odstępy (mniej „przyklejone” do dołu) */
   .hero-wrap {
@@ -1338,7 +1412,7 @@ body {
   }
   .hero-photo { height: 100%; top: 0; min-height: 100%; }
   .hero-photo img { object-position: 70% center; }
-  .nav-bar { position: absolute; top: 0; left: 0; right: 0; padding: 0 20px; height: 72px; }
+  .nav-bar { padding: 0 20px; height: 72px; }
   .hero-copy {
     position: absolute;
     left: max(16px, env(safe-area-inset-left, 0px));
@@ -1398,8 +1472,8 @@ body {
 
   /* — Agenda — */
   .sec-agenda {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     padding-left: max(56px, calc(20px + env(safe-area-inset-left, 0px)));
     padding-right: max(56px, calc(20px + env(safe-area-inset-right, 0px)));
     min-height: 0;
@@ -1522,6 +1596,7 @@ body {
   .consult-content h2 { font-size: 32px; line-height: 40px; }
   .consult-content .lead { font-size: 18px; line-height: 26px; }
   .consult-person { margin-top: 28px; }
+  .consult-contact { flex-direction: column; gap: 12px; }
 
   /* — Footer — */
   .site-footer { padding: 48px 20px; }
