@@ -467,16 +467,8 @@ body {
   .timeline { max-width: none; overflow: visible; }
   .timeline-outer { container-type: normal; aspect-ratio: auto; overflow: visible; max-width: none; }
   .timeline-track { position: static; left: auto; top: auto; transform: none; width: 100%; height: auto; min-height: 0; }
-  /* Jedna pozioma linia pod tytułem sekcji zamiast skalowanej osi desktopowej */
   .timeline-line {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-width: none;
-    margin-bottom: clamp(20px, 4vw, 36px);
-    height: 2px;
-    background: rgba(255, 255, 255, 0.72);
+    display: none;
   }
   .tl-grid {
     display: flex;
@@ -514,9 +506,9 @@ body {
     min-height: 0;
     padding-bottom: 0;
     display: grid;
-    grid-template-columns: minmax(5.5rem, 7.25rem) minmax(0, 1fr);
+    grid-template-columns: minmax(3rem, 4.5rem) minmax(0, 1fr);
     grid-template-areas: "num body";
-    column-gap: clamp(16px, 3.5vw, 28px);
+    column-gap: clamp(12px, 2vw, 20px);
     align-items: start;
   }
   .tl-num,
