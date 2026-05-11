@@ -615,40 +615,61 @@ body {
   max-width: none; box-sizing: border-box; isolation: isolate; padding: 80px 0;
 }
 .scenarios-inner {
-  padding: 62px 203px; display: flex; flex-direction: column;
-  gap: 50px; align-items: flex-start; width: 100%; max-width: none; box-sizing: border-box;
+  padding: clamp(40px, 5vw, 62px) max(24px, min(203px, 12vw));
+  display: flex; flex-direction: column;
+  gap: clamp(28px, 4vw, 50px); align-items: flex-start; width: 100%; max-width: none;
+  box-sizing: border-box; min-width: 0;
 }
-.scenarios-intro { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; max-width: 1287px; }
+.scenarios-intro {
+  display: flex; flex-direction: column; gap: 20px; align-items: flex-start;
+  max-width: 1287px; min-width: 0; width: 100%;
+}
 .sec-scenarios h2 {
   font-family: var(--font-serif); font-size: 64px; font-weight: 400;
   line-height: 70px; color: var(--text); margin: 0; max-width: 1287px;
   font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word; word-wrap: break-word;
 }
 .sec-scenarios .sub {
   font-family: var(--font-sans); font-size: 22px; font-weight: 400;
   line-height: 24px; color: var(--text); margin: 0; max-width: 1287px;
+  overflow-wrap: break-word; word-wrap: break-word;
 }
 .scenario-cols {
-  display: flex; flex-direction: row; flex-wrap: nowrap; gap: 50px;
-  align-items: flex-start; width: 100%; max-width: 1540px; box-sizing: border-box;
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  gap: clamp(24px, 3vw, 50px);
+  align-items: flex-start; width: 100%; max-width: 1540px;
+  box-sizing: border-box; min-width: 0;
 }
 .scenario-col {
-  flex: 0 0 480px; width: 480px; max-width: 480px; min-width: 0;
+  flex: 1 1 min(340px, 100%);
+  min-width: min(100%, 260px);
+  max-width: 480px;
   font-family: var(--font-sans); font-weight: 300; font-size: 16px; line-height: 30px;
+  box-sizing: border-box;
+  overflow-wrap: break-word; word-wrap: break-word;
 }
 .scenario-col h3 { font-weight: 700; font-size: 22px; line-height: 30px; margin: 0; }
 .scenario-col ul { margin: 0; padding-left: 1.5em; list-style: disc; }
 .scenario-col li { margin: 0; padding-left: 0.25em; }
 @media (max-width: 1200px) {
   .sec-scenarios { padding: 48px 0; }
-  .scenarios-inner { padding: 48px 32px; }
-  .scenario-cols { flex-wrap: wrap; max-width: none; }
-  .scenario-col { flex: 1 1 100%; width: 100%; max-width: 480px; }
+  .scenarios-inner { padding: 48px max(32px, min(12vw, 80px)); }
+  .scenario-cols { max-width: none; }
+  .scenario-col {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
 }
 @media (max-width: 640px) {
   .sec-scenarios { padding: 32px 0; }
-  .scenarios-inner { padding: 40px 20px; }
-  .sec-scenarios h2 { font-size: clamp(36px, 10vw, 64px); line-height: 1.1; }
+  .scenarios-inner { padding: 40px max(20px, env(safe-area-inset-left)) 40px max(20px, env(safe-area-inset-right)); }
+  .sec-scenarios h2 { font-size: clamp(28px, 8vw, 40px); line-height: 1.15; }
+  .sec-scenarios .sub { font-size: clamp(16px, 4vw, 20px); line-height: 1.45; }
+  .scenario-col { font-size: 15px; line-height: 26px; }
+  .scenario-col h3 { font-size: clamp(17px, 4.2vw, 20px); line-height: 1.35; }
 }
 
 /* —— Why proof —— */
@@ -1188,11 +1209,14 @@ body {
 
   /* — Scenarios — */
   .sec-scenarios { padding: 48px 0; }
-  .scenarios-inner { padding: 0 20px; gap: 32px; }
-  .sec-scenarios h2 { font-size: 32px; line-height: 40px; }
+  .scenarios-inner {
+    padding: 0 max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
+    gap: 32px;
+  }
+  .sec-scenarios h2 { font-size: clamp(26px, 4.2vw, 32px); line-height: 1.22; }
   .sec-scenarios .sub { font-size: 18px; line-height: 26px; }
-  .scenario-cols { flex-wrap: wrap; gap: 32px; }
-  .scenario-col { flex: 1 1 100%; width: 100%; max-width: none; }
+  .scenario-cols { gap: 28px 32px; }
+  .scenario-col { flex: 1 1 100%; width: 100%; max-width: none; min-width: 0; }
   .scenario-col h3 { font-size: 18px; line-height: 26px; }
 
   /* — Why — */
@@ -1339,6 +1363,9 @@ body {
   .learn-visual { max-height: 200px; }
 
   .sec-scenarios h2 { font-size: 26px; line-height: 34px; }
+  .sec-scenarios .sub { font-size: 16px; line-height: 24px; }
+  .scenario-col { font-size: 15px; line-height: 24px; }
+  .scenario-col h3 { font-size: 16px; line-height: 24px; }
 
   .sec-why h2 { font-size: 26px; line-height: 34px; }
   .why-card .n { font-size: 32px; line-height: 40px; }
