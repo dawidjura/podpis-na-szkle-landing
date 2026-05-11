@@ -643,18 +643,17 @@ body {
 
 /* —— Learn split ——
    Figma: Main Page → „Czego dowiesz się” (256:18210). Układ 1920: foto −1/34/1095×651,
-   wektor 580×744 od dołu, Paragraph 1038×119 / 697px, trytytka 1675×169 / 611.542px. */
+   wektor left 580 / 744 wys., pas szary nad zdjęciem do styku z wektorem (580px), Paragraph 1038×119 / 697px. */
 .sec-learn {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(100deg, #0d3d5c 0%, #006eb1 45%, #2b7bba 100%);
+  background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
 }
-/* Pasek jak Agenda — nad obszarem zdjęcia (Figma y 0–34 przy szer. zdjęcia). */
 .sec-learn-top-bar {
   position: absolute;
   left: 0;
+  right: 0;
   top: 0;
-  width: calc(1095 / 1920 * 100%);
   height: calc(34 / 1920 * 100vw);
   background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
   z-index: 6;
@@ -688,7 +687,7 @@ body {
   overflow: hidden;
 }
 .learn-visual-flip { width: 100%; height: 100%; transform: rotate(180deg) scaleY(-1); transform-origin: center center; }
-.learn-visual-crop { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.learn-visual-crop { position: relative; width: 100%; height: 100%; overflow: hidden; top: 25 }
 .learn-visual img {
   position: absolute; width: 114.31%; height: 128.15%;
   left: -10.51%; top: -21.4%; object-fit: cover;
@@ -696,13 +695,18 @@ body {
 }
 .learn-split-svg {
   position: absolute;
-  left: calc(580 / 1920 * 100%);
+  /* −1px: anty-szczelina / subpiksel przy styku z szarym i tłem sekcji */
+  left: calc(580 / 1920 * 100% - 1px);
+  right: 0;
   bottom: 0;
-  width: calc(1462 / 1920 * 100%);
+  width: auto;
   height: auto;
+  /* Figma: 580 + 1462 > 1920 — szerokość do prawej krawędzi, nie stały ułamek 1462/1920 */
   aspect-ratio: 1462 / 744;
   pointer-events: none;
   z-index: 4;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 .learn-split-svg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; display: block; }
 .learn-copy {
@@ -807,6 +811,7 @@ body {
     max-width: none;
   }
   .learn-try { display: none; }
+  
   .sec-learn-top-bar,
   .sec-learn-bottom-bar { display: none; }
 }
