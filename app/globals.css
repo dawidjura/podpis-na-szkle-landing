@@ -1203,16 +1203,19 @@ a.form-submit--anchor {
   max-width: 520px;
   font-feature-settings: "lnum" 1, "tnum" 1;
 }
-#rejestracja {
+#rejestracja,
+#rejestracja-dol {
   scroll-margin-top: 104px;
   overflow-x: hidden;
   overflow-y: visible;
 }
-#rejestracja .form-right {
+#rejestracja .form-right,
+#rejestracja-dol .form-right {
   position: relative;
   z-index: 2;
 }
-#rejestracja .form-actions {
+#rejestracja .form-actions,
+#rejestracja-dol .form-actions {
   position: relative;
   z-index: 3;
   padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
@@ -1845,7 +1848,8 @@ a.form-submit--anchor {
   .guest .rule img { width: 100%; max-width: 275px; }
 
   /* — Form — */
-  #rejestracja {
+  #rejestracja,
+  #rejestracja-dol {
     scroll-margin-top: 88px;
   }
   .sec-form {

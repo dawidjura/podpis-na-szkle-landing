@@ -29,7 +29,11 @@ export default function Home() {
         <Why />
         <Audience />
         <Guests />
-        <RegistrationForm />
+        <RegistrationForm
+          sectionId="rejestracja-dol"
+          headingId="form-main-title-dol"
+          fieldIdPrefix="reg-dol"
+        />
         <Consult />
         <Organizers />
         <Footer />

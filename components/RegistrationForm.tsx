@@ -4,7 +4,25 @@ import { useState, useCallback, useRef } from "react";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
 import ThankYouModal from "./ThankYouModal";
 
-export default function RegistrationForm() {
+export type RegistrationFormProps = {
+  /** `dark` — sekcja jak w teaserze (`.sec-form--dark`). */
+  variant?: "default" | "dark";
+  /** `id` sekcji (kotwica); domyślnie `rejestracja` — nawigacja CTA. */
+  sectionId?: string;
+  /** `id` nagłówka h2 dla `aria-labelledby`. */
+  headingId?: string;
+  /** Prefiks `id` pól i `htmlFor` — drugi formularz musi mieć inny niż domyślny `reg`. */
+  fieldIdPrefix?: string;
+};
+
+export default function RegistrationForm({
+  variant = "default",
+  sectionId = "rejestracja",
+  headingId = "form-main-title",
+  fieldIdPrefix = "reg",
+}: RegistrationFormProps) {
+  const sectionClass =
+    variant === "dark" ? "sec-form sec-form--dark" : "sec-form";
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,11 +119,11 @@ export default function RegistrationForm() {
 
   return (
     <>
-      <section className="sec-form" id="rejestracja" aria-labelledby="form-main-title">
+      <section className={sectionClass} id={sectionId} aria-labelledby={headingId}>
         <img className="form-deco" src="/assets/v4.1f23f49e.svg" alt="" aria-hidden="true" />
         <div className="form-layout">
           <div className="form-left">
-            <h2 id="form-main-title">
+            <h2 id={headingId}>
               Zarezerwuj
               <br />
               swoje miejsce
@@ -122,11 +140,11 @@ export default function RegistrationForm() {
             >
               <div className="form-grid2">
                 <div className="field">
-                  <label htmlFor="reg-firstName">
+                  <label htmlFor={`${fieldIdPrefix}-firstName`}>
                     Imię <span className="req">*</span>
                   </label>
                   <input
-                    id="reg-firstName"
+                    id={`${fieldIdPrefix}-firstName`}
                     type="text"
                     name="firstName"
                     placeholder="Twoje imię"
@@ -135,11 +153,11 @@ export default function RegistrationForm() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="reg-lastName">
+                  <label htmlFor={`${fieldIdPrefix}-lastName`}>
                     Nazwisko <span className="req">*</span>
                   </label>
                   <input
-                    id="reg-lastName"
+                    id={`${fieldIdPrefix}-lastName`}
                     type="text"
                     name="lastName"
                     placeholder="Twoje nazwisko"
@@ -150,11 +168,11 @@ export default function RegistrationForm() {
               </div>
               <div className="form-grid2">
                 <div className="field">
-                  <label htmlFor="reg-phone">
+                  <label htmlFor={`${fieldIdPrefix}-phone`}>
                     Telefon <span className="req">*</span>
                   </label>
                   <input
-                    id="reg-phone"
+                    id={`${fieldIdPrefix}-phone`}
                     type="tel"
                     name="phone"
                     placeholder="Twój numer telefonu"
@@ -164,11 +182,11 @@ export default function RegistrationForm() {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="reg-email">
+                  <label htmlFor={`${fieldIdPrefix}-email`}>
                     E-mail <span className="req">*</span>
                   </label>
                   <input
-                    id="reg-email"
+                    id={`${fieldIdPrefix}-email`}
                     type="email"
                     name="email"
                     placeholder="Twój e-mail"
