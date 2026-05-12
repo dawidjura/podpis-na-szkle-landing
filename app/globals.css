@@ -69,7 +69,9 @@ body {
 .nav-bar {
   position: fixed; z-index: 10050;
   top: 0; left: 0; right: 0;
-  height: 96px; display: flex;
+  height: 96px;
+  --nav-bar-h: 96px;
+  display: flex;
   align-items: center; justify-content: space-between;
   padding: 0 48px;
   overflow: visible;
@@ -1477,7 +1479,10 @@ body {
   .nav-mobile-backdrop {
     display: block;
     position: fixed;
-    inset: 0;
+    top: var(--nav-bar-h, 96px);
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 10040;
     margin: 0;
     padding: 0;
@@ -1507,19 +1512,24 @@ body {
     position: fixed;
     left: 0;
     right: 0;
-    top: 0;
+    top: var(--nav-bar-h, 96px);
     z-index: 10041;
+    box-sizing: border-box;
+    width: 100%;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 22px;
-    padding: 112px 48px 34px;
-    max-height: min(100dvh, 100vh);
+    /* Wysokość od treści (linki + CTA); max-height + scroll gdy mało miejsca w viewport. */
+    padding: 20px 48px 28px;
+    max-height: min(calc(100dvh - var(--nav-bar-h, 96px) - 16px), calc(100vh - var(--nav-bar-h, 96px) - 16px));
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background: rgba(255, 255, 255, 0.98);
     box-shadow: 0 10px 30px rgba(17, 24, 39, 0.12);
+    border-radius: 0 0 16px 16px;
     touch-action: pan-y;
+    /* Wysuwane w dół spod paska; -100% chowa nad slotem — ::after na .nav-bar maskuje strefę logo. */
     transform: translate3d(0, -100%, 0);
     opacity: 0;
     visibility: hidden;
@@ -1562,6 +1572,18 @@ body {
   .nav-bar {
     background: rgba(255, 255, 255, 0.98);
     box-shadow: 0 8px 28px rgba(17, 24, 39, 0.14);
+  }
+  /* Warstwa nad panelem (z-index), pod logo/hamburger — zasłania ewentualne „przecieki” animacji. */
+  .nav-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: var(--nav-bar-h, 96px);
+    z-index: 10045;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.98);
   }
   .nav-bar .nav-logo img {
     filter: brightness(0) saturate(100%) invert(17%) sepia(9%) saturate(537%) hue-rotate(169deg) brightness(93%) contrast(90%);
@@ -1627,7 +1649,7 @@ body {
   /* — Nav — */
   .nav-logo img { height: 26px; }
   .nav-mobile-sheet {
-    padding: 88px 20px 28px;
+    padding: 24px 20px 28px;
     padding-left: max(20px, env(safe-area-inset-left, 0px));
     padding-right: max(20px, env(safe-area-inset-right, 0px));
   }
@@ -1643,7 +1665,11 @@ body {
   }
   .hero-photo { height: 100%; top: 0; min-height: 100%; }
   .hero-photo img { object-position: 70% center; }
-  .nav-bar { padding: 0 20px; height: 72px; }
+  .nav-bar {
+    padding: 0 20px;
+    height: 72px;
+    --nav-bar-h: 72px;
+  }
   .hero-copy {
     position: absolute;
     left: max(16px, env(safe-area-inset-left, 0px));
