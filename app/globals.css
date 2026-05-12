@@ -21,7 +21,11 @@
   --font-sans: "Inter", system-ui, sans-serif;
 }
 
-html { scroll-behavior: smooth; overflow-x: hidden; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-anchor: none;
+}
 
 body {
   font-family: var(--font-sans);
@@ -30,6 +34,7 @@ body {
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "lnum" 1, "tnum" 1;
   overflow-x: hidden;
+  overflow-anchor: none;
 }
 
 .page {
@@ -1165,6 +1170,9 @@ body {
   font-family: var(--font-sans); font-weight: 600; font-size: clamp(16px, 1.5vw, 18px);
   line-height: 1.35; padding: 14px clamp(14px, 2vw, 20px); border-radius: 120px;
   border: none; cursor: pointer; white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+  min-height: 48px;
   transition: opacity 0.2s;
   flex: 0 1 auto;
   align-self: flex-end;
@@ -1173,6 +1181,41 @@ body {
 .form-submit:disabled {
   opacity: 0.6; cursor: not-allowed;
   font-feature-settings: "lnum" 1, "tnum" 1;
+}
+a.form-submit--anchor {
+  text-decoration: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+.form-teaser-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  min-width: 0;
+}
+.form-teaser-lead {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.35;
+  margin: 0;
+  max-width: 520px;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+#rejestracja {
+  scroll-margin-top: 104px;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+#rejestracja .form-right {
+  position: relative;
+  z-index: 2;
+}
+#rejestracja .form-actions {
+  position: relative;
+  z-index: 3;
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
 }
 .form-deco {
   position: absolute; left: -243px; bottom: 87px;
@@ -1646,7 +1689,9 @@ body {
    TABLET / MOBILE LAYOUT — 1024px
    ============================================================ */
 @media (max-width: 1024px) {
-  /* — Nav — */
+  html {
+    scroll-behavior: auto;
+  }
   .nav-logo img { height: 26px; }
   .nav-mobile-sheet {
     padding: 24px 20px 28px;
@@ -1657,7 +1702,6 @@ body {
   /* — Hero — wyżej na wąskich ekranach: większy bottom + odstępy (mniej „przyklejone” do dołu) */
   .hero-wrap {
     min-height: 100svh;
-    min-height: 100dvh;
     --hero-gap-kicker-h1: clamp(16px, 3.5vw, 22px);
     --hero-gap-h1-desc: clamp(32px, 6vw, 44px);
     --hero-gap-sub-body: clamp(18px, 3.8vw, 24px);
@@ -1801,6 +1845,9 @@ body {
   .guest .rule img { width: 100%; max-width: 275px; }
 
   /* — Form — */
+  #rejestracja {
+    scroll-margin-top: 88px;
+  }
   .sec-form {
     padding: 60px max(20px, env(safe-area-inset-right)) 60px max(20px, env(safe-area-inset-left));
     min-height: 0;
@@ -1826,6 +1873,9 @@ body {
     width: 100%;
   }
   .form-error { max-width: none; }
+  .form-teaser-right {
+    align-items: stretch;
+  }
   .form-submit {
     width: 100%;
     justify-content: center;
@@ -1964,8 +2014,13 @@ body {
 .modal-overlay {
   position: fixed; inset: 0; z-index: 10100;
   display: flex; align-items: center; justify-content: center;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  min-height: 100svh;
   background: rgba(0, 0, 0, 0.55);
   animation: fadeIn 0.25s ease;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 

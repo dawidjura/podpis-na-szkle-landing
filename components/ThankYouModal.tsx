@@ -1,5 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ThankYouModalProps {
   open: boolean;
@@ -7,14 +9,20 @@ interface ThankYouModalProps {
 }
 
 export default function ThankYouModal({ open, onClose }: ThankYouModalProps) {
-  if (!open) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
     <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Potwierdzenie zapisu">
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <img className="modal-bg" src="/assets/popup-bg.svg" alt="" aria-hidden="true" />
 
-        <button className="modal-close" onClick={onClose} aria-label="Zamknij">
+        <button type="button" className="modal-close" onClick={onClose} aria-label="Zamknij">
           &times;
         </button>
 
@@ -40,6 +48,7 @@ export default function ThankYouModal({ open, onClose }: ThankYouModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
