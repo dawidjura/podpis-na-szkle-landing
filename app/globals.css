@@ -1264,21 +1264,117 @@ body {
 /* —— Organizers —— */
 .sec-organizers {
   background: #fff;
-  padding: 160px 20px;
-  text-align: center;
+  color: var(--text);
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: clamp(72px, 10vw, 160px) 0;
+}
+.organizers-inner {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 max(24px, min(203px, 12vw));
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 64px);
+  align-items: stretch;
 }
 .sec-organizers h2 {
-  font-family: var(--font-serif); font-weight: 400;
-  font-size: 64px; line-height: 80px;
-  color: var(--text); margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.15;
+  color: var(--text);
+  margin: 0;
   font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
-@media (max-width: 768px) {
-  .sec-organizers { padding: 60px 20px; }
-  .sec-organizers h2 { font-size: 36px; line-height: 44px; }
+.organizers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(32px, 4vw, 72px);
+  align-items: start;
+  width: 100%;
+  min-width: 0;
 }
-@media (max-width: 480px) {
-  .sec-organizers h2 { font-size: 28px; line-height: 36px; }
+.organizer-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(16px, 2vw, 24px);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.75;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.organizer-card p {
+  margin: 0;
+}
+.organizer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 52px;
+  margin-bottom: clamp(8px, 1.5vw, 16px);
+}
+.organizer-logo img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.organizer-logo--gs1 img {
+  max-height: 64px;
+  width: auto;
+}
+/* SVG logo jest białe — filter na <img> bywa niewidoczny w WebKit; maska + tło = pewny „ciemny” znak jak w navbarze. */
+.organizer-logo--euvic {
+  --euvic-logo-h: 38px;
+  flex-shrink: 0;
+  height: var(--euvic-logo-h);
+  width: min(220px, calc(var(--euvic-logo-h) * 177.946 / 32));
+  max-width: 100%;
+  background-color: var(--text);
+  -webkit-mask-image: url("/assets/logo.8fea627a.svg");
+  mask-image: url("/assets/logo.8fea627a.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+}
+@media (max-width: 900px) {
+  .organizers-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 6vw, 56px);
+  }
+  .organizer-card {
+    max-width: 640px;
+  }
+}
+@media (max-width: 640px) {
+  .sec-organizers {
+    padding: 48px 0 56px;
+  }
+  .organizers-inner {
+    padding: 0 max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
+    gap: 32px;
+  }
+  .organizer-logo--gs1 img {
+    max-height: 48px;
+  }
+  .organizer-logo--euvic {
+    --euvic-logo-h: 32px;
+  }
 }
 
 /* —— Footer —— */
@@ -1460,6 +1556,20 @@ body {
     padding: 14px 36px;
     border-color: var(--text);
     color: var(--text);
+  }
+
+  /* Stałe białe tło paska nawigacji (bez zmiany przy scrollu — jak na desktopie po scrollu). */
+  .nav-bar {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 8px 28px rgba(17, 24, 39, 0.14);
+  }
+  .nav-bar .nav-logo img {
+    filter: brightness(0) saturate(100%) invert(17%) sepia(9%) saturate(537%) hue-rotate(169deg) brightness(93%) contrast(90%);
+  }
+  .nav-bar #nav-mobile-toggle:not(:checked) ~ .nav-hamburger .hamburger-line,
+  .nav-bar #nav-mobile-toggle:not(:checked) ~ .nav-hamburger .hamburger-line::before,
+  .nav-bar #nav-mobile-toggle:not(:checked) ~ .nav-hamburger .hamburger-line::after {
+    background: var(--text);
   }
 }
 @media (min-width: 1531px) {

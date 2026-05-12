@@ -84,31 +84,57 @@ export default function Nav() {
     const nav = navRef.current;
     if (!nav) return;
 
-    let ticking = false;
-    const check = () => {
-      const y = Math.max(
+    const mq = window.matchMedia("(min-width: 1531px)");
+
+    const readScrollY = () =>
+      Math.max(
+        window.scrollY ?? 0,
         window.pageYOffset ?? 0,
         document.documentElement.scrollTop ?? 0,
         document.body.scrollTop ?? 0,
       );
-      nav.classList.toggle("nav-scrolled", y > 10);
-      ticking = false;
-    };
 
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(check);
+    let scrollCleanup: (() => void) | undefined;
+
+    const bindDesktopScroll = () => {
+      scrollCleanup?.();
+      scrollCleanup = undefined;
+
+      if (!mq.matches) {
+        nav.classList.remove("nav-scrolled");
+        return;
       }
+
+      let ticking = false;
+      const apply = () => {
+        nav.classList.toggle("nav-scrolled", readScrollY() > 10);
+        ticking = false;
+      };
+
+      const schedule = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      };
+
+      apply();
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule);
+
+      scrollCleanup = () => {
+        window.removeEventListener("scroll", schedule);
+        window.removeEventListener("resize", schedule);
+      };
     };
 
-    check();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    document.addEventListener("scroll", onScroll, { passive: true });
+    bindDesktopScroll();
+    mq.addEventListener("change", bindDesktopScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      document.removeEventListener("scroll", onScroll);
+      mq.removeEventListener("change", bindDesktopScroll);
+      scrollCleanup?.();
+      nav.classList.remove("nav-scrolled");
     };
   }, []);
 
