@@ -7,7 +7,7 @@ export default function EventBand() {
       <div className="event-inner">
         <h2 id="ev-title">Szczegóły wydarzenia</h2>
         <div className="event-stats">
-          <div className="event-stat"><label>Data:</label><strong>26 marca 2026 r.</strong></div>
+          <div className="event-stat"><label>Data:</label><strong>26 czerwca 2026 r.</strong></div>
           <div className="event-stat"><label>Godzina:</label><strong>12:00</strong></div>
           <div className="event-stat"><label>Czas trwania:</label><strong>60 min</strong></div>
           <div className="event-stat is-place"><label>Miejsce:</label><strong>Online</strong></div>

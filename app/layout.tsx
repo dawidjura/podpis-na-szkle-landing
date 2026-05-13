@@ -21,7 +21,7 @@ const sincerity = localFont({
 export const metadata: Metadata = {
   title: "Podpis na szkle – dowód dostawy nie do podważenia – Webinar GS1 & Euvic",
   description:
-    "Webinar GS1 & Euvic: połączenie standardów GS1 z cyfrową dokumentacją zdarzeń w transporcie. 26.03.2026, 12:00, online.",
+    "Webinar GS1 & Euvic: połączenie standardów GS1 z cyfrową dokumentacją zdarzeń w transporcie. 26.06.2026, 12:00, online.",
 };
 
 export default function RootLayout({
