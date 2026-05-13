@@ -10,10 +10,8 @@ export default function Agenda() {
             <div className="tl-grid">
               <div className="tl-item top">
                 <div className="tl-num">01</div>
-                <div className="tl-deco" aria-hidden="true">
-                  <div className="tl-connector"><img src="/assets/union1.206a9414.svg" alt="" /></div>
-                  <div className="tl-dot"><img src="/assets/ell85.b7cda8ed.svg" alt="" /></div>
-                </div>
+                <div className="tl-connector" aria-hidden="true"><img src="/assets/union1.206a9414.svg" alt="" /></div>
+                <div className="tl-dot" aria-hidden="true"><img src="/assets/ell85.b7cda8ed.svg" alt="" /></div>
                 <div className="tl-body">
                   <h3>Wyzwania w dokumentowaniu dostaw</h3>
                   <p>Zagubione dokumenty WZ/CMR, zdjęcia w komunikatorach i brak jednego cyfrowego śladu zdarzeń.</p>
@@ -21,10 +19,8 @@ export default function Agenda() {
               </div>
               <div className="tl-item bot">
                 <div className="tl-num">02</div>
-                <div className="tl-deco" aria-hidden="true">
-                  <div className="tl-connector"><img src="/assets/union.74fd3637.svg" alt="" /></div>
-                  <div className="tl-dot"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
-                </div>
+                <div className="tl-connector" aria-hidden="true"><img src="/assets/union.74fd3637.svg" alt="" /></div>
+                <div className="tl-dot" aria-hidden="true"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
                 <div className="tl-body">
                   <h3>Standardy GS1 (SSCC, GTIN, GLN)</h3>
                   <p>Jednoznaczna identyfikacja jednostki logistycznej jako fundament wiarygodnych danych o dostawie</p>
@@ -32,10 +28,8 @@ export default function Agenda() {
               </div>
               <div className="tl-item top">
                 <div className="tl-num">03</div>
-                <div className="tl-deco" aria-hidden="true">
-                  <div className="tl-connector"><img src="/assets/union1.206a9414.svg" alt="" /></div>
-                  <div className="tl-dot"><img src="/assets/ell85.b7cda8ed.svg" alt="" /></div>
-                </div>
+                <div className="tl-connector" aria-hidden="true"><img src="/assets/union1.206a9414.svg" alt="" /></div>
+                <div className="tl-dot" aria-hidden="true"><img src="/assets/ell85.b7cda8ed.svg" alt="" /></div>
                 <div className="tl-body">
                   <h3>Cyfrowy dowód dostawy</h3>
                   <p>Jak dokumentować zdarzenia na trasie: podpis odbiorcy, zdjęcia, geolokalizacja i timestamp.</p>
@@ -43,10 +37,8 @@ export default function Agenda() {
               </div>
               <div className="tl-item bot">
                 <div className="tl-num">04</div>
-                <div className="tl-deco" aria-hidden="true">
-                  <div className="tl-connector"><img src="/assets/union.74fd3637.svg" alt="" /></div>
-                  <div className="tl-dot"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
-                </div>
+                <div className="tl-connector" aria-hidden="true"><img src="/assets/union.74fd3637.svg" alt="" /></div>
+                <div className="tl-dot" aria-hidden="true"><img src="/assets/ell86.2062d1cf.svg" alt="" /></div>
                 <div className="tl-body">
                   <h3>Panel Q&amp;A</h3>
                   <p>Dyskusja o realnych scenariuszach, reklamacjach i wyzwaniach w logistyce.</p>

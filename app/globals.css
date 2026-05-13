@@ -406,27 +406,37 @@ body {
   .program-col { max-width: 100%; }
 }
 
-/* —— Agenda dark —— */
+/* —— Agenda —— */
 .sec-agenda {
   min-height: 1046px;
   padding: 132px 0 120px;
-  background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
-  color: var(--white);
+  background: #fff;
+  color: var(--text);
   position: relative;
 }
 .sec-agenda h2 {
   font-family: var(--font-serif); font-weight: 400;
   font-size: 64px; line-height: 80px;
   margin: 0 203px 108px; max-width: 877px;
+  color: var(--text);
 }
-.timeline { width: 100%; max-width: none; margin: 0; padding: 0; overflow: hidden; }
+.timeline {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  /* Tor ma szer. 1920px + scale — overflow:hidden obcinał lewą stronę (kropki 01/02). */
+  overflow-x: visible;
+  overflow-y: visible;
+}
 .timeline-outer {
   container-type: inline-size; container-name: agenda-timeline;
   width: 100%; max-width: none; margin: 0;
   /* Było 430px — za nisko dla .tl-item.bot (.tl-body od top: 364px); tekst był obcinany przez overflow */
   aspect-ratio: 1920 / 560;
   position: relative;
-  overflow: hidden;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 .timeline-track {
   position: absolute; left: 50%; top: 0;
@@ -437,13 +447,16 @@ body {
   transform: translateX(-50%) scale(calc(100cqi / 1920px));
 }
 .timeline-line {
-  position: absolute; left: -3px; top: 223px;
+  position: absolute; left: -3px; top: 224px;
   width: 1923px; height: 2px;
-  background: #ffffff; z-index: 1; pointer-events: none;
+  /* Figma 256:18110 (Line 586): top 224px, w 1923px — na jasnym tle oś w kolorze tekstu zamiast Dark/35 (#BFC1C4). */
+  background: var(--text);
+  z-index: 0;
+  pointer-events: none;
 }
 .tl-grid {
   display: grid; grid-template-columns: 325px 487px 325px 583px;
-  column-gap: 0; row-gap: 0; position: relative; z-index: 2;
+  column-gap: 0; row-gap: 0; position: relative; z-index: 1;
   min-height: 560px;
   width: 1920px;
   box-sizing: border-box;
@@ -456,34 +469,49 @@ body {
   color: var(--blue-light); text-align: center;
   position: absolute; width: 80px; left: 40px; margin: 0;
   transform: translateX(-50%); font-feature-settings: "lnum" 1, "tnum" 1;
+  z-index: 4;
 }
 .tl-connector {
   position: absolute; display: flex; justify-content: center;
   width: 5.334px; margin: 0; z-index: 2;
+  pointer-events: none;
 }
-.tl-connector img { width: 5.334px; height: auto; display: block; max-width: none; }
+.tl-connector img {
+  width: 5.334px; height: auto; display: block; max-width: none;
+}
 .tl-item.top .tl-connector img { height: 199.667px; width: 5.334px; object-fit: fill; }
 .tl-item.bot .tl-connector img { height: 194.667px; width: 5.334px; object-fit: fill; }
 .tl-dot {
   position: absolute; display: flex; justify-content: center;
-  align-items: center; width: 21px; height: 21px; margin: 0; z-index: 4;
+  align-items: center; width: 21px; height: 21px; margin: 0; z-index: 3;
+  pointer-events: none;
 }
-.tl-dot img { width: 15.04px; height: 15.04px; display: block; }
-.tl-body { position: absolute; left: 101px; margin: 0; box-sizing: border-box; }
+.tl-dot img {
+  width: 15.04px; height: 15.04px; display: block;
+}
+.tl-body {
+  position: absolute;
+  left: 101px;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 1;
+}
+/* Figma 256:18110 — współrzędne względem każdego .tl-item (szer. kolumny siatki). */
+.tl-item.top .tl-dot { left: 81.4px; top: 215.5px; }
+.tl-item.bot .tl-dot { left: 81.01px; top: 212.15px; }
 .tl-item.top .tl-body { top: 10px; width: 308.62px; max-width: 308.62px; }
 .tl-item.bot .tl-body { top: 364px; width: 400px; max-width: 400px; }
-.tl-body h3 { font-weight: 600; font-size: 22px; line-height: 30px; margin: 0; color: var(--white); }
+.tl-body h3 { font-weight: 600; font-size: 22px; line-height: 30px; margin: 0; color: var(--text); }
 .tl-body p {
   font-size: 14px;
   line-height: 1.45;
   margin: 0;
-  color: rgba(255, 255, 255, 0.95);
+  color: color-mix(in srgb, var(--text) 88%, transparent);
 }
 .tl-item.top .tl-body h3 { max-width: 308.62px; }
 .tl-item.top .tl-body p { margin-top: 0; max-width: 240.261px; }
 .tl-item.top .tl-num { top: 0; transform: translateX(-50%); }
-.tl-item.top .tl-connector { left: 86px; top: 23px; }
-.tl-item.top .tl-dot { left: 81px; top: 215.5px; }
+.tl-item.top .tl-connector { left: 86.47px; top: 23px; }
 .tl-item.bot .tl-num { top: 357.5px; transform: translateX(-50%); }
 .tl-item.bot:nth-child(2) .tl-body p { max-width: 400px; }
 .tl-item.bot:nth-child(2) .tl-body h3 { max-width: 388px; }
@@ -492,8 +520,7 @@ body {
 .tl-item.bot:nth-child(4) .tl-body h3 { max-width: 328px; }
 .tl-item.bot .tl-body h3 { margin: 0 0 6px; }
 .tl-item.bot .tl-body p { margin: 0; }
-.tl-item.bot .tl-connector { left: 88px; top: 223.5px; }
-.tl-item.bot .tl-dot { left: 81px; top: 212.15px; }
+.tl-item.bot .tl-connector { left: 88.48px; top: 223.5px; }
 /* Lista + kropka CSS — tylko viewport ≤1600px. Powyżej 1600px = skalowana oś z Figmy (bez zmian). */
 @media (max-width: 1600px) {
   .sec-agenda {
@@ -557,7 +584,6 @@ body {
     align-items: start;
   }
   .tl-num,
-  .tl-deco,
   .tl-connector,
   .tl-dot,
   .tl-body {
@@ -566,31 +592,14 @@ body {
     top: auto;
     right: auto;
   }
-  /* SVG z Figmy (łuki + kropki): ukryte — inaczej .tl-dot { display:flex; position:absolute }
-     z desktopu wygrywa nad zwykłym display:none i przy 02/04 widać drugą kropkę nad numerem. */
-  .sec-agenda .tl-item .tl-deco {
-    display: none !important;
-  }
   .sec-agenda .tl-item .tl-dot,
   .sec-agenda .tl-item .tl-connector {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
+    position: absolute !important;
     width: 0 !important;
     height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
     overflow: hidden !important;
     clip-path: inset(50%) !important;
-    border: 0 !important;
-    position: absolute !important;
-    left: -9999px !important;
-    top: -9999px !important;
-    pointer-events: none !important;
-  }
-  .sec-agenda .tl-item .tl-dot img,
-  .sec-agenda .tl-item .tl-connector img {
-    display: none !important;
   }
   .sec-agenda .tl-num {
     grid-area: num;
@@ -618,21 +627,24 @@ body {
     align-items: stretch;
     gap: 10px;
     padding-top: 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.45);
+    border-top: 1px solid var(--text);
     position: relative;
+    overflow: visible;
   }
   /* Jedna kropka na osi linii (top/bot identycznie — bez dodatkowego przesunięcia dla .bot) */
   .sec-agenda .tl-grid > .tl-item > .tl-body::before {
     content: "";
     position: absolute;
-    left: 0;
+    /* środek kropki na linii border-top; połowa szczeliny między numerem a treścią */
+    left: calc(-0.5 * clamp(12px, 2vw, 20px));
     top: 0;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: var(--white);
-    transform: translate(-4px, -50%);
-    box-shadow: 0 0 0 1px rgba(46, 46, 55, 0.85);
+    background: var(--text);
+    transform: translate(-50%, calc(-50% - 0.5px));
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--text);
+    z-index: 2;
   }
   .sec-agenda .tl-grid > .tl-item > .tl-body h3 {
     font-size: clamp(17px, 0.55rem + 1.35vw, 22px);
@@ -642,6 +654,7 @@ body {
     overflow-wrap: anywhere;
     word-break: break-word;
     max-width: none;
+    color: var(--text);
   }
   .sec-agenda .tl-item.bot .tl-body h3,
   .sec-agenda .tl-item.top .tl-body h3 {
@@ -655,6 +668,7 @@ body {
     max-width: none;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    color: color-mix(in srgb, var(--text) 88%, transparent);
   }
 }
 
@@ -684,15 +698,19 @@ body {
     gap: 8px;
     padding-top: 0.45rem;
   }
+  .sec-agenda .tl-grid > .tl-item > .tl-body::before {
+    left: 0;
+    transform: translate(0, calc(-50% - 0.5px));
+  }
 }
 
 /* —— Learn split ——
    Figma: Main Page → „Czego dowiesz się” (256:18210). Układ 1920: foto −1/34/1095×651,
-   wektor left 580 / 744 wys., pas szary nad zdjęciem do styku z wektorem (580px), Paragraph 1038×119 / 697px. */
+   wektor left 580 / 744 wys., pas biały nad zdjęciem do styku z wektorem (580px), Paragraph 1038×119 / 697px. */
 .sec-learn {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
+  background: #fff;
 }
 .sec-learn-top-bar {
   position: absolute;
@@ -700,7 +718,7 @@ body {
   right: 0;
   top: 0;
   height: calc(34 / 1920 * 100vw);
-  background: linear-gradient(to left, #2e2e37 16.101%, #33333d 90.923%, #383844 100%);
+  background: #fff;
   z-index: 6;
   pointer-events: none;
 }
@@ -730,6 +748,7 @@ body {
   aspect-ratio: 1095 / 651;
   z-index: 2;
   overflow: hidden;
+  background: #fff;
 }
 .learn-visual-flip { width: 100%; height: 100%; transform: rotate(180deg) scaleY(-1); transform-origin: center center; }
 .learn-visual-crop { position: relative; width: 100%; height: 100%; overflow: hidden; top: 0; }
@@ -772,6 +791,7 @@ body {
   line-height: 24px;
   margin: 0 0 12px;
   font-weight: 400;
+  color: rgba(255, 255, 255, 0.92);
 }
 .learn-copy h2 {
   font-family: var(--font-serif);
@@ -781,6 +801,7 @@ body {
   margin: 0;
   max-width: 732px;
   font-feature-settings: "lnum" 1, "tnum" 1;
+  color: var(--white);
 }
 .learn-body ul {
   list-style: disc;
@@ -789,11 +810,12 @@ body {
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
+  color: var(--white);
 }
 .learn-body li { margin: 0 0 0 24px; }
 .learn-body li:last-child { margin-bottom: 0; }
-.learn-body li strong { font-weight: 600; display: block; margin-bottom: 0; }
-.learn-body li .light { font-weight: 300; display: block; margin-top: 0; }
+.learn-body li strong { font-weight: 600; display: block; margin-bottom: 0; color: var(--white); }
+.learn-body li .light { font-weight: 300; display: block; margin-top: 0; color: rgba(255, 255, 255, 0.88); }
 .learn-try {
   position: absolute;
   left: calc(1675 / 1920 * 100%);
