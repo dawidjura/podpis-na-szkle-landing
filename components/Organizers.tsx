@@ -11,8 +11,8 @@ export default function Organizers() {
             </div>
             <p>
               GS1 Polska jest częścią globalnej organizacji GS1, która rozwija jeden z najpowszechniej
-              wykorzystywanych systemów standardów na świecie. Standardy GS1 wspierają firmy i organizacje
-              w identyfikacji, gromadzeniu oraz wymianie danych w procesach biznesowych i logistycznych.
+              wykorzystywanych systemów standardów na świecie. Standardy GS1 wspierają firmy i organizacje w
+              identyfikacji, gromadzeniu oraz wymianie danych w procesach biznesowych i logistycznych.
             </p>
             <p>
               Wspólny standard danych tworzy uniwersalny język GS1, stanowiący fundament wielu systemów i
@@ -27,15 +27,16 @@ export default function Organizers() {
               aria-label="Euvic"
             />
             <p>
-              Euvic to międzynarodowa grupa technologiczna z ponad 20-letnim doświadczeniem we wspieraniu firm
-              z branży logistycznej, produkcyjnej i handlowej. Pomagamy organizacjom integrować systemy ERP,
-              WMS i TMS, automatyzować przepływ danych oraz zwiększać przejrzystość i efektywność operacji.
+              Euvic to międzynarodowa grupa technologiczna z ponad 20-letnim doświadczeniem m.in. w branży
+              logistycznej, produkcyjnej czy handlowej. Pomagamy organizacjom integrować systemy ERP, WMS i TMS,
+              automatyzować przepływ danych oraz zwiększać przejrzystość i efektywność operacji -
+              przekształcając tradycyjne łańcuchy dostaw w przewidywalne, zautomatyzowane środowiska oparte na
+              danych.
             </p>
             <p>
-              Tworzymy bezpieczne środowiska łączące działy, magazyny, klientów i partnerów 3PL w nowoczesne,
-              skalowalne i oparte na danych ekosystemy logistyczne. Łączymy kompetencje w obszarze software
-              development, consultingu i transformacji cyfrowej, wspierając firmy w budowaniu bardziej
-              przewidywalnych i odpornych łańcuchów dostaw.
+              Łączymy kompetencje w obszarze software development, consultingu i transformacji cyfrowej,
+              tworząc bezpieczne ekosystemy, które integrują działy, magazyny, klientów i partnerów 3PL w jeden
+              spójny ekosystem.
             </p>
           </article>
         </div>
