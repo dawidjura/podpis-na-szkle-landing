@@ -1400,7 +1400,7 @@ a.form-submit--anchor {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  padding: clamp(40px, 6vw, 96px) 0 clamp(56px, 8vw, 120px);
+  padding: clamp(40px, 6vw, 60px) 0 clamp(56px, 8vw, 120px);
 }
 .organizers-inner {
   width: 100%;
