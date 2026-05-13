@@ -17,9 +17,6 @@ function NavMenuBody({ onNavigate }: { onNavigate: () => void }) {
         <a href="#prelegenci" onClick={onNavigate}>
           Prelegenci
         </a>
-        <a href="#oferta" onClick={onNavigate}>
-          Oferta dla logistyki
-        </a>
         <a href="#organizatorzy" onClick={onNavigate}>
           Organizatorzy
         </a>
