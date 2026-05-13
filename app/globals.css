@@ -1239,14 +1239,20 @@ a.form-submit--anchor {
 
 /* —— Consultation —— */
 .sec-consult {
-  position: relative; aspect-ratio: 1920 / 924;
+  position: relative;
+  aspect-ratio: 1920 / 924;
+  /* aspect-ratio + overflow ukrywały dół bloku .consult-content (ostatnia linia pod zdjęciem) */
+  min-height: calc(100vw * 924 / 1920 + clamp(100px, 14vw, 200px));
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background: #F8F8F8;
-  overflow: hidden;
+  overflow: visible;
 }
 .sec-consult::after {
   content: ""; position: absolute; bottom: 0; left: 0;
   width: 100%; height: 6.1%;
-  background: #fff; z-index: 2;
+  background: #fff; z-index: 1;
 }
 .consult-vector {
   position: absolute; top: 0;
@@ -1266,34 +1272,62 @@ a.form-submit--anchor {
   width: 100%; height: auto; display: block;
 }
 .consult-content {
-  position: absolute; z-index: 2;
+  position: absolute;
+  z-index: 3;
   left: calc(918 / 1920 * 100%);
+  right: calc(189 / 1920 * 100%);
   top: calc(232 / 924 * 100%);
-  width: calc(813 / 1920 * 100%);
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+  padding-right: 0;
   color: var(--text);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+}
+.consult-content-inner {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .consult-content h2 {
   font-family: var(--font-serif); font-size: clamp(36px, 3.33vw, 64px); font-weight: 400;
   line-height: 1.25; margin: 0 0 20px; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
 }
 .consult-content .lead {
   font-family: var(--font-sans); font-weight: 700; font-size: clamp(16px, 1.15vw, 22px);
   line-height: 1.36; margin: 0 0 12px; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
 }
 .consult-content ul {
   list-style: disc; margin: 0 0 12px; padding: 0;
   font-family: var(--font-sans); font-weight: 300; font-size: 16px;
   line-height: 30px; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .consult-content li { margin: 0; margin-left: 24px; }
 .consult-person { margin-top: 40px; }
 .consult-person .name {
   font-family: var(--font-sans); font-weight: 700; font-size: clamp(18px, 1.15vw, 22px);
-  line-height: 24px; margin: 0 0 12px; font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1.35; margin: 0 0 12px; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .consult-person .title {
   font-family: var(--font-sans); font-weight: 300; font-size: 16px;
-  line-height: 20px; margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1.5; margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .consult-contact {
   display: flex; flex-wrap: wrap; gap: 16px 28px; margin-top: 16px;
@@ -1308,12 +1342,41 @@ a.form-submit--anchor {
 .consult-contact-item:hover { color: var(--blue-light); }
 .consult-contact-item svg { flex-shrink: 0; }
 @media (max-width: 1200px) {
-  .sec-consult { aspect-ratio: auto; min-height: 0; padding: 40px 0; }
-  .consult-photo { position: relative; top: auto; left: auto; width: 60%; max-width: 500px; margin: 0 auto; }
+  .sec-consult {
+    aspect-ratio: auto;
+    min-height: 0;
+    padding: 22px 0 12px;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  /* ::after (biały pas) był nad treścią — ucinał imię / stopkę bloku przy układzie kolumnowym */
+  .sec-consult::after { z-index: 1; }
+  .consult-photo {
+    position: relative; top: auto; left: auto; width: 60%; max-width: 500px; margin: 0 auto;
+    z-index: 2;
+  }
   .consult-photo img { width: 100%; height: auto; }
-  .consult-vector { width: 100%; height: 100%; opacity: 0.4; left: 0; }
-  .consult-content { position: relative; top: auto; left: auto; width: auto; margin: 0; padding: 40px 28px; max-width: none; }
+  .consult-vector { width: 100%; height: 100%; opacity: 0.4; left: 0; z-index: 0; }
+  .consult-content {
+    position: relative; top: auto; left: auto; right: auto; width: auto; margin: 0; padding: 28px 28px 20px;
+    max-width: none;
+    z-index: 3;
+    background: #F8F8F8;
+    isolation: isolate;
+  }
   .consult-content h2 { font-size: 40px; }
+  .consult-person {
+    margin-top: 28px;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px 16px;
+    background: #f8f8f8;
+    border-radius: 4px;
+  }
+  .consult-person .title {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
 }
 
 /* —— Organizers —— */
@@ -1323,7 +1386,7 @@ a.form-submit--anchor {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  padding: clamp(72px, 10vw, 160px) 0;
+  padding: clamp(40px, 6vw, 96px) 0 clamp(56px, 8vw, 120px);
 }
 .organizers-inner {
   width: 100%;
@@ -1407,6 +1470,11 @@ a.form-submit--anchor {
   -webkit-mask-position: left center;
   mask-position: left center;
 }
+@media (max-width: 1200px) {
+  .sec-organizers {
+    padding: clamp(28px, 5vw, 64px) 0 clamp(48px, 7vw, 96px);
+  }
+}
 @media (max-width: 900px) {
   .organizers-grid {
     grid-template-columns: 1fr;
@@ -1418,7 +1486,7 @@ a.form-submit--anchor {
 }
 @media (max-width: 640px) {
   .sec-organizers {
-    padding: 48px 0 56px;
+    padding: 36px 0 48px;
   }
   .organizers-inner {
     padding: 0 max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
@@ -1908,22 +1976,39 @@ a.form-submit--anchor {
 
   /* — Consult — */
   .sec-consult {
-    aspect-ratio: auto; min-height: 0; padding: 32px 0;
+    aspect-ratio: auto; min-height: 0; padding: 16px 0 10px;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
   .consult-photo {
     position: relative; top: auto; left: auto;
     width: 100%; max-width: none; margin: 0 auto;
+    z-index: 2;
   }
   .consult-photo img { width: 100%; height: auto; }
-  .consult-vector { width: 100%; height: 100%; opacity: 0.35; left: 0; }
+  .consult-vector { width: 100%; height: 100%; opacity: 0.35; left: 0; z-index: 0; }
   .consult-content {
-    position: relative; top: auto; left: auto; width: auto;
-    margin: 0; padding: 32px 20px;
+    position: relative; top: auto; left: auto; right: auto; width: auto;
+    margin: 0; padding: 20px 20px 16px;
     max-width: none;
+    z-index: 3;
+    background: #F8F8F8;
+    isolation: isolate;
   }
   .consult-content h2 { font-size: 32px; line-height: 40px; }
   .consult-content .lead { font-size: 18px; line-height: 26px; }
-  .consult-person { margin-top: 28px; }
+  .consult-person {
+    margin-top: 24px;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px 16px;
+    background: #f8f8f8;
+    border-radius: 4px;
+  }
+  .consult-person .title {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
   .consult-contact { flex-direction: column; gap: 12px; }
 
   /* — Footer — */
