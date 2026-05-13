@@ -1453,22 +1453,13 @@ a.form-submit--anchor {
   max-height: 64px;
   width: auto;
 }
-/* SVG logo jest białe — filter na <img> bywa niewidoczny w WebKit; maska + tło = pewny „ciemny” znak jak w navbarze. */
-.organizer-logo--euvic {
-  --euvic-logo-h: 38px;
+.organizer-logo--euvic img {
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: min(280px, 100%);
+  object-fit: contain;
   flex-shrink: 0;
-  height: var(--euvic-logo-h);
-  width: min(220px, calc(var(--euvic-logo-h) * 177.946 / 32));
-  max-width: 100%;
-  background-color: var(--text);
-  -webkit-mask-image: url("/assets/logo.8fea627a.svg");
-  mask-image: url("/assets/logo.8fea627a.svg");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: left center;
-  mask-position: left center;
 }
 @media (max-width: 1200px) {
   .sec-organizers {
@@ -1495,8 +1486,8 @@ a.form-submit--anchor {
   .organizer-logo--gs1 img {
     max-height: 48px;
   }
-  .organizer-logo--euvic {
-    --euvic-logo-h: 32px;
+  .organizer-logo--euvic img {
+    height: 36px;
   }
 }
 

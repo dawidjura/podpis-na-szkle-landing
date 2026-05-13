@@ -7,7 +7,7 @@ export default function Organizers() {
         <div className="organizers-grid">
           <article className="organizer-card">
             <div className="organizer-logo organizer-logo--gs1">
-              <img src="/assets/gs1-logo.png" alt="GS1 Polska" width={200} height={80} />
+              <img src="/assets/GS1_color.svg" alt="GS1 Polska" width={140} height={83} />
             </div>
             <p>
               GS1 Polska jest częścią globalnej organizacji GS1, która rozwija jeden z najpowszechniej
@@ -21,11 +21,9 @@ export default function Organizers() {
             </p>
           </article>
           <article className="organizer-card">
-            <div
-              className="organizer-logo organizer-logo--euvic"
-              role="img"
-              aria-label="Euvic"
-            />
+            <div className="organizer-logo organizer-logo--euvic">
+              <img src="/assets/Euvic_logo_blue_rgb.svg" alt="Euvic" width={395} height={73} />
+            </div>
             <p>
               Euvic to międzynarodowa grupa technologiczna z ponad 20-letnim doświadczeniem m.in. w branży
               logistycznej, produkcyjnej czy handlowej. Pomagamy organizacjom integrować systemy ERP, WMS i TMS,
