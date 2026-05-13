@@ -8,7 +8,11 @@ export default function Footer() {
       <div className="footer-contact">
         <h3>Kontakt</h3>
         <p>www.euvic.com/pl/</p>
-        <p><a href="mailto:business@euvic.pl">business@euvic.pl</a><br /><a href="tel:+48322794942">+48 32 279 49 42</a></p>
+        <p>
+          business@euvic.pl
+          <br />
+          +48 32 279 49 42
+        </p>
         <p>Euvic S.A.<br />ul. Przewozowa 32<br />44-100, Gliwice, Polska</p>
       </div>
       <div className="footer-legal" id="polityka-prywatnosci">
