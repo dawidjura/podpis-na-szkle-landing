@@ -1,6 +1,11 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import { ClientSecretCredential } from "@azure/identity";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials";
+
+/** Inline CID — baner wysyłany razem z mailem (Graph), bez zależności od publicznego URL (Vercel Shield, zły SITE_URL itd.). */
+const NEWSLETTER_BANNER_CID = "podpis-newsletter-banner";
 
 const TENANT_ID = process.env.MICROSOFT_TENANT_ID ?? "";
 const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID ?? "";
@@ -42,23 +47,31 @@ function getPublicOrigin(): string {
   return "";
 }
 
-function buildParticipantConfirmationHtml(_data: WebinarFormData): string {
-  const origin = getPublicOrigin();
-  const landingUrl = origin ? `${origin}/` : "";
-  const bannerUrl = origin ? `${origin}/assets/NewsletterPotwierdzenieZapisu.png` : "";
+function loadNewsletterBannerBase64(): string | null {
+  try {
+    const filePath = join(process.cwd(), "public", "assets", "NewsletterPotwierdzenieZapisu.png");
+    return readFileSync(filePath).toString("base64");
+  } catch {
+    return null;
+  }
+}
 
+function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: string, landingUrl: string): string {
   const webinarPageLink = landingUrl
     ? `<a href="${landingUrl}" style="color:#006eb8;text-decoration:underline;">stronie webinaru</a>`
     : "stronie webinaru";
 
+  const escAttr = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+  const bannerImg = bannerSrc
+    ? `<img src="${escAttr(bannerSrc)}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />`
+    : "";
+
   const bannerRow =
-    bannerUrl && landingUrl
-      ? `<a href="${landingUrl}" style="text-decoration:none;display:block;line-height:0;">
-          <img src="${bannerUrl}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />
-        </a>`
-      : bannerUrl
-        ? `<img src="${bannerUrl}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />`
-        : "";
+    bannerImg && landingUrl
+      ? `<a href="${escAttr(landingUrl)}" style="text-decoration:none;display:block;line-height:0;">${bannerImg}</a>`
+      : bannerImg;
 
   const p =
     'margin:0 0 16px 0;font-family:Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#2c3135;';
@@ -108,13 +121,36 @@ export async function sendRegistrationEmail(data: WebinarFormData): Promise<void
 
   const fullName = `${data.firstName} ${data.lastName}`;
 
+  const origin = getPublicOrigin();
+  const landingUrl = origin ? `${origin}/` : "";
+  const bannerB64 = loadNewsletterBannerBase64();
+  const bannerSrc = bannerB64
+    ? `cid:${NEWSLETTER_BANNER_CID}`
+    : origin
+      ? `${origin}/assets/NewsletterPotwierdzenieZapisu.png`
+      : "";
+
+  const attachments = bannerB64
+    ? [
+        {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          name: "NewsletterPotwierdzenieZapisu.png",
+          contentType: "image/png",
+          contentBytes: bannerB64,
+          contentId: NEWSLETTER_BANNER_CID,
+          isInline: true,
+        },
+      ]
+    : [];
+
   await client.api("/users/no-reply@euvic.com/sendMail").post({
     message: {
       subject: "Potwierdzenie zapisu – webinar „Podpis na szkle”",
       body: {
         contentType: "HTML",
-        content: buildParticipantConfirmationHtml(data),
+        content: buildParticipantConfirmationHtml(data, bannerSrc, landingUrl),
       },
+      attachments,
       from: {
         emailAddress: { address: "no-reply@euvic.com", name: "Euvic Webinar" },
       },
