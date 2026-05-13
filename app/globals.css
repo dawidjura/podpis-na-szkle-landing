@@ -1111,6 +1111,9 @@ body {
   align-items: flex-end;
   gap: 16px 24px;
 }
+.form-bottom .form-actions {
+  margin-left: auto;
+}
 .form-actions {
   display: flex;
   flex-direction: column;
@@ -1118,6 +1121,10 @@ body {
   gap: 10px;
   flex: 0 1 auto;
   min-width: min(100%, 220px);
+}
+.form-actions .form-error {
+  align-self: stretch;
+  text-align: left;
 }
 .form-extras {
   display: flex;
@@ -1843,9 +1850,18 @@ a.form-submit--anchor {
   .sec-guests h2 { font-size: 36px; line-height: 44px; margin-bottom: 32px; }
   .guest-grid { flex-wrap: wrap; gap: 40px; }
   .guest { flex: 1 1 100%; max-width: none; }
-  .guest-photo { max-width: 400px; }
-  .guest h3 { font-size: 24px; line-height: 32px; }
-  .guest .rule img { width: 100%; max-width: 275px; }
+  .guest-photo {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .guest h3 {
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+  }
+  .guest .role { text-align: center; }
+  .guest .rule img { width: 100%; max-width: 275px; margin-left: auto; margin-right: auto; }
 
   /* — Form — */
   #rejestracja,
@@ -1873,6 +1889,7 @@ a.form-submit--anchor {
   .form-extras { flex: 1 1 auto; min-width: 0; }
   .form-actions {
     align-items: stretch;
+    align-self: stretch;
     min-width: 0;
     width: 100%;
   }
@@ -1882,6 +1899,7 @@ a.form-submit--anchor {
   }
   .form-submit {
     width: 100%;
+    max-width: 100%;
     justify-content: center;
     align-self: stretch;
     white-space: normal;

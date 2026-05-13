@@ -13,6 +13,8 @@ export type RegistrationFormProps = {
   headingId?: string;
   /** Prefiks `id` pól i `htmlFor` — drugi formularz musi mieć inny niż domyślny `reg`. */
   fieldIdPrefix?: string;
+  /** Gdy ustawione — jedna linia nagłówka zamiast „Zarezerwuj / swoje miejsce”. */
+  headingTitle?: string;
 };
 
 export default function RegistrationForm({
@@ -20,6 +22,7 @@ export default function RegistrationForm({
   sectionId = "rejestracja",
   headingId = "form-main-title",
   fieldIdPrefix = "reg",
+  headingTitle,
 }: RegistrationFormProps) {
   const sectionClass =
     variant === "dark" ? "sec-form sec-form--dark" : "sec-form";
@@ -124,9 +127,13 @@ export default function RegistrationForm({
         <div className="form-layout">
           <div className="form-left">
             <h2 id={headingId}>
-              Zarezerwuj
-              <br />
-              swoje miejsce
+              {headingTitle ?? (
+                <>
+                  Zarezerwuj
+                  <br />
+                  swoje miejsce
+                </>
+              )}
             </h2>
             <p>
               * Liczba miejsc jest ograniczona, aby zapewnić komfortową przestrzeń do rozmów i wymiany doświadczeń.
@@ -254,7 +261,7 @@ export default function RegistrationForm({
                     disabled={sending}
                     onClick={handleClick}
                   >
-                    {sending ? "Wysyłanie…" : "Zapisz się na webinar"}
+                    {sending ? "Wysyłanie…" : "Zarejestruj się"}
                   </button>
                 </div>
               </div>
