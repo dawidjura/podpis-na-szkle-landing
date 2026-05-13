@@ -135,9 +135,6 @@ export default function RegistrationForm({
                 </>
               )}
             </h2>
-            <p>
-              * Liczba miejsc jest ograniczona, aby zapewnić komfortową przestrzeń do rozmów i wymiany doświadczeń.
-            </p>
           </div>
           <div className="form-right">
             <form
