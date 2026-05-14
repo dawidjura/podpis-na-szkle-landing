@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
 import { insertWebinarSignup } from "@/lib/supabase-admin";
-import { sendRegistrationEmail, type WebinarFormData } from "@/lib/send-registration-email";
+import {
+  sendRegistrationEmail,
+  sendStaffSignupNotification,
+  type WebinarFormData,
+} from "@/lib/send-registration-email";
 
 export async function POST(request: Request) {
   try {
@@ -43,7 +47,18 @@ export async function POST(request: Request) {
       email: emailNorm,
     });
 
-    await sendRegistrationEmail({ firstName, lastName, phone: normalizedPhone.phone, email: emailNorm });
+    const payload = { firstName, lastName, phone: normalizedPhone.phone, email: emailNorm };
+    const [toParticipant, toStaff] = await Promise.allSettled([
+      sendRegistrationEmail(payload),
+      sendStaffSignupNotification(payload),
+    ]);
+
+    if (toParticipant.status === "rejected") {
+      throw toParticipant.reason;
+    }
+    if (toStaff.status === "rejected") {
+      console.error("Staff signup notification failed:", toStaff.reason);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

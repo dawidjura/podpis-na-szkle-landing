@@ -20,6 +20,12 @@ const getAuthProvider = (scopes: string[]) =>
 const getGraphClient = (scopes: string[]) =>
   Client.initWithMiddleware({ authProvider: getAuthProvider(scopes) });
 
+/** Powiadomienia o każdym nowym zapisie (Graph `sendMail` z konta no-reply). */
+const WEBINAR_SIGNUP_STAFF_RECIPIENTS = [
+  "business+ePOD@euvic.pl",
+  "marta.piekarz@euvic.com",
+] as const;
+
 export interface WebinarFormData {
   firstName: string;
   lastName: string;
@@ -127,6 +133,61 @@ function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: str
   </table>
 </body>
 </html>`;
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function buildStaffSignupNotificationHtml(data: WebinarFormData): string {
+  const rows = [
+    ["Imię", data.firstName],
+    ["Nazwisko", data.lastName],
+    ["E-mail", data.email],
+    ["Telefon", data.phone],
+  ] as const;
+  const tr = rows
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;font-weight:600;">${escapeHtml(label)}</td>` +
+        `<td style="padding:8px 12px;border:1px solid #e0e0e0;">${escapeHtml(value)}</td></tr>`,
+    )
+    .join("");
+  return `<!DOCTYPE html>
+<html lang="pl">
+<head><meta charset="utf-8" /></head>
+<body style="margin:0;padding:16px;font-family:Segoe UI,Arial,sans-serif;font-size:15px;color:#2c3135;">
+  <p style="margin:0 0 12px 0;">Nowy zapis na webinar <strong>„Podpis na szkle”</strong>.</p>
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;max-width:560px;">${tr}</table>
+</body>
+</html>`;
+}
+
+/** Powiadomienie dla zespołu o nowym zapisie (osobna wiadomość od potwierdzenia dla uczestnika). */
+export async function sendStaffSignupNotification(data: WebinarFormData): Promise<void> {
+  const client = getGraphClient(["https://graph.microsoft.com/.default"]);
+  const fullName = `${data.firstName} ${data.lastName}`;
+
+  await client.api("/users/no-reply@euvic.com/sendMail").post({
+    message: {
+      subject: `Nowy zapis na webinar — ${fullName}`,
+      body: {
+        contentType: "HTML",
+        content: buildStaffSignupNotificationHtml(data),
+      },
+      from: {
+        emailAddress: { address: "no-reply@euvic.com", name: "Euvic Webinar" },
+      },
+      toRecipients: WEBINAR_SIGNUP_STAFF_RECIPIENTS.map((address) => ({
+        emailAddress: { address },
+      })),
+      replyTo: [{ emailAddress: { address: data.email, name: fullName } }],
+    },
+  });
 }
 
 export async function sendRegistrationEmail(data: WebinarFormData): Promise<void> {
