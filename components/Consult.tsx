@@ -8,9 +8,7 @@ export default function Consult() {
         <div className="consult-content-inner">
           <h2>Bezpłatna konsultacja procesu dostaw</h2>
           <p className="lead">
-            Możesz zapisać się na krótką konsultację z ekspertem po webinarze, aby omówić swój proces{" "}
-            <wbr />
-            logistyczny.
+            Po webinarze możesz zapisać się na krótką konsultację z ekspertem, aby omówić swój proces logistyczny.
           </p>
           <ul>
             <li>przeanalizujemy proces dostaw</li>

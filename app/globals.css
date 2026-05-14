@@ -259,8 +259,6 @@ body {
 /* Data z „r.” w jednej linii na szerokim desktopie (unikaj sieroty „r.”). */
 .event-stat:nth-child(1) strong { white-space: nowrap; }
 .event-stat.is-place strong { line-height: 1.3; }
-.event-note { font-size: 18px; line-height: 28px; margin: 0; flex: 1 1 auto; min-height: 0; }
-.event-note b { font-weight: 600; }
 @media (max-width: 1400px) {
   .event-inner { padding: 90px 80px 48px; }
   .event-stats { gap: 48px 80px; }
@@ -276,7 +274,6 @@ body {
   .event-stat:nth-child(4) { width: auto; min-width: 140px; flex: 1 0 auto; }
   .event-stat:nth-child(1) strong { white-space: normal; }
   .event-stat strong { font-size: 36px; line-height: 52px; }
-  .event-note { font-size: 16px; line-height: 24px; }
 }
 
 /* —— Program —— */
@@ -1858,7 +1855,6 @@ a.form-submit--anchor {
   .event-stat:nth-child(4) { width: calc(50% - 20px); min-width: 0; }
   .event-stat strong { font-size: 32px; line-height: 48px; }
   .event-stat:nth-child(1) strong { white-space: normal; }
-  .event-note { font-size: 15px; line-height: 24px; }
 
   /* — Program — */
   .sec-program { min-height: 0; }
@@ -2208,6 +2204,12 @@ a.form-submit--anchor {
   font-family: var(--font-sans); font-weight: 200;
   font-size: 17px; line-height: 1.1; color: #fff;
   margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: none;
+}
+.modal-nowrap {
+  white-space: nowrap;
 }
 .modal-footer-info {
   display: flex; align-items: center; justify-content: space-between;
