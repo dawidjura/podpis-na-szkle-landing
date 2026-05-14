@@ -8,12 +8,12 @@ export default function Consult() {
         <div className="consult-content-inner">
           <h2>Bezpłatna konsultacja procesu dostaw</h2>
           <p className="lead">
-            Po webinarze możesz zapisać się na krótką konsultację z ekspertem, aby omówić swój proces logistyczny.
+            Po webinarze możesz umówić się na bezpłatną konsultację, podczas której:
           </p>
           <ul>
-            <li>przeanalizujemy proces dostaw</li>
-            <li>sprawdzimy sposób dokumentowania zdarzeń</li>
-            <li>wskażemy możliwe usprawnienia</li>
+            <li>ocenisz poziom cyfrowej dojrzałości procesów logistycznych w swojej organizacji,</li>
+            <li>poznasz możliwe sposoby ograniczania problemów i niejasności w łańcuchu dostaw,</li>
+            <li>dowiesz się więcej o rozwiązaniach wspierających dokumentowanie i monitorowanie procesów logistycznych.</li>
           </ul>
           <div className="consult-person">
             <p className="name">Dariusz Mikołajczak</p>
