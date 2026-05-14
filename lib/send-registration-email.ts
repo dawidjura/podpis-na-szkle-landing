@@ -57,21 +57,34 @@ function loadNewsletterBannerBase64(): string | null {
 }
 
 function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: string, landingUrl: string): string {
-  const webinarPageLink = landingUrl
-    ? `<a href="${landingUrl}" style="color:#006eb8;text-decoration:underline;">stronie webinaru</a>`
-    : "stronie webinaru";
-
   const escAttr = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+  const webinarPageLink = landingUrl
+    ? `<a href="${escAttr(landingUrl)}" target="_blank" rel="noopener noreferrer" style="color:#006eb8;text-decoration:underline;">stronie webinaru</a>`
+    : "stronie webinaru";
 
   const bannerImg = bannerSrc
     ? `<img src="${escAttr(bannerSrc)}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />`
     : "";
 
+  const webinarHref = landingUrl ? escAttr(landingUrl) : "";
+  const linkStyle =
+    'color:#006eb8;text-decoration:underline;font-weight:inherit;';
   const bannerRow =
-    bannerImg && landingUrl
-      ? `<a href="${escAttr(landingUrl)}" style="text-decoration:none;display:block;line-height:0;">${bannerImg}</a>`
+    bannerImg && webinarHref
+      ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;line-height:0;">${bannerImg}</a>`
       : bannerImg;
+
+  const titleLinked =
+    webinarHref
+      ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}"><strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong></a>`
+      : `<strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong>`;
+
+  const onlineLinked =
+    webinarHref
+      ? `Do zobaczenia <a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">online</a>,`
+      : "Do zobaczenia online,";
 
   const p =
     'margin:0 0 16px 0;font-family:Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#2c3135;';
@@ -90,7 +103,7 @@ function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: str
             <td style="padding:28px 28px 32px 28px;">
               <p style="${p}">Dzień dobry,</p>
               <p style="${p}">Dziękujemy za zapis na bezpłatny webinar:</p>
-              <p style="${p}"><strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong><br />
+              <p style="${p}">${titleLinked}<br />
               26 czerwca 2026 | 12:00 | 60 minut</p>
               <p style="${p}">Podczas webinaru pokażemy, jak budować wiarygodną dokumentację dostaw i unikać sporów w logistyce.</p>
               <p style="${p}">To wszystko w praktycznej formule:<br />
@@ -105,7 +118,7 @@ function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: str
               <p style="${p}">Porozmawiamy m.in. o podpisie na urządzeniu mobilnym, zdjęciach, geolokalizacji i cyfrowym śladzie zdarzeń w logistyce.</p>
               <p style="${p}">Więcej informacji o agendzie spotkania, prelegentach i szczegółach wydarzenia znajdziesz na ${webinarPageLink}.</p>
               <p style="${p}">Przed spotkaniem prześlemy Ci przypomnienie wraz z linkiem do webinaru.</p>
-              <p style="${pLast}">Do zobaczenia online,<br />Zespół Euvic &amp; GS1</p>
+              <p style="${pLast}">${onlineLinked}<br />Zespół Euvic &amp; GS1</p>
             </td>
           </tr>
         </table>
