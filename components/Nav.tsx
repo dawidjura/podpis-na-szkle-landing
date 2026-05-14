@@ -1,7 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useCallback, useEffect, useRef } from "react";
-import PrivacyPdfLink from "./PrivacyPdfLink";
 
 const MOBILE_NAV_ID = "nav-mobile-toggle";
 
@@ -21,9 +20,9 @@ function NavMenuBody({ onNavigate }: { onNavigate: () => void }) {
         <a href="#organizatorzy" onClick={onNavigate}>
           Organizatorzy
         </a>
-        <PrivacyPdfLink onOpenPreview={onNavigate}>
+        <a href="#polityka-prywatnosci" onClick={onNavigate}>
           Polityka prywatności
-        </PrivacyPdfLink>
+        </a>
       </div>
       <a className="nav-cta" href="#rejestracja" onClick={onNavigate}>
         Zapisz się

@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import PrivacyPdfLink from "./PrivacyPdfLink";
-
 export default function Footer() {
   return (
     <footer className="site-footer">
@@ -18,7 +16,7 @@ export default function Footer() {
         <p>Euvic S.A.<br />ul. Przewozowa 32<br />44-100, Gliwice, Polska</p>
       </div>
       <div className="footer-legal" id="polityka-prywatnosci">
-        <PrivacyPdfLink>Polityka prywatności</PrivacyPdfLink>
+        <a href="/assets/2026-01-02-klauzula-EUV-dla-osob-rejestrujacych-sie-na-wydarzenia.pdf" target="_blank" rel="noopener noreferrer">Polityka prywatności</a>
       </div>
     </footer>
   );

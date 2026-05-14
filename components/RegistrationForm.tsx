@@ -3,7 +3,6 @@
 import { useState, useCallback, useRef } from "react";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
 import ThankYouModal from "./ThankYouModal";
-import PrivacyPdfLink from "./PrivacyPdfLink";
 
 export type RegistrationFormProps = {
   /** `dark` — sekcja jak w teaserze (`.sec-form--dark`). */
@@ -233,7 +232,14 @@ export default function RegistrationForm({
                   <p className="admin-notice">
                     Administratorem danych osobowych przetwarzanych w celu organizacji webinaru oraz w zakresie kontaktu
                     telefonicznego jest Euvic S.A. Zobacz{" "}
-                    <PrivacyPdfLink>politykę prywatności</PrivacyPdfLink>.
+                    <a
+                      href="/assets/2026-01-02-klauzula-EUV-dla-osob-rejestrujacych-sie-na-wydarzenia.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      politykę prywatności
+                    </a>
+                    .
                   </p>
                   <div className="obl">
                     <span className="req">*</span>

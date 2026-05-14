@@ -36,8 +36,7 @@ export default function ThankYouModal({ open, onClose }: ThankYouModalProps) {
 
           <div className="modal-body">
             <p>
-              Potwierdzenie zapisu oraz najważniejsze informacje o wydarzeniu wysłaliśmy na podany adres{" "}
-              <span className="modal-nowrap">e{"\u2011"}mail</span>.
+              Potwierdzenie zapisu oraz najważniejsze informacje o wydarzeniu wysłaliśmy na podany adres e-mail.
               <br />
               Jeśli nie widzisz wiadomości, sprawdź folder SPAM.
             </p>

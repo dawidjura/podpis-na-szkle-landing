@@ -259,6 +259,8 @@ body {
 /* Data z „r.” w jednej linii na szerokim desktopie (unikaj sieroty „r.”). */
 .event-stat:nth-child(1) strong { white-space: nowrap; }
 .event-stat.is-place strong { line-height: 1.3; }
+.event-note { font-size: 18px; line-height: 28px; margin: 0; flex: 1 1 auto; min-height: 0; }
+.event-note b { font-weight: 600; }
 @media (max-width: 1400px) {
   .event-inner { padding: 90px 80px 48px; }
   .event-stats { gap: 48px 80px; }
@@ -274,6 +276,7 @@ body {
   .event-stat:nth-child(4) { width: auto; min-width: 140px; flex: 1 0 auto; }
   .event-stat:nth-child(1) strong { white-space: normal; }
   .event-stat strong { font-size: 36px; line-height: 52px; }
+  .event-note { font-size: 16px; line-height: 24px; }
 }
 
 /* —— Program —— */
@@ -1047,25 +1050,12 @@ body {
 }
 .guest-grid { display: flex; gap: 24px; align-items: flex-start; }
 .guest { flex: 1 0 0; min-width: 0; }
-.guest-photo {
-  position: relative;
-  aspect-ratio: 1;
-  overflow: hidden;
-  margin-bottom: 24px;
-  width: 100%;
-}
-/* inset:0 — stabilne object-fit / object-position (procent height na img bywał liczony inaczej z aspect-ratio). */
-.guest-photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.guest-photo { position: relative; aspect-ratio: 1; overflow: hidden; margin-bottom: 24px; }
+.guest-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.guest-photo .rusinek-photo {
+  position: absolute; left: 14.64%; top: -5.79%;
+  width: 70.67%; height: 155.85%;
   object-fit: cover;
-  display: block;
-}
-/* Portret 1920×2880: niżej w kadrze = kotwica wyżej na obrazie (mniejszy % Y). */
-.guest-photo img.rusinek-photo {
-  object-position: center 15%;
 }
 .guest h3 {
   font-family: var(--font-sans); font-weight: 600; font-size: 30px; line-height: 38px;
@@ -1868,6 +1858,7 @@ a.form-submit--anchor {
   .event-stat:nth-child(4) { width: calc(50% - 20px); min-width: 0; }
   .event-stat strong { font-size: 32px; line-height: 48px; }
   .event-stat:nth-child(1) strong { white-space: normal; }
+  .event-note { font-size: 15px; line-height: 24px; }
 
   /* — Program — */
   .sec-program { min-height: 0; }
@@ -2217,12 +2208,6 @@ a.form-submit--anchor {
   font-family: var(--font-sans); font-weight: 200;
   font-size: 17px; line-height: 1.1; color: #fff;
   margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: none;
-}
-.modal-nowrap {
-  white-space: nowrap;
 }
 .modal-footer-info {
   display: flex; align-items: center; justify-content: space-between;
@@ -2248,57 +2233,4 @@ a.form-submit--anchor {
 @media (max-width: 480px) {
   .modal-content { padding: 32px 20px 24px; }
   .modal-title { font-size: 26px; line-height: 32px; }
-}
-
-/* —— Polityka prywatności (PDF) — nakładka na stronie —— */
-.privacy-pdf-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10150;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  min-height: 100svh;
-  background: rgba(0, 0, 0, 0.55);
-  animation: fadeIn 0.25s ease;
-  overscroll-behavior: contain;
-}
-.privacy-pdf-panel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: min(960px, 96vw);
-  height: min(88vh, 900px);
-  max-height: 100%;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
-}
-.privacy-pdf-close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  z-index: 2;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 32px;
-  line-height: 1;
-  cursor: pointer;
-  opacity: 0.65;
-  transition: opacity 0.2s;
-  padding: 4px 8px;
-}
-.privacy-pdf-close:hover {
-  opacity: 1;
-}
-.privacy-pdf-frame {
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  border: 0;
-  display: block;
 }

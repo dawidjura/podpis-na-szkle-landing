@@ -15,8 +15,9 @@ export default function EventBand() {
           </div>
           <div className="event-stat"><label>Godzina:</label><strong>12:00</strong></div>
           <div className="event-stat"><label>Czas trwania:</label><strong>60 min</strong></div>
-          <div className="event-stat is-place"><label>Forma:</label><strong>Bezpłatny</strong></div>
+          <div className="event-stat is-place"><label>Miejsce:</label><strong>Online</strong></div>
         </div>
+        <p className="event-note"><b>Udział w wydarzeniu jest bezpłatny!<br /></b>Planowany czas trwania spotkania wynosi 60 minut, co pozwoli na szczegółowe omówienie wszystkich przewidzianych tematów.</p>
       </div>
     </section>
   );
