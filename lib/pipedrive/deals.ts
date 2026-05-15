@@ -4,6 +4,7 @@ import {
   getPipedrivePipelineId,
   getPipedriveStageId,
 } from './client';
+import { resolveNamedPipelineStage } from './pipeline-resolve';
 
 export interface CreateDealParams {
   title: string;
@@ -17,8 +18,17 @@ interface PipedriveDealResponse {
 }
 
 export async function createDeal(params: CreateDealParams): Promise<number | null> {
-  const pipelineId = getPipedrivePipelineId();
-  const stageId = getPipedriveStageId();
+  const named = await resolveNamedPipelineStage();
+  let pipelineId: number;
+  let stageId: number | undefined;
+
+  if (named) {
+    pipelineId = named.pipelineId;
+    stageId = named.stageId;
+  } else {
+    pipelineId = getPipedrivePipelineId();
+    stageId = getPipedriveStageId();
+  }
   const baseUrl = getPipedriveV2BaseUrl();
   const token = getPipedriveApiToken();
   const url = `${baseUrl}/deals`;

@@ -31,3 +31,7 @@ export function getPipedrivePipelineId(): number {
 export function getPipedriveStageId(): number | undefined {
   return PIPEDRIVE_STAGE_ID;
 }
+
+export function getPipedriveCompanyDomain(): string {
+  return PIPEDRIVE_DOMAIN;
+}

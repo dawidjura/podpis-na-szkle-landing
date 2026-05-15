@@ -55,45 +55,56 @@ function getPublicOrigin(): string {
 
 function loadNewsletterBannerBase64(): string | null {
   try {
-    const filePath = join(process.cwd(), "public", "assets", "NewsletterPotwierdzenieZapisu.png");
+    const filePath = join(
+      process.cwd(),
+      "public",
+      "assets",
+      "NewsletterPotwierdzenieZapisu.png"
+    );
     return readFileSync(filePath).toString("base64");
   } catch {
     return null;
   }
 }
 
-function buildParticipantConfirmationHtml(_data: WebinarFormData, bannerSrc: string, landingUrl: string): string {
+function buildParticipantConfirmationHtml(
+  _data: WebinarFormData,
+  bannerSrc: string,
+  landingUrl: string
+): string {
   const escAttr = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
   const webinarPageLink = landingUrl
-    ? `<a href="${escAttr(landingUrl)}" target="_blank" rel="noopener noreferrer" style="color:#006eb8;text-decoration:underline;">stronie webinaru</a>`
+    ? `<a href="${escAttr(
+        landingUrl
+      )}" target="_blank" rel="noopener noreferrer" style="color:#006eb8;text-decoration:underline;">stronie webinaru</a>`
     : "stronie webinaru";
 
   const bannerImg = bannerSrc
-    ? `<img src="${escAttr(bannerSrc)}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />`
+    ? `<img src="${escAttr(
+        bannerSrc
+      )}" width="600" alt="Potwierdzamy zapis na webinar — Podpis na szkle. EUVIC i GS1 Polska." border="0" style="display:block;width:100%;max-width:600px;height:auto;margin:0;padding:0;border:0;" />`
     : "";
 
   const webinarHref = landingUrl ? escAttr(landingUrl) : "";
   const linkStyle =
-    'color:#006eb8;text-decoration:underline;font-weight:inherit;';
+    "color:#006eb8;text-decoration:underline;font-weight:inherit;";
   const bannerRow =
     bannerImg && webinarHref
       ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;line-height:0;">${bannerImg}</a>`
       : bannerImg;
 
-  const titleLinked =
-    webinarHref
-      ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}"><strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong></a>`
-      : `<strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong>`;
+  const titleLinked = webinarHref
+    ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}"><strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong></a>`
+    : `<strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong>`;
 
-  const onlineLinked =
-    webinarHref
-      ? `Do zobaczenia <a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">online</a>,`
-      : "Do zobaczenia online,";
+  const onlineLinked = webinarHref
+    ? `Do zobaczenia <a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">online</a>,`
+    : "Do zobaczenia online,";
 
   const p =
-    'margin:0 0 16px 0;font-family:Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#2c3135;';
+    "margin:0 0 16px 0;font-family:Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#2c3135;";
   const pLast = p.replace("16px", "0");
 
   return `<!DOCTYPE html>
@@ -153,8 +164,12 @@ function buildStaffSignupNotificationHtml(data: WebinarFormData): string {
   const tr = rows
     .map(
       ([label, value]) =>
-        `<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;font-weight:600;">${escapeHtml(label)}</td>` +
-        `<td style="padding:8px 12px;border:1px solid #e0e0e0;">${escapeHtml(value)}</td></tr>`,
+        `<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;font-weight:600;">${escapeHtml(
+          label
+        )}</td>` +
+        `<td style="padding:8px 12px;border:1px solid #e0e0e0;">${escapeHtml(
+          value
+        )}</td></tr>`
     )
     .join("");
   return `<!DOCTYPE html>
@@ -168,7 +183,9 @@ function buildStaffSignupNotificationHtml(data: WebinarFormData): string {
 }
 
 /** Powiadomienie dla zespołu o nowym zapisie (osobna wiadomość od potwierdzenia dla uczestnika). */
-export async function sendStaffSignupNotification(data: WebinarFormData): Promise<void> {
+export async function sendStaffSignupNotification(
+  data: WebinarFormData
+): Promise<void> {
   const client = getGraphClient(["https://graph.microsoft.com/.default"]);
   const fullName = `${data.firstName} ${data.lastName}`;
 
@@ -190,7 +207,9 @@ export async function sendStaffSignupNotification(data: WebinarFormData): Promis
   });
 }
 
-export async function sendRegistrationEmail(data: WebinarFormData): Promise<void> {
+export async function sendRegistrationEmail(
+  data: WebinarFormData
+): Promise<void> {
   const client = getGraphClient(["https://graph.microsoft.com/.default"]);
 
   const fullName = `${data.firstName} ${data.lastName}`;
@@ -201,8 +220,8 @@ export async function sendRegistrationEmail(data: WebinarFormData): Promise<void
   const bannerSrc = bannerB64
     ? `cid:${NEWSLETTER_BANNER_CID}`
     : origin
-      ? `${origin}/assets/NewsletterPotwierdzenieZapisu.png`
-      : "";
+    ? `${origin}/assets/NewsletterPotwierdzenieZapisu.png`
+    : "";
 
   const attachments = bannerB64
     ? [
