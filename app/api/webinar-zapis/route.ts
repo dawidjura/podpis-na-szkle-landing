@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
-import { insertWebinarSignup } from "@/lib/supabase-admin";
+import { insertWebinarSignup } from "@/lib/insert-webinar-signup";
 import {
   sendRegistrationEmail,
   sendStaffSignupNotification,
@@ -63,14 +63,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Registration error:", err);
-    const code =
-      err && typeof err === "object" && "code" in err ? String((err as { code: unknown }).code) : "";
-    if (code === "23505") {
-      return NextResponse.json(
-        { error: "Na ten adres e-mail jest już zapis." },
-        { status: 409 },
-      );
-    }
     return NextResponse.json(
       { error: "Nie udało się wysłać zgłoszenia. Spróbuj ponownie." },
       { status: 500 },

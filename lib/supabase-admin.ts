@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { WebinarSignupRow } from "@/lib/webinar-signup-types";
 
 let cached: { url: string; key: string; client: SupabaseClient } | null = null;
 
@@ -19,14 +20,7 @@ export function getSupabaseAdmin(): SupabaseClient {
   return client;
 }
 
-export type WebinarSignupRow = {
-  name: string;
-  surname: string;
-  phone_number: string;
-  email: string;
-};
-
-export async function insertWebinarSignup(row: WebinarSignupRow): Promise<void> {
+export async function insertWebinarSignupSupabase(row: WebinarSignupRow): Promise<void> {
   const supabase = getSupabaseAdmin();
   const { error } = await supabase.from("webinar_signups").insert(row);
   if (error) {
