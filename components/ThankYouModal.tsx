@@ -44,7 +44,7 @@ export default function ThankYouModal({ open, onClose }: ThankYouModalProps) {
           </div>
 
           <div className="modal-footer-info">
-            <p>Podpis na szkle | 26 czerwca 2026 | 12:00 | 60 minut</p>
+            <p>Podpis na szkle | 2 lipca 2026 | 14:00 | 60 minut</p>
             <img src="/assets/popup-arrows.svg" alt="" aria-hidden="true" className="modal-arrows" />
           </div>
         </div>

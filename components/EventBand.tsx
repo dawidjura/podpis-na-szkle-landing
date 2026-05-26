@@ -10,10 +10,10 @@ export default function EventBand() {
           <div className="event-stat">
             <label>Data:</label>
             <strong>
-              26 czerwca 2026{"\u00A0"}r.
+              czwartek, 2 lipca 2026{"\u00A0"}r.
             </strong>
           </div>
-          <div className="event-stat"><label>Godzina:</label><strong>12:00</strong></div>
+          <div className="event-stat"><label>Godzina:</label><strong>14:00</strong></div>
           <div className="event-stat"><label>Czas trwania:</label><strong>60 min</strong></div>
           <div className="event-stat is-place"><label>Forma:</label><strong>Bezpłatny</strong></div>
         </div>
