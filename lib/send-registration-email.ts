@@ -121,7 +121,7 @@ function buildParticipantConfirmationHtml(
               <p style="${p}">Dzień dobry,</p>
               <p style="${p}">Dziękujemy za zapis na bezpłatny webinar:</p>
               <p style="${p}">${titleLinked}<br />
-              26 czerwca 2026 | 12:00 | 60 minut</p>
+              2 lipca 2026 | 14:00 | 60 minut</p>
               <p style="${p}">Podczas webinaru pokażemy, jak budować wiarygodną dokumentację dostaw i unikać sporów w logistyce.</p>
               <p style="${p}">To wszystko w praktycznej formule:<br />
               30 minut wprowadzenia + 30 minut Q&amp;A</p>
