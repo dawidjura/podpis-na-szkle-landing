@@ -2330,12 +2330,29 @@ a.form-submit--anchor {
   position: relative; z-index: 1;
   padding: 60px 80px 48px;
   display: flex; flex-direction: column; gap: 24px;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 .modal-logos {
-  display: flex; align-items: center; gap: 24px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 24px;
+  max-width: 100%;
+  padding-right: 44px;
+  box-sizing: border-box;
 }
-.modal-logo-euvic { height: 34px; width: auto; }
-.modal-logo-gs1 { height: 47px; width: auto; }
+.modal-logo-euvic,
+.modal-logo-gs1 {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 1;
+  min-width: 0;
+}
+.modal-logo-euvic { height: 34px; max-width: min(192px, 58%); }
+.modal-logo-gs1 { height: 47px; max-width: min(140px, 38%); }
 
 .modal-title {
   font-family: var(--font-serif); font-weight: 400;
@@ -2369,18 +2386,23 @@ a.form-submit--anchor {
 .modal-arrows { height: 27px; width: auto; }
 
 @media (max-width: 768px) {
-  .modal-content { padding: 40px 28px 32px; gap: 20px; }
+  .modal-content { padding: 48px 28px 32px; gap: 20px; }
+  .modal-close { top: 12px; right: 16px; }
+  .modal-logos { gap: 14px; padding-right: 40px; }
   .modal-title { font-size: 32px; line-height: 38px; }
   .modal-body p { font-size: 15px; }
   .modal-footer-info { flex-direction: column; align-items: flex-start; gap: 16px; }
   .modal-footer-info p { font-size: 14px; }
   .modal-arrows { height: 20px; }
-  .modal-logo-euvic { height: 26px; }
-  .modal-logo-gs1 { height: 36px; }
+  .modal-logo-euvic { height: 26px; max-width: 56%; }
+  .modal-logo-gs1 { height: 34px; max-width: 40%; }
 }
 @media (max-width: 480px) {
-  .modal-content { padding: 32px 20px 24px; }
+  .modal-content { padding: 48px 24px 24px; }
+  .modal-logos { gap: 10px; padding-right: 36px; }
   .modal-title { font-size: 26px; line-height: 32px; }
+  .modal-logo-euvic { height: 22px; max-width: 54%; }
+  .modal-logo-gs1 { height: 28px; max-width: 42%; }
 }
 
 /* —— Polityka prywatności (PDF) — nakładka na stronie —— */
