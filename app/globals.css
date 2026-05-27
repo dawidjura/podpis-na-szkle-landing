@@ -1383,10 +1383,16 @@ a.form-submit--anchor {
   word-break: normal;
 }
 .consult-content li { margin: 0; margin-left: 24px; }
-.consult-person { margin-top: 40px; }
+.consult-host-kicker {
+  font-family: var(--font-sans); font-weight: 700; font-size: clamp(16px, 1.15vw, 22px);
+  line-height: 1.36; margin: 24px 0 16px; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.consult-person { margin-top: 0; }
 .consult-person .name {
   font-family: var(--font-sans); font-weight: 700; font-size: clamp(18px, 1.15vw, 22px);
-  line-height: 1.35; margin: 0 0 12px; font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1.35; margin: 0 0 8px; font-feature-settings: "lnum" 1, "tnum" 1;
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -1395,6 +1401,68 @@ a.form-submit--anchor {
   line-height: 1.5; margin: 0; font-feature-settings: "lnum" 1, "tnum" 1;
   overflow-wrap: break-word;
   word-break: normal;
+}
+.consult-bio {
+  font-family: var(--font-sans); font-weight: 300; font-size: 16px;
+  line-height: 1.55; margin: 32px 0 0; font-feature-settings: "lnum" 1, "tnum" 1;
+  overflow-wrap: break-word;
+  word-break: normal;
+  max-width: 100%;
+}
+/* Desktop: grid zamiast aspect-ratio + absolute — tekst (w tym bio) w jednej kolumnie */
+@media (min-width: 1201px) {
+  .sec-consult {
+    aspect-ratio: unset;
+    min-height: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 37.14%) minmax(0, 1fr);
+    grid-template-areas: "consult-photo consult-content";
+    align-items: start;
+    column-gap: clamp(28px, 3.75vw, 72px);
+    padding: clamp(48px, 4.06vw, 78px) clamp(24px, 9.84vw, 189px) clamp(56px, 6.1vw, 96px);
+    box-sizing: border-box;
+    overflow-x: clip;
+  }
+  .consult-vector {
+    left: 44.17%;
+    width: 55.83%;
+    height: 100%;
+    top: 0;
+  }
+  .consult-photo {
+    position: relative;
+    grid-area: consult-photo;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 713px;
+    justify-self: start;
+    align-self: start;
+  }
+  .consult-content {
+    position: relative;
+    grid-area: consult-content;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: 100%;
+    max-width: 813px;
+    min-width: 0;
+    align-self: start;
+    padding-top: clamp(48px, 8.3vw, 154px);
+    box-sizing: border-box;
+  }
+  .consult-content-inner,
+  .consult-content h2,
+  .consult-content .lead,
+  .consult-content ul,
+  .consult-host-kicker,
+  .consult-person,
+  .consult-bio {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 .consult-contact {
   display: flex; flex-wrap: wrap; gap: 16px 28px; margin-top: 16px;
