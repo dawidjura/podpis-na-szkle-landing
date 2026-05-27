@@ -30,10 +30,17 @@ export default function RegistrationForm({
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [consent1, setConsent1] = useState(false);
-  const [consent2, setConsent2] = useState(false);
+  const [consentRequired, setConsentRequired] = useState(false);
+  const [consentFeedback, setConsentFeedback] = useState(false);
+  const [consentMarketing, setConsentMarketing] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const networkLockRef = useRef(false);
+
+  const resetConsents = useCallback(() => {
+    setConsentRequired(false);
+    setConsentFeedback(false);
+    setConsentMarketing(false);
+  }, []);
 
   const submitRegistration = useCallback(
     async (form: HTMLFormElement) => {
@@ -66,8 +73,8 @@ export default function RegistrationForm({
         return;
       }
 
-      if (!consent1 || !consent2) {
-        setError("Zaznaczenie obu zgód jest wymagane.");
+      if (!consentRequired) {
+        setError("Zaznaczenie zgody wymaganej do rejestracji na webinar jest obowiązkowe.");
         return;
       }
 
@@ -96,8 +103,7 @@ export default function RegistrationForm({
         setShowModal(true);
         requestAnimationFrame(() => {
           form.reset();
-          setConsent1(false);
-          setConsent2(false);
+          resetConsents();
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : "Nie udało się wysłać zgłoszenia.");
@@ -106,7 +112,7 @@ export default function RegistrationForm({
         setSending(false);
       }
     },
-    [consent1, consent2],
+    [consentRequired, resetConsents],
   );
 
   const handleSubmit = useCallback(
@@ -202,38 +208,56 @@ export default function RegistrationForm({
               </div>
               <div className="form-bottom">
                 <div className="form-extras">
-                  <label className="privacy-row">
-                    <input
-                      type="checkbox"
-                      className="chk"
-                      checked={consent1}
-                      onChange={(e) => setConsent1(e.target.checked)}
-                      required
-                    />
-                    <span>
-                      Wyrażam zgodę na przetwarzanie moich danych osobowych przez Euvic S.A. w celu rejestracji i
-                      udziału w webinarze, w tym obsługi organizacyjnej wydarzenia oraz przesyłania informacji
-                      związanych z jego realizacją. <span className="req">*</span>
-                    </span>
-                  </label>
-                  <label className="privacy-row">
-                    <input
-                      type="checkbox"
-                      className="chk"
-                      checked={consent2}
-                      onChange={(e) => setConsent2(e.target.checked)}
-                      required
-                    />
-                    <span>
-                      Wyrażam zgodę na kontakt telefoniczny ze strony Euvic S.A. po webinarze w celu zebrania opinii na
-                      temat wydarzenia oraz moich doświadczeń związanych z tematyką webinaru.{" "}
-                      <span className="req">*</span>
-                    </span>
-                  </label>
+                  <div className="form-consents">
+                    <label className="privacy-row privacy-row--required">
+                      <input
+                        id={`${fieldIdPrefix}-consent-required`}
+                        type="checkbox"
+                        className="chk"
+                        checked={consentRequired}
+                        onChange={(e) => setConsentRequired(e.target.checked)}
+                        required
+                      />
+                      <span>
+                        Wyrażam zgodę na przetwarzanie moich danych osobowych przez Organizatorów jako
+                        współadministratorów danych osobowych w celu rejestracji i organizacji webinaru, w tym
+                        przesłania linku dostępowego oraz materiałów szkoleniowych.{" "}
+                        <span className="req">*</span>
+                      </span>
+                    </label>
+
+                    <label className="privacy-row">
+                      <input
+                        id={`${fieldIdPrefix}-consent-feedback`}
+                        type="checkbox"
+                        className="chk"
+                        checked={consentFeedback}
+                        onChange={(e) => setConsentFeedback(e.target.checked)}
+                      />
+                      <span>
+                        Wyrażam zgodę na kontakt telefoniczny przez Organizatorów po zakończeniu webinaru w celu
+                        zebrania opinii o wydarzeniu i moich doświadczeniach jako Uczestnika.
+                      </span>
+                    </label>
+
+                    <label className="privacy-row">
+                      <input
+                        id={`${fieldIdPrefix}-consent-marketing`}
+                        type="checkbox"
+                        className="chk"
+                        checked={consentMarketing}
+                        onChange={(e) => setConsentMarketing(e.target.checked)}
+                      />
+                      <span>
+                        Wyrażam zgodę na kontakt marketingowy za pośrednictwem telefonu (połączenia głosowe, SMS,
+                        MMS) oraz poczty elektronicznej (wiadomości e-mail) w celu przesyłania informacji handlowych
+                        przez Organizatorów.
+                      </span>
+                    </label>
+                  </div>
+
                   <p className="admin-notice">
-                    Administratorem danych osobowych przetwarzanych w celu organizacji webinaru oraz w zakresie kontaktu
-                    telefonicznego jest Euvic S.A. Zobacz{" "}
-                    <PrivacyPdfLink>politykę prywatności</PrivacyPdfLink>.
+                    Zobacz <PrivacyPdfLink>politykę prywatności</PrivacyPdfLink>.
                   </p>
                   <div className="obl">
                     <span className="req">*</span>

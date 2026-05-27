@@ -1200,10 +1200,49 @@ body {
   flex: 1 1 280px;
   min-width: min(100%, 220px);
 }
+.form-consents {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+.consent-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.consent-group-intro {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  color: inherit;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.consent-suboptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0 0 0 clamp(16px, 4vw, 24px);
+  min-width: 0;
+}
 .privacy-row {
   display: flex; align-items: flex-start; gap: 8px;
   font-family: var(--font-sans); font-size: 14px; font-weight: 400;
   line-height: 18px; font-feature-settings: "lnum" 1, "tnum" 1;
+  min-width: 0;
+}
+.privacy-row > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .privacy-row { cursor: pointer; }
 .privacy-row .chk {
@@ -2211,10 +2250,18 @@ a.form-submit--anchor {
 
   .form-left h2 { font-size: 28px; line-height: 1.2; }
   .privacy-row,
+  .consent-group-intro,
   .admin-notice,
   .obl {
     font-size: 13px;
     line-height: 1.45;
+  }
+  .consent-suboptions {
+    padding-left: 12px;
+    gap: 8px;
+  }
+  .form-consents {
+    gap: 16px;
   }
   .field input {
     font-size: 16px;
