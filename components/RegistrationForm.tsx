@@ -73,8 +73,8 @@ export default function RegistrationForm({
         return;
       }
 
-      if (!consentRequired) {
-        setError("Zaznaczenie zgody wymaganej do rejestracji na webinar jest obowiązkowe.");
+      if (!consentRequired || !consentFeedback) {
+        setError("Zaznaczenie zgód oznaczonych gwiazdką jest obowiązkowe.");
         return;
       }
 
@@ -112,7 +112,7 @@ export default function RegistrationForm({
         setSending(false);
       }
     },
-    [consentRequired, resetConsents],
+    [consentRequired, consentFeedback, resetConsents],
   );
 
   const handleSubmit = useCallback(
@@ -219,24 +219,26 @@ export default function RegistrationForm({
                         required
                       />
                       <span>
-                        Wyrażam zgodę na przetwarzanie moich danych osobowych przez Organizatorów jako
-                        współadministratorów danych osobowych w celu rejestracji i organizacji webinaru, w tym
-                        przesłania linku dostępowego oraz materiałów szkoleniowych.{" "}
+                        Wyrażam zgodę na przetwarzanie moich danych osobowych przez Euvic S.A. w celu
+                        organizacji webinaru oraz przesyłania informacji związanych z webinarem, w tym materiałów
+                        po webinarze.{" "}
                         <span className="req">*</span>
                       </span>
                     </label>
 
-                    <label className="privacy-row">
+                    <label className="privacy-row privacy-row--required">
                       <input
                         id={`${fieldIdPrefix}-consent-feedback`}
                         type="checkbox"
                         className="chk"
                         checked={consentFeedback}
                         onChange={(e) => setConsentFeedback(e.target.checked)}
+                        required
                       />
                       <span>
-                        Wyrażam zgodę na kontakt telefoniczny przez Organizatorów po zakończeniu webinaru w celu
-                        zebrania opinii o wydarzeniu i moich doświadczeniach jako Uczestnika.
+                        Wyrażam zgodę na kontakt telefoniczny przez Euvic S.A. po webinarze w celu zebrania
+                        opinii o wydarzeniu.{" "}
+                        <span className="req">*</span>
                       </span>
                     </label>
 
@@ -249,9 +251,8 @@ export default function RegistrationForm({
                         onChange={(e) => setConsentMarketing(e.target.checked)}
                       />
                       <span>
-                        Wyrażam zgodę na kontakt marketingowy za pośrednictwem telefonu (połączenia głosowe, SMS,
-                        MMS) oraz poczty elektronicznej (wiadomości e-mail) w celu przesyłania informacji handlowych
-                        przez Organizatorów.
+                        Wyrażam zgodę na otrzymywanie od Euvic S.A. informacji handlowych drogą elektroniczną
+                        (e-mail) oraz telefonicznie (połączenia głosowe, SMS, MMS).
                       </span>
                     </label>
                   </div>
