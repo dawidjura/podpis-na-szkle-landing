@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  ClickMeetingConfigError,
+  ClickMeetingRegistrationError,
+  registerClickMeetingParticipant,
+} from "@/lib/clickmeeting-register";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
 import { insertWebinarSignup } from "@/lib/insert-webinar-signup";
 import {
@@ -40,6 +45,12 @@ export async function POST(request: Request) {
 
     const emailNorm = email.toLowerCase();
 
+    await registerClickMeetingParticipant({
+      firstName,
+      lastName,
+      email: emailNorm,
+    });
+
     await insertWebinarSignup({
       name: firstName,
       surname: lastName,
@@ -62,6 +73,32 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
+    if (err instanceof ClickMeetingConfigError) {
+      console.error("Registration config error:", err.message);
+      return NextResponse.json(
+        { error: "Rejestracja tymczasowo niedostępna. Skontaktuj się z organizatorem." },
+        { status: 503 },
+      );
+    }
+    if (err instanceof ClickMeetingRegistrationError) {
+      return NextResponse.json({ error: err.message }, { status: err.httpStatus });
+    }
+    const errText =
+      err instanceof Error
+        ? `${err.message} ${(err as { details?: string }).details ?? ""}`
+        : String(err);
+
+    if (/supabase|ENOTFOUND|fetch failed/i.test(errText)) {
+      console.error("Registration CRM error:", err);
+      return NextResponse.json(
+        {
+          error:
+            "Zapis w CRM nie powiódł się (problem z Supabase). Lokalnie możesz ustawić ENV=PRODUCTION w .env, aby użyć Pipedrive.",
+        },
+        { status: 503 },
+      );
+    }
+
     console.error("Registration error:", err);
     return NextResponse.json(
       { error: "Nie udało się wysłać zgłoszenia. Spróbuj ponownie." },
