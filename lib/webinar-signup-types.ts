@@ -3,4 +3,6 @@ export type WebinarSignupRow = {
   surname: string;
   phone_number: string;
   email: string;
+  /** Opcjonalna zgoda na komunikację handlową (checkbox w formularzu). */
+  consent_marketing: boolean;
 };

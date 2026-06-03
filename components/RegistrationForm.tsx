@@ -59,6 +59,7 @@ export default function RegistrationForm({
         lastName: readTrimmed("lastName"),
         phone: readTrimmed("phone"),
         email: readTrimmed("email"),
+        consentMarketing,
       };
 
       if (!data.firstName || !data.lastName || !data.phone || !data.email) {
@@ -112,7 +113,7 @@ export default function RegistrationForm({
         setSending(false);
       }
     },
-    [consentRequired, consentFeedback, resetConsents],
+    [consentRequired, consentFeedback, consentMarketing, resetConsents],
   );
 
   const handleSubmit = useCallback(
