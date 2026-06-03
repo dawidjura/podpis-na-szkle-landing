@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     const emailNorm = email.toLowerCase();
     const consentMarketing = body.consentMarketing === true;
 
-    await registerClickMeetingParticipant({
+    const { joinUrl } = await registerClickMeetingParticipant({
       firstName,
       lastName,
       email: emailNorm,
@@ -66,6 +66,7 @@ export async function POST(request: Request) {
       phone: normalizedPhone.phone,
       email: emailNorm,
       consentMarketing,
+      webinarJoinUrl: joinUrl,
     };
     const [toParticipant, toStaff] = await Promise.allSettled([
       sendRegistrationEmail(payload),

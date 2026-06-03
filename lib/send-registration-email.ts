@@ -32,6 +32,8 @@ export interface WebinarFormData {
   phone: string;
   email: string;
   consentMarketing?: boolean;
+  /** Osobisty link auto-login z ClickMeeting (priorytet nad CLICKMEETING_WEBINAR_URL). */
+  webinarJoinUrl?: string;
 }
 
 /** Public origin for email images and links. Without it, the banner image is omitted (mail clients need an absolute URL).
@@ -232,7 +234,7 @@ export async function sendRegistrationEmail(
 
   const origin = getPublicOrigin();
   const landingUrl = origin ? `${origin}/` : "";
-  const webinarJoinUrl = getWebinarJoinUrl();
+  const webinarJoinUrl = data.webinarJoinUrl?.trim() || getWebinarJoinUrl();
   const bannerB64 = loadNewsletterBannerBase64();
   const bannerSrc = bannerB64
     ? `cid:${NEWSLETTER_BANNER_CID}`

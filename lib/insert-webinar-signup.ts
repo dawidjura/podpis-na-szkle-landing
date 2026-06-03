@@ -29,9 +29,17 @@ export function isWebinarSignupProduction(): boolean {
   return getWebinarSignupBackend() === "pipedrive";
 }
 
+function isWebinarSupabaseSkipped(): boolean {
+  return (process.env.SKIP_WEBINAR_SUPABASE ?? "").trim().toLowerCase() === "true";
+}
+
 export async function insertWebinarSignup(row: WebinarSignupRow): Promise<void> {
   if (getWebinarSignupBackend() === "pipedrive") {
     await insertWebinarSignupPipedrive(row);
+    return;
+  }
+  if (isWebinarSupabaseSkipped()) {
+    console.info("[webinar-signup] Pominięto zapis do Supabase (SKIP_WEBINAR_SUPABASE=true).");
     return;
   }
   await insertWebinarSignupSupabase(row);
