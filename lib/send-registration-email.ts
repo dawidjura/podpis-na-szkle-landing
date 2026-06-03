@@ -38,6 +38,13 @@ export interface WebinarFormData {
  *  - SITE_URL=https://twoja-domena.pl  (recommended, server-only), or
  *  - NEXT_PUBLIC_SITE_URL=https://twoja-domena.pl
  *  VERCEL_URL is used only as fallback (often *.vercel.app, not your custom domain). */
+/** Publiczny URL pokoju webinarowego (link z panelu ClickMeeting, nie API id). */
+function getWebinarJoinUrl(): string {
+  const url = process.env.CLICKMEETING_WEBINAR_URL?.trim();
+  if (!url) return "";
+  return url.replace(/\/$/, "");
+}
+
 function getPublicOrigin(): string {
   const normalize = (raw: string | undefined) => {
     const u = raw?.trim();
@@ -70,7 +77,8 @@ function loadNewsletterBannerBase64(): string | null {
 function buildParticipantConfirmationHtml(
   _data: WebinarFormData,
   bannerSrc: string,
-  landingUrl: string
+  landingUrl: string,
+  webinarJoinUrl: string,
 ): string {
   const escAttr = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
@@ -103,6 +111,11 @@ function buildParticipantConfirmationHtml(
     ? `Do zobaczenia <a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">online</a>,`
     : "Do zobaczenia online,";
 
+  const joinHref = webinarJoinUrl ? escAttr(webinarJoinUrl) : "";
+  const eventHereLine = joinHref
+    ? `Wydarzenie odbędzie się <a href="${joinHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">tutaj</a>.`
+    : "Wydarzenie odbędzie się online — link do pokoju otrzymasz w osobnym mailu z ClickMeeting.";
+
   const p =
     "margin:0 0 16px 0;font-family:Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#2c3135;";
   const pLast = p.replace("16px", "0");
@@ -121,7 +134,8 @@ function buildParticipantConfirmationHtml(
               <p style="${p}">Dzień dobry,</p>
               <p style="${p}">Dziękujemy za zapis na bezpłatny webinar:</p>
               <p style="${p}">${titleLinked}<br />
-              2 lipca 2026 | 14:00 | 60 minut</p>
+              2 lipca 2026 | 14:00 | 60 minut<br />
+              ${eventHereLine}</p>
               <p style="${p}">Podczas webinaru pokażemy, jak budować wiarygodną dokumentację dostaw i unikać sporów w logistyce.</p>
               <p style="${p}">To wszystko w praktycznej formule:<br />
               30 minut wprowadzenia + 30 minut Q&amp;A</p>
@@ -134,7 +148,6 @@ function buildParticipantConfirmationHtml(
               </ul>
               <p style="${p}">Porozmawiamy m.in. o podpisie na urządzeniu mobilnym, zdjęciach, geolokalizacji i cyfrowym śladzie zdarzeń w logistyce.</p>
               <p style="${p}">Więcej informacji o agendzie spotkania, prelegentach i szczegółach wydarzenia znajdziesz na ${webinarPageLink}.</p>
-              <p style="${p}">Przed spotkaniem prześlemy Ci przypomnienie wraz z linkiem do webinaru.</p>
               <p style="${pLast}">${onlineLinked}<br />Zespół Euvic &amp; GS1</p>
             </td>
           </tr>
@@ -216,6 +229,7 @@ export async function sendRegistrationEmail(
 
   const origin = getPublicOrigin();
   const landingUrl = origin ? `${origin}/` : "";
+  const webinarJoinUrl = getWebinarJoinUrl();
   const bannerB64 = loadNewsletterBannerBase64();
   const bannerSrc = bannerB64
     ? `cid:${NEWSLETTER_BANNER_CID}`
@@ -241,7 +255,12 @@ export async function sendRegistrationEmail(
       subject: "Potwierdzenie zapisu – webinar „Podpis na szkle”",
       body: {
         contentType: "HTML",
-        content: buildParticipantConfirmationHtml(data, bannerSrc, landingUrl),
+        content: buildParticipantConfirmationHtml(
+          data,
+          bannerSrc,
+          landingUrl,
+          webinarJoinUrl,
+        ),
       },
       attachments,
       from: {
