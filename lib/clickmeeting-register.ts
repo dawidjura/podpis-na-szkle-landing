@@ -4,6 +4,10 @@ export type ClickMeetingParticipant = {
   email: string;
 };
 
+export type ClickMeetingRegistrationResult = {
+  joinUrl: string;
+};
+
 export class ClickMeetingConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -20,6 +24,12 @@ export class ClickMeetingRegistrationError extends Error {
     this.httpStatus = httpStatus;
   }
 }
+
+type ConferenceDetails = {
+  name?: string;
+  room_url?: string;
+  registration_enabled?: number | boolean;
+};
 
 /** API używa pola `id` konferencji, nie `room_pin` z adresu pokoju (np. …/288686738). */
 function normalizeConferenceId(raw: string): string {
@@ -41,10 +51,31 @@ function getClickMeetingConfig(): { apiKey: string; roomId: string } {
   return { apiKey, roomId };
 }
 
-async function assertConferenceReady(
+/** Publiczny URL pokoju z .env (fallback gdy API nie zwróci room_url). */
+function getStaticWebinarRoomUrl(): string {
+  const url = process.env.CLICKMEETING_WEBINAR_URL?.trim();
+  if (!url) return "";
+  return url.replace(/\/$/, "");
+}
+
+function appendQueryParam(baseUrl: string, key: string, value: string): string {
+  const url = new URL(baseUrl);
+  url.searchParams.set(key, value);
+  return url.toString();
+}
+
+function participantNickname(participant: ClickMeetingParticipant): string {
+  const name = [participant.firstName, participant.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  return name || participant.email;
+}
+
+async function fetchConference(
   apiKey: string,
   roomId: string,
-): Promise<void> {
+): Promise<ConferenceDetails> {
   const res = await fetch(`https://api.clickmeeting.com/v1/conferences/${roomId}`, {
     headers: { "X-Api-Key": apiKey },
     cache: "no-store",
@@ -61,24 +92,30 @@ async function assertConferenceReady(
     );
   }
 
-  let conference: { name?: string; registration_enabled?: number | boolean } | undefined;
   try {
-    const json = JSON.parse(raw) as { conference?: { name?: string; registration_enabled?: number | boolean } };
-    conference = json.conference;
+    const json = JSON.parse(raw) as { conference?: ConferenceDetails };
+    return json.conference ?? {};
   } catch {
-    return;
+    return {};
   }
+}
 
+function assertRegistrationEnabled(conference: ConferenceDetails, roomId: string): void {
   const registrationOn =
-    conference?.registration_enabled === 1 ||
-    conference?.registration_enabled === true;
+    conference.registration_enabled === 1 || conference.registration_enabled === true;
 
   if (!registrationOn) {
     throw new ClickMeetingRegistrationError(
-      `Rejestracja jest wyłączona w ClickMeeting dla pokoju „${conference?.name ?? roomId}”. Włącz ją w panelu: Rejestracja → Włącz.`,
+      `Rejestracja jest wyłączona w ClickMeeting dla pokoju „${conference.name ?? roomId}”. Włącz ją w panelu: Rejestracja → Włącz.`,
       503,
     );
   }
+}
+
+function resolveConferenceRoomUrl(conference: ConferenceDetails): string {
+  const fromApi = conference.room_url?.trim();
+  if (fromApi) return fromApi.replace(/\/$/, "");
+  return getStaticWebinarRoomUrl();
 }
 
 function isDuplicateRegistration(message: string, status: number): boolean {
@@ -87,15 +124,74 @@ function isDuplicateRegistration(message: string, status: number): boolean {
 }
 
 /**
- * Rejestruje uczestnika w pokoju ClickMeeting (API v1).
+ * Auto-login URL — uczestnik wchodzi bez ponownego logowania.
+ * @see https://dev.clickmeeting.com/api-guide/conferences/auto-login-url/
+ */
+async function createAutologinJoinUrl(
+  apiKey: string,
+  roomId: string,
+  participant: ClickMeetingParticipant,
+  roomUrl: string,
+): Promise<string> {
+  const fallback = roomUrl || getStaticWebinarRoomUrl();
+  if (!fallback) {
+    console.error("[ClickMeeting] Brak room_url i CLICKMEETING_WEBINAR_URL — nie można zbudować linku.");
+    return "";
+  }
+
+  const body = new URLSearchParams();
+  body.set("email", participant.email);
+  body.set("nickname", participantNickname(participant));
+  body.set("role", "listener");
+
+  const res = await fetch(
+    `https://api.clickmeeting.com/v1/conferences/${encodeURIComponent(roomId)}/room/autologin_hash`,
+    {
+      method: "POST",
+      headers: {
+        "X-Api-Key": apiKey,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: body.toString(),
+      cache: "no-store",
+    },
+  );
+
+  const raw = await res.text();
+  let parsed: { autologin_hash?: string; message?: string } | null = null;
+  if (raw) {
+    try {
+      parsed = JSON.parse(raw) as { autologin_hash?: string; message?: string };
+    } catch {
+      parsed = null;
+    }
+  }
+
+  const hash = parsed?.autologin_hash?.trim();
+  if (res.ok && hash) {
+    return appendQueryParam(fallback, "l", hash);
+  }
+
+  console.error(
+    "[ClickMeeting] autologin_hash failed:",
+    res.status,
+    parsed?.message ?? raw.slice(0, 300),
+  );
+  return fallback;
+}
+
+/**
+ * Rejestruje uczestnika w pokoju ClickMeeting (API v1) i zwraca link auto-login do maila.
  * @see https://dev.clickmeeting.com/api-doc/ — Register participant
  */
 export async function registerClickMeetingParticipant(
   participant: ClickMeetingParticipant,
-): Promise<void> {
+): Promise<ClickMeetingRegistrationResult> {
   const { apiKey, roomId } = getClickMeetingConfig();
 
-  await assertConferenceReady(apiKey, roomId);
+  const conference = await fetchConference(apiKey, roomId);
+  assertRegistrationEnabled(conference, roomId);
+  const roomUrl = resolveConferenceRoomUrl(conference);
 
   const body = new URLSearchParams();
   body.set("registration[1]", participant.firstName);
@@ -126,33 +222,34 @@ export async function registerClickMeetingParticipant(
     }
   }
 
-  if (res.ok && (parsed?.status === "OK" || parsed?.url)) {
-    return;
-  }
+  if (!res.ok || (parsed?.status !== "OK" && !parsed?.url)) {
+    const detail =
+      typeof parsed?.message === "string"
+        ? parsed.message
+        : raw.slice(0, 500) || `HTTP ${res.status}`;
 
-  const detail =
-    typeof parsed?.message === "string"
-      ? parsed.message
-      : raw.slice(0, 500) || `HTTP ${res.status}`;
+    if (res.status === 404 || /not found|room not found/i.test(detail)) {
+      throw new ClickMeetingRegistrationError(
+        "Nie znaleziono pokoju w ClickMeeting. Sprawdź CLICKMEETING_ROOM_ID (id API, np. 9984434 dla „Test embedowania 1”).",
+        404,
+      );
+    }
 
-  if (res.status === 404 || /not found|room not found/i.test(detail)) {
+    if (isDuplicateRegistration(detail, res.status)) {
+      throw new ClickMeetingRegistrationError(
+        "Ten adres e-mail jest już zarejestrowany na to wydarzenie.",
+        409,
+      );
+    }
+
+    console.error("ClickMeeting registration failed:", res.status);
+
     throw new ClickMeetingRegistrationError(
-      "Nie znaleziono pokoju w ClickMeeting. Sprawdź CLICKMEETING_ROOM_ID (id API, np. 9984434 dla „Test embedowania 1”).",
-      404,
+      "Nie udało się zarejestrować na webinar. Spróbuj ponownie za chwilę.",
+      res.status >= 400 && res.status < 600 ? res.status : 502,
     );
   }
 
-  if (isDuplicateRegistration(detail, res.status)) {
-    throw new ClickMeetingRegistrationError(
-      "Ten adres e-mail jest już zarejestrowany na to wydarzenie.",
-      409,
-    );
-  }
-
-  console.error("ClickMeeting registration failed:", res.status);
-
-  throw new ClickMeetingRegistrationError(
-    "Nie udało się zarejestrować na webinar. Spróbuj ponownie za chwilę.",
-    res.status >= 400 && res.status < 600 ? res.status : 502,
-  );
+  const joinUrl = await createAutologinJoinUrl(apiKey, roomId, participant, roomUrl);
+  return { joinUrl };
 }
