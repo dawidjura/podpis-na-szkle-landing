@@ -31,6 +31,7 @@ export interface WebinarFormData {
   lastName: string;
   phone: string;
   email: string;
+  consentMarketing?: boolean;
 }
 
 /** Public origin for email images and links. Without it, the banner image is omitted (mail clients need an absolute URL).
@@ -173,6 +174,10 @@ function buildStaffSignupNotificationHtml(data: WebinarFormData): string {
     ["Nazwisko", data.lastName],
     ["E-mail", data.email],
     ["Telefon", data.phone],
+    [
+      "Zgoda marketingowa",
+      data.consentMarketing ? "tak" : "nie",
+    ],
   ] as const;
   const tr = rows
     .map(

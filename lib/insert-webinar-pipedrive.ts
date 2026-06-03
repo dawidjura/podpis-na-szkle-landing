@@ -1,4 +1,5 @@
 import { createDeal } from "@/lib/pipedrive/deals";
+import { addDealNote } from "@/lib/pipedrive/notes";
 import { createPerson } from "@/lib/pipedrive/persons";
 import { isPipedriveConfigured } from "@/lib/pipedrive/client";
 import type { WebinarSignupRow } from "@/lib/webinar-signup-types";
@@ -32,4 +33,10 @@ export async function insertWebinarSignupPipedrive(
   if (dealId == null) {
     throw new Error("Pipedrive: nie udało się utworzyć szansy.");
   }
+
+  const marketingLabel = row.consent_marketing ? "tak" : "nie";
+  await addDealNote(
+    dealId,
+    `Zgoda marketingowa (formularz webinar): ${marketingLabel}.`,
+  );
 }
