@@ -108,9 +108,7 @@ function buildParticipantConfirmationHtml(
     ? `<a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}"><strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong></a>`
     : `<strong>„Podpis na szkle – dowód dostawy nie do podważenia”</strong>`;
 
-  const onlineLinked = webinarHref
-    ? `Do zobaczenia <a href="${webinarHref}" target="_blank" rel="noopener noreferrer" style="${linkStyle}">online</a>,`
-    : "Do zobaczenia online,";
+  const onlineLinked = "Do zobaczenia online,";
 
   const joinHref = webinarJoinUrl ? escAttr(webinarJoinUrl) : "";
   const eventHereLine = joinHref
