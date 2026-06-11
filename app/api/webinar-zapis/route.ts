@@ -6,7 +6,6 @@ import {
 } from "@/lib/clickmeeting-register";
 import { normalizePhoneNumber } from "@/lib/phone-validation";
 import { insertWebinarSignup } from "@/lib/insert-webinar-signup";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import {
   sendRegistrationEmail,
   sendStaffSignupNotification,
@@ -14,17 +13,6 @@ import {
 } from "@/lib/send-registration-email";
 
 export async function POST(request: Request) {
-  const rateLimit = checkRateLimit(getClientIp(request));
-  if (!rateLimit.ok) {
-    return NextResponse.json(
-      { error: "Zbyt wiele prób rejestracji. Spróbuj ponownie za chwilę." },
-      {
-        status: 429,
-        headers: { "Retry-After": String(rateLimit.retryAfter) },
-      },
-    );
-  }
-
   try {
     const body = (await request.json()) as Partial<WebinarFormData>;
 
