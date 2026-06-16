@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,7 +32,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl" className={`${inter.variable} ${sincerity.variable}`}>
-      <body>{children}</body>
+      <GoogleTagManager gtmId="GTM-MTWKBGLT" />
+      <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-MTWKBGLT"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }
