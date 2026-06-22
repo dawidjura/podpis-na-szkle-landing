@@ -48,7 +48,6 @@ export default function CookieConsentProvider() {
         },
         preferencesModal: {
           layout: "box",
-          position: "middle center",
           equalWeightButtons: false,
           flipButtons: false,
         },
