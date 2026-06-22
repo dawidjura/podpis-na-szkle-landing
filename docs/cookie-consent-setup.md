@@ -26,7 +26,7 @@ Landing używa [vanilla-cookieconsent](https://cookieconsent.orestbida.com/) (MI
 2. Po deploy: DevTools → Application → Cookies:
    - **Przed** zgodą: brak `_clck`, `_clsk`
    - **Po** „Akceptuj wszystkie”: cookies Clarity obecne
-   - **Po** „Tylko niezbędne”: brak cookies Clarity (no-consent mode)
+   - **Po** „Odrzuć”: brak cookies Clarity (no-consent mode)
 3. W nagraniach sesji sprawdź, że nowe sesje po odrzuceniu nie zapisują pełnych danych cross-page.
 
 ## Test manualny (formularz + dead clicki)

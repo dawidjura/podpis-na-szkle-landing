@@ -5,6 +5,23 @@ import * as CookieConsent from "vanilla-cookieconsent";
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import { applyAnalyticsConsent } from "@/lib/analytics-consent";
 
+const RODO_URL = "https://www.euvic.com/pl/rodo/";
+
+function arrangeConsentButtons(modal: HTMLElement) {
+  const btns = modal.querySelector(".cm__btns");
+  if (!btns || btns.classList.contains("cm__btns--euvic")) return;
+
+  btns.classList.add("cm__btns--euvic");
+  btns.querySelectorAll(".cm__btn-group").forEach((group) => {
+    group.classList.add("cm__btn-group--euvic");
+  });
+
+  const customize = modal.querySelector('[data-role="show"]');
+  if (customize instanceof HTMLButtonElement) {
+    customize.classList.add("cm__btn", "cm__btn--secondary");
+  }
+}
+
 function syncAnalyticsFromPreferences() {
   const prefs = CookieConsent.getUserPreferences();
   const analyticsAccepted = prefs.acceptedCategories.includes("analytics");
@@ -24,15 +41,15 @@ export default function CookieConsentProvider() {
       },
       guiOptions: {
         consentModal: {
-          layout: "box",
+          layout: "box wide",
           position: "middle center",
           equalWeightButtons: false,
           flipButtons: false,
         },
         preferencesModal: {
           layout: "box",
-          position: "left",
-          equalWeightButtons: true,
+          position: "middle center",
+          equalWeightButtons: false,
           flipButtons: false,
         },
       },
@@ -68,32 +85,34 @@ export default function CookieConsentProvider() {
             consentModal: {
               title: "Pliki cookie na tej stronie",
               description:
-                'Używamy plików cookie niezbędnych do działania strony oraz — za Twoją zgodą — analitycznych (Google Tag Manager, Microsoft Clarity), aby ulepszać stronę. Możesz zaakceptować wszystkie lub wybrać tylko niezbędne. Więcej w <a href="#polityka-prywatnosci" class="cc-link">polityce prywatności</a>.',
+                `Zapisujemy Twoją decyzję o plikach cookie. Za Twoją zgodą stosujemy też pliki analityczne (Google Tag Manager, Microsoft Clarity), aby ulepszać stronę. Więcej w <a href="${RODO_URL}" class="cc-link" target="_blank" rel="noopener noreferrer">polityce prywatności</a>.`,
               acceptAllBtn: "Akceptuj wszystkie",
-              acceptNecessaryBtn: "Tylko niezbędne",
-              showPreferencesBtn: "Ustawienia",
+              acceptNecessaryBtn: "Odrzuć",
+              showPreferencesBtn: "Dostosuj",
             },
             preferencesModal: {
               title: "Preferencje plików cookie",
               acceptAllBtn: "Akceptuj wszystkie",
-              acceptNecessaryBtn: "Odrzuć opcjonalne",
+              acceptNecessaryBtn: "Odrzuć",
               savePreferencesBtn: "Zapisz wybór",
               closeIconLabel: "Zamknij",
+              serviceCounterLabel: "Usługi",
               sections: [
                 {
                   title: "Używanie plików cookie",
                   description:
-                    "Pliki cookie pomagają nam zapewnić podstawowe funkcje strony oraz — za zgodą — mierzyć ruch i poprawiać doświadczenie użytkownika.",
+                    `Tutaj wybierasz pliki cookie. Ściśle niezbędne służą wyłącznie zapamiętaniu Twojej decyzji i na mocy prawa UE nie wymagają osobnej zgody. Analityczne włączysz tylko, jeśli wyrazisz na nie zgodę. Więcej w <a href="${RODO_URL}" class="cc-link" target="_blank" rel="noopener noreferrer">polityce prywatności</a>.`,
                 },
                 {
-                  title: "Niezbędne",
-                  description: "Wymagane do prawidłowego działania strony. Zawsze aktywne.",
+                  title: "Ściśle niezbędne",
+                  description:
+                    "Pliki cookie zapisujące Twój wybór w banerze. Bez nich musielibyśmy pytać o zgodę przy każdej wizycie.",
                   linkedCategory: "necessary",
                 },
                 {
                   title: "Analityczne",
                   description:
-                    "Google Tag Manager i Microsoft Clarity — statystyki odwiedzin i zachowań na stronie (np. mapy ciepła, nagrania sesji).",
+                    "Google Tag Manager i Microsoft Clarity: statystyki odwiedzin, zachowania na stronie (mapy ciepła, nagrania sesji) i ulepszanie strony.",
                   linkedCategory: "analytics",
                 },
               ],
@@ -103,6 +122,11 @@ export default function CookieConsentProvider() {
       },
       onConsent: syncAnalyticsFromPreferences,
       onChange: syncAnalyticsFromPreferences,
+      onModalReady: ({ modalName, modal }) => {
+        if (modalName === "consentModal") {
+          arrangeConsentButtons(modal);
+        }
+      },
     });
 
     if (CookieConsent.validConsent()) {
