@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
-import { GoogleTagManager } from "@next/third-parties/google";
+import CookieConsentProvider from "@/components/CookieConsentProvider";
 import "./globals.css";
-
-const CLARITY_PROJECT_ID = "x8z7grnd3f";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -35,24 +33,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl" className={`${inter.variable} ${sincerity.variable}`}>
-      <GoogleTagManager gtmId="GTM-MTWKBGLT" />
       <body>
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-MTWKBGLT"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
-        {children}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");`}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'denied',personalization_storage:'denied',wait_for_update:500});`}
         </Script>
+        {children}
+        <CookieConsentProvider />
       </body>
     </html>
   );

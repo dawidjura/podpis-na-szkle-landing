@@ -79,7 +79,10 @@ export default function RegistrationForm({
         return;
       }
 
-      if (networkLockRef.current) return;
+      if (networkLockRef.current) {
+        setError("Wysyłamy zgłoszenie, proszę czekać…");
+        return;
+      }
       networkLockRef.current = true;
 
       setSending(true);
@@ -124,10 +127,6 @@ export default function RegistrationForm({
     [submitRegistration],
   );
 
-  const handleClick = useCallback(() => {
-    if (formRef.current) void submitRegistration(formRef.current);
-  }, [submitRegistration]);
-
   return (
     <>
       <section className={sectionClass} id={sectionId} aria-labelledby={headingId}>
@@ -148,13 +147,15 @@ export default function RegistrationForm({
             <form
               ref={formRef}
               noValidate
+              autoComplete="on"
+              aria-busy={sending}
               onSubmit={handleSubmit}
             >
               <div className="form-grid2">
-                <div className="field">
-                  <label htmlFor={`${fieldIdPrefix}-firstName`}>
+                <label className="field">
+                  <span className="field-caption">
                     Imię <span className="req">*</span>
-                  </label>
+                  </span>
                   <input
                     id={`${fieldIdPrefix}-firstName`}
                     type="text"
@@ -163,11 +164,11 @@ export default function RegistrationForm({
                     autoComplete="given-name"
                     required
                   />
-                </div>
-                <div className="field">
-                  <label htmlFor={`${fieldIdPrefix}-lastName`}>
+                </label>
+                <label className="field">
+                  <span className="field-caption">
                     Nazwisko <span className="req">*</span>
-                  </label>
+                  </span>
                   <input
                     id={`${fieldIdPrefix}-lastName`}
                     type="text"
@@ -176,13 +177,13 @@ export default function RegistrationForm({
                     autoComplete="family-name"
                     required
                   />
-                </div>
+                </label>
               </div>
               <div className="form-grid2">
-                <div className="field">
-                  <label htmlFor={`${fieldIdPrefix}-phone`}>
+                <label className="field">
+                  <span className="field-caption">
                     Telefon <span className="req">*</span>
-                  </label>
+                  </span>
                   <input
                     id={`${fieldIdPrefix}-phone`}
                     type="tel"
@@ -192,11 +193,11 @@ export default function RegistrationForm({
                     inputMode="tel"
                     required
                   />
-                </div>
-                <div className="field">
-                  <label htmlFor={`${fieldIdPrefix}-email`}>
+                </label>
+                <label className="field">
+                  <span className="field-caption">
                     E-mail <span className="req">*</span>
-                  </label>
+                  </span>
                   <input
                     id={`${fieldIdPrefix}-email`}
                     type="email"
@@ -205,7 +206,7 @@ export default function RegistrationForm({
                     autoComplete="email"
                     required
                   />
-                </div>
+                </label>
               </div>
               <div className="form-bottom">
                 <div className="form-extras">
@@ -273,10 +274,9 @@ export default function RegistrationForm({
                     </p>
                   ) : null}
                   <button
-                    type="button"
+                    type="submit"
                     className="form-submit"
                     disabled={sending}
-                    onClick={handleClick}
                   >
                     {sending ? "Wysyłanie…" : "Zarejestruj się"}
                   </button>
