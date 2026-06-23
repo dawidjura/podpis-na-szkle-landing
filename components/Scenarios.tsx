@@ -7,7 +7,7 @@ export default function Scenarios() {
           <h2 id="scenarios-title">Praktyczna formuła spotkania</h2>
           <p className="sub">
             30 min wprowadzenia eksperckiego + 30 min dyskusji o realnych
-            scenariuszach w logistyce
+            scenariuszach w logistyce:
           </p>
         </div>
         <div className="scenario-cols">
