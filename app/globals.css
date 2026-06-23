@@ -310,7 +310,7 @@ body {
   top: calc(50% - 11px); transform: translateY(-50%);
   box-sizing: border-box; display: flex; flex-direction: column;
   align-items: flex-start;
-  gap: clamp(36px, 4vw, 48px);
+  gap: clamp(24px, 3vw, 32px);
   width: min(1418px, calc(100% - 404px)); max-width: 1418px;
   min-width: 0;
   container-type: inline-size;
@@ -326,18 +326,10 @@ body {
   max-width: 100%;
   min-width: 0;
 }
-.sec-program h2 {
-  font-family: var(--font-serif); font-weight: 400;
-  font-size: clamp(22px, 1.65vw + 1.1rem, 64px);
-  line-height: 1.15;
-  color: var(--text); margin: 0; max-width: none;
+.sec-program-heading-row .band-title {
   flex: 1 1 auto;
   min-width: 0;
-}
-@supports (font-size: 1cqi) {
-  .sec-program h2 {
-    font-size: clamp(22px, 0.5rem + 5.2cqi, 64px);
-  }
+  max-width: none;
 }
 .sec-program-trytytka {
   flex: 0 0 auto;
@@ -681,13 +673,14 @@ body {
   align-items: flex-start;
   box-sizing: border-box;
 }
-.sec-intro-band h2 {
+.band-title {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: clamp(32px, 4vw, 56px);
   line-height: 1.15;
   margin: 0;
   max-width: 900px;
+  color: var(--text);
 }
 .intro-band-lead {
   font-family: var(--font-sans);
@@ -2028,10 +2021,6 @@ a.form-submit--anchor {
     position: static; transform: none; left: auto; top: auto;
     width: 100%; max-width: none;
   }
-  .sec-program h2 {
-    font-size: 36px;
-    line-height: 44px;
-  }
 
   /* — Agenda — */
   .sec-agenda {
@@ -2233,11 +2222,6 @@ a.form-submit--anchor {
   .event-stat:nth-child(3),
   .event-stat:nth-child(4) { width: 100%; }
   .event-stat strong { font-size: 28px; line-height: 40px; }
-
-  .sec-program h2 {
-    font-size: clamp(15px, 4.2vw, 28px);
-    line-height: 1.25;
-  }
 
   .sec-agenda h2 { font-size: 28px; line-height: 36px; }
   .sec-agenda .tl-num { font-size: 32px; line-height: 40px; }
