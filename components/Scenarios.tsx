@@ -4,8 +4,11 @@ export default function Scenarios() {
     <section className="sec-scenarios" aria-labelledby="scenarios-title">
       <div className="scenarios-inner">
         <div className="scenarios-intro">
-          <h2 id="scenarios-title">Ty wybierasz scenariusz do omówienia</h2>
-          <p className="sub">Z jakimi problemami mierzysz się najczęściej? Podczas sesji Q&amp;A możesz wybrać temat, który przeanalizujemy na żywo.</p>
+          <h2 id="scenarios-title">Praktyczna formuła spotkania</h2>
+          <p className="sub">
+            30 min wprowadzenia eksperckiego + 30 min dyskusji o realnych
+            scenariuszach w logistyce
+          </p>
         </div>
         <div className="scenario-cols">
           <div className="scenario-col">

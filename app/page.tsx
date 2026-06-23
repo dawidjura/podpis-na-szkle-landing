@@ -10,6 +10,7 @@ import Audience from "@/components/Audience";
 import Guests from "@/components/Guests";
 import RegistrationForm from "@/components/RegistrationForm";
 import RegistrationTeaser from "@/components/RegistrationTeaser";
+import IntroBand from "@/components/IntroBand";
 import Consult from "@/components/Consult";
 import Organizers from "@/components/Organizers";
 import Footer from "@/components/Footer";
@@ -23,8 +24,9 @@ export default function Home() {
         <EventBand />
         <Program />
         <RegistrationTeaser />
-        <Agenda />
+        <IntroBand />
         <Learn />
+        <Agenda />
         <Scenarios />
         <Why />
         <Audience />
