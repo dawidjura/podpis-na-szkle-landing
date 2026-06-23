@@ -328,13 +328,11 @@ body {
 }
 .sec-program h2 {
   font-family: var(--font-serif); font-weight: 400;
-  /* Jedna linia; skalowanie żeby nie wychodziło poza .page (overflow-x: hidden) */
   font-size: clamp(22px, 1.65vw + 1.1rem, 64px);
   line-height: 1.15;
   color: var(--text); margin: 0; max-width: none;
   flex: 1 1 auto;
   min-width: 0;
-  white-space: nowrap;
 }
 @supports (font-size: 1cqi) {
   .sec-program h2 {
@@ -360,68 +358,10 @@ body {
 @media (max-width: 1459px) {
   .sec-program-trytytka { display: none; }
 }
-.program-cols {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  gap: clamp(20px, 2.5vw, 32px);
-  width: 100%;
-  max-width: 1418px;
-  min-width: 0;
-}
-.program-col {
-  min-width: 0;
-  width: 100%;
-  max-width: min(699px, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(22px, 2.2vw, 28px);
-  align-items: flex-start;
-}
-.program-body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 100%;
-  min-width: 0;
-}
-.program-min {
-  font-family: var(--font-serif); font-weight: 400;
-  font-size: clamp(28px, 2.2vw + 1rem, 40px);
-  line-height: 1.1;
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
-}
-@supports (font-size: 1cqi) {
-  .program-min {
-    font-size: clamp(28px, 2.5cqi + 1rem, 40px);
-  }
-}
-.program-col:first-child .program-min { color: var(--blue-light); }
-.program-col:last-child .program-min { color: var(--blue-dark); }
-.program-col h3 {
-  font-weight: 600; font-size: 16px; line-height: 24px;
-  margin: 0 0 14px;
-  color: var(--text);
-}
-.program-col p {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--text);
-  margin: 0;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
 @media (max-width: 1300px) {
   .sec-program { min-height: 0; }
   .sec-program-inner { min-height: 0; padding: 56px clamp(20px, 10.5vw, 202px) 72px; }
   .sec-program-stack { position: static; transform: none; left: auto; top: auto; width: 100%; max-width: 1418px; }
-  .program-cols {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(16px, 2vw, 28px);
-  }
-  .program-col { max-width: 100%; }
 }
 
 /* —— Agenda —— */
@@ -720,6 +660,65 @@ body {
     left: 0;
     transform: translate(0, calc(-50% - 0.5px));
   }
+}
+
+/* —— Intro band (biała sekcja między formularzem a Learn) —— */
+.sec-intro-band {
+  background: #fff;
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(46, 46, 55, 0.12);
+}
+.intro-band-inner {
+  width: 100%;
+  max-width: 1287px;
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 96px) clamp(24px, 10.5vw, 203px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 32px);
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.sec-intro-band h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1.15;
+  margin: 0;
+  max-width: 900px;
+}
+.intro-band-lead {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.5;
+  font-weight: 400;
+  margin: 0;
+  max-width: 720px;
+}
+.intro-band-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+}
+.intro-band-list li {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.intro-band-list li strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.intro-band-list li span {
+  font-weight: 300;
+  color: var(--text);
 }
 
 /* —— Learn split ——
@@ -2032,14 +2031,7 @@ a.form-submit--anchor {
   .sec-program h2 {
     font-size: 36px;
     line-height: 44px;
-    white-space: nowrap;
   }
-  .program-cols {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .program-col { max-width: 100%; }
-  .program-min { font-size: 32px; }
 
   /* — Agenda — */
   .sec-agenda {
@@ -2245,9 +2237,7 @@ a.form-submit--anchor {
   .sec-program h2 {
     font-size: clamp(15px, 4.2vw, 28px);
     line-height: 1.25;
-    white-space: nowrap;
   }
-  .program-min { font-size: 28px; line-height: 20px; }
 
   .sec-agenda h2 { font-size: 28px; line-height: 36px; }
   .sec-agenda .tl-num { font-size: 32px; line-height: 40px; }
