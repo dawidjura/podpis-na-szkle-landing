@@ -359,7 +359,7 @@ body {
 /* —— Agenda —— */
 .sec-agenda {
   min-height: 1046px;
-  padding: 132px 0 120px;
+  padding: 132px 0 48px;
   background: #fff;
   color: var(--text);
   position: relative;
@@ -476,7 +476,7 @@ body {
   .sec-agenda {
     min-height: 0;
     padding-top: clamp(56px, 8vw, 80px);
-    padding-bottom: clamp(56px, 8vw, 80px);
+    padding-bottom: clamp(32px, 5vw, 48px);
     padding-left: max(56px, calc(20px + env(safe-area-inset-left, 0px)));
     padding-right: max(56px, calc(20px + env(safe-area-inset-right, 0px)));
   }
@@ -900,10 +900,10 @@ body {
 /* —— Scenarios —— */
 .sec-scenarios {
   background: #fff; color: var(--text); width: 100%;
-  max-width: none; box-sizing: border-box; isolation: isolate; padding: 80px 0;
+  max-width: none; box-sizing: border-box; isolation: isolate; padding: 32px 0 80px;
 }
 .scenarios-inner {
-  padding: clamp(40px, 5vw, 62px) max(24px, min(203px, 12vw));
+  padding: clamp(24px, 3vw, 40px) max(24px, min(203px, 12vw)) clamp(40px, 5vw, 62px);
   display: flex; flex-direction: column;
   gap: clamp(28px, 4vw, 50px); align-items: flex-start; width: 100%; max-width: none;
   box-sizing: border-box; min-width: 0;
@@ -941,7 +941,7 @@ body {
 .scenario-col ul { margin: 0; padding-left: 1.5em; list-style: disc; }
 .scenario-col li { margin: 0; padding-left: 0.25em; }
 @media (max-width: 1200px) {
-  .sec-scenarios { padding: 48px 0; }
+  .sec-scenarios { padding: 24px 0 48px; }
   .scenarios-inner { padding: 48px max(32px, min(12vw, 80px)); }
   .scenario-cols { max-width: none; }
   .scenario-col {
@@ -952,7 +952,7 @@ body {
   }
 }
 @media (max-width: 640px) {
-  .sec-scenarios { padding: 32px 0; }
+  .sec-scenarios { padding: 24px 0 32px; }
   .scenarios-inner { padding: 40px max(20px, env(safe-area-inset-left)) 40px max(20px, env(safe-area-inset-right)); }
   .sec-scenarios h2 { font-size: clamp(28px, 8vw, 40px); line-height: 1.15; }
   .sec-scenarios .sub { font-size: clamp(16px, 4vw, 20px); line-height: 1.45; }
@@ -2025,7 +2025,7 @@ a.form-submit--anchor {
   /* — Agenda — */
   .sec-agenda {
     padding-top: 50px;
-    padding-bottom: 50px;
+    padding-bottom: 32px;
     padding-left: max(56px, calc(20px + env(safe-area-inset-left, 0px)));
     padding-right: max(56px, calc(20px + env(safe-area-inset-right, 0px)));
     min-height: 0;
@@ -2049,7 +2049,7 @@ a.form-submit--anchor {
   .learn-copy h2 { font-size: 32px; line-height: 40px; }
 
   /* — Scenarios — */
-  .sec-scenarios { padding: 48px 0; }
+  .sec-scenarios { padding: 24px 0 48px; }
   .scenarios-inner {
     padding: 0 max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
     gap: 32px;
