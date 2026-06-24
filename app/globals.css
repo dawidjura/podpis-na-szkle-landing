@@ -294,68 +294,6 @@ body {
   .event-stat strong { font-size: 36px; line-height: 52px; }
 }
 
-/* —— Program —— */
-.sec-program {
-  position: relative; width: 100%; min-height: 450px;
-  padding: 0; background: #fff;
-  overflow-x: visible; overflow-y: visible;
-  border-top: 1px solid var(--blue-dark);
-}
-.sec-program-inner {
-  position: relative; z-index: 1; box-sizing: border-box;
-  width: 100%; max-width: 1920px; margin: 0 auto; min-height: 450px; padding: 0;
-}
-.sec-program-stack {
-  position: absolute; left: 202px;
-  top: calc(50% - 11px); transform: translateY(-50%);
-  box-sizing: border-box; display: flex; flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(24px, 3vw, 32px);
-  width: min(1418px, calc(100% - 404px)); max-width: 1418px;
-  min-width: 0;
-  container-type: inline-size;
-  container-name: program-stack;
-}
-/* Figma 256:18057 — jeden wiersz: tytuł + strzałki skrajnie w prawo (flex); <1460px bez SVG */
-.sec-program-heading-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(16px, 3vw, 40px);
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-.sec-program-heading-row .band-title {
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: none;
-}
-.sec-program-trytytka {
-  flex: 0 0 auto;
-  margin-left: auto;
-  width: min(611.542px, 38%);
-  max-width: 611.542px;
-  min-width: 0;
-  transform: rotate(180deg);
-  transform-origin: right center;
-  pointer-events: none;
-}
-@supports (width: 1cqi) {
-  .sec-program-trytytka {
-    width: min(611.542px, min(48%, 42cqi));
-  }
-}
-.sec-program-trytytka img { display: block; width: 100%; height: auto; }
-@media (max-width: 1459px) {
-  .sec-program-trytytka { display: none; }
-}
-@media (max-width: 1300px) {
-  .sec-program { min-height: 0; }
-  .sec-program-inner { min-height: 0; padding: 56px clamp(20px, 10.5vw, 202px) 72px; }
-  .sec-program-stack { position: static; transform: none; left: auto; top: auto; width: 100%; max-width: 1418px; }
-}
-
 /* —— Agenda —— */
 .sec-agenda {
   min-height: 1046px;
@@ -664,7 +602,7 @@ body {
 }
 .intro-band-inner {
   width: 100%;
-  max-width: 1287px;
+  max-width: 1920px;
   margin: 0 auto;
   padding: clamp(56px, 7vw, 96px) clamp(24px, 10.5vw, 203px);
   display: flex;
@@ -672,6 +610,16 @@ body {
   gap: clamp(24px, 3vw, 32px);
   align-items: flex-start;
   box-sizing: border-box;
+}
+.sec-intro-band .band-title {
+  max-width: none;
+  width: 100%;
+  font-size: clamp(28px, 3.1vw, 56px);
+}
+@media (min-width: 900px) {
+  .sec-intro-band .band-title {
+    white-space: nowrap;
+  }
 }
 .band-title {
   font-family: var(--font-serif);
@@ -681,6 +629,52 @@ body {
   margin: 0;
   max-width: 900px;
   color: var(--text);
+}
+.intro-band-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: clamp(28px, 4vw, 56px);
+  width: 100%;
+  max-width: 1100px;
+}
+.intro-band-stat {
+  flex: 1 1 min(200px, 100%);
+  min-width: 0;
+}
+.intro-band-stat-num {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.1;
+  color: var(--blue-dark);
+  letter-spacing: -0.02em;
+}
+.intro-band-stat-label {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.5;
+  font-weight: 400;
+  margin: 0;
+  max-width: 24ch;
+  color: var(--text);
+}
+.intro-band-stat-label .intro-band-stat-num {
+  display: block;
+  margin-bottom: 6px;
+}
+@media (max-width: 899px) {
+  .intro-band-stats {
+    flex-direction: column;
+    gap: 28px;
+  }
+  .intro-band-stat {
+    flex: none;
+    width: 100%;
+  }
+  .intro-band-stat-label {
+    max-width: none;
+  }
 }
 .intro-band-lead {
   font-family: var(--font-sans);
@@ -2013,14 +2007,6 @@ a.form-submit--anchor {
   .event-stat:nth-child(4) { width: calc(50% - 20px); min-width: 0; }
   .event-stat strong { font-size: 32px; line-height: 48px; }
   .event-stat:nth-child(1) strong { white-space: normal; }
-
-  /* — Program — */
-  .sec-program { min-height: 0; }
-  .sec-program-inner { min-height: 0; padding: 48px 20px; }
-  .sec-program-stack {
-    position: static; transform: none; left: auto; top: auto;
-    width: 100%; max-width: none;
-  }
 
   /* — Agenda — */
   .sec-agenda {
