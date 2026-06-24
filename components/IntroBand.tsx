@@ -1,7 +1,7 @@
 const BENEFITS = [
   { value: "50%", label: "krótszy DSO" },
-  { value: "100%", label: "dostępności dokumentacji" },
-  { value: "0%", label: "zagubionych dokumentów" },
+  { value: "90%", label: "niższe koszty obsługi" },
+  { value: "97%", label: "dokładności zamówień" },
 ] as const;
 
 export default function IntroBand() {
@@ -17,9 +17,10 @@ export default function IntroBand() {
         </h2>
         <div className="intro-band-stats">
           {BENEFITS.map(({ value, label }) => (
-            <div key={value} className="intro-band-stat">
+            <div key={label} className="intro-band-stat">
               <p className="intro-band-stat-label">
-                <span className="intro-band-stat-num">{value}</span> {label}
+                <span className="intro-band-stat-num">{value}</span>
+                <span className="intro-band-stat-desc">{label}</span>
               </p>
             </div>
           ))}

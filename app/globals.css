@@ -643,6 +643,8 @@ body {
   min-width: 0;
 }
 .intro-band-stat-num {
+  display: block;
+  margin-bottom: 6px;
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: clamp(40px, 5vw, 64px);
@@ -650,18 +652,17 @@ body {
   color: var(--blue-dark);
   letter-spacing: -0.02em;
 }
-.intro-band-stat-label {
+.intro-band-stat-desc {
+  display: block;
   font-family: var(--font-sans);
   font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.5;
   font-weight: 400;
-  margin: 0;
-  max-width: 24ch;
   color: var(--text);
 }
-.intro-band-stat-label .intro-band-stat-num {
-  display: block;
-  margin-bottom: 6px;
+.intro-band-stat-label {
+  margin: 0;
+  max-width: 28ch;
 }
 @media (max-width: 899px) {
   .intro-band-stats {
