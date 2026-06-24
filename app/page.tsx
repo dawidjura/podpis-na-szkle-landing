@@ -1,7 +1,6 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import EventBand from "@/components/EventBand";
-import Program from "@/components/Program";
 import Agenda from "@/components/Agenda";
 import Learn from "@/components/Learn";
 import Scenarios from "@/components/Scenarios";
@@ -22,12 +21,11 @@ export default function Home() {
       <div className="page">
         <Hero />
         <EventBand />
-        <Program />
+        <Scenarios />
         <RegistrationTeaser />
         <IntroBand />
         <Learn />
         <Agenda />
-        <Scenarios />
         <Why />
         <Audience />
         <Guests />
