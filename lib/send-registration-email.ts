@@ -1,24 +1,10 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { ClientSecretCredential } from "@azure/identity";
-import { Client } from "@microsoft/microsoft-graph-client";
-import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials";
+import { getGraphClient } from "@/lib/mailing/graph";
+import { getPublicOrigin, getWebinarJoinUrl } from "@/lib/mailing/site-url";
 
-/** Inline CID — baner wysyłany razem z mailem (Graph), bez zależności od publicznego URL (Vercel Shield, zły SITE_URL itd.). */
+/** Inline CID — baner wysyłany razem z mailem (Graph), bez zależności od publicznego URL. */
 const NEWSLETTER_BANNER_CID = "podpis-newsletter-banner";
-
-const TENANT_ID = process.env.MICROSOFT_TENANT_ID ?? "";
-const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID ?? "";
-const CLIENT_SECRET = process.env.MICROSOFT_CLIENT_SECRET ?? "";
-
-const getCredential = () =>
-  new ClientSecretCredential(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
-
-const getAuthProvider = (scopes: string[]) =>
-  new TokenCredentialAuthenticationProvider(getCredential(), { scopes });
-
-const getGraphClient = (scopes: string[]) =>
-  Client.initWithMiddleware({ authProvider: getAuthProvider(scopes) });
 
 /** Powiadomienia o każdym nowym zapisie (Graph `sendMail` z konta no-reply). */
 const WEBINAR_SIGNUP_STAFF_RECIPIENTS = [
@@ -34,33 +20,6 @@ export interface WebinarFormData {
   consentMarketing?: boolean;
   /** Osobisty link auto-login z ClickMeeting (priorytet nad CLICKMEETING_WEBINAR_URL). */
   webinarJoinUrl?: string;
-}
-
-/** Public origin for email images and links. Without it, the banner image is omitted (mail clients need an absolute URL).
- *  With your own domain, set in production (Vercel / hosting env):
- *  - SITE_URL=https://twoja-domena.pl  (recommended, server-only), or
- *  - NEXT_PUBLIC_SITE_URL=https://twoja-domena.pl
- *  VERCEL_URL is used only as fallback (often *.vercel.app, not your custom domain). */
-/** Publiczny URL pokoju webinarowego (link z panelu ClickMeeting, nie API id). */
-function getWebinarJoinUrl(): string {
-  const url = process.env.CLICKMEETING_WEBINAR_URL?.trim();
-  if (!url) return "";
-  return url.replace(/\/$/, "");
-}
-
-function getPublicOrigin(): string {
-  const normalize = (raw: string | undefined) => {
-    const u = raw?.trim();
-    if (!u) return "";
-    return u.replace(/\/$/, "");
-  };
-  const siteUrl = normalize(process.env.SITE_URL);
-  if (siteUrl) return siteUrl;
-  const nextPublic = normalize(process.env.NEXT_PUBLIC_SITE_URL);
-  if (nextPublic) return nextPublic;
-  const vercel = process.env.VERCEL_URL?.trim();
-  if (vercel) return `https://${vercel.replace(/^https?:\/\//, "")}`;
-  return "";
 }
 
 function loadNewsletterBannerBase64(): string | null {

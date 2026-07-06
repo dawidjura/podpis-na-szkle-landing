@@ -12,6 +12,62 @@ interface PipedriveV2PersonResponse {
   error?: string;
 }
 
+interface PipedriveV2PersonGetResponse {
+  data?: {
+    id: number;
+    name?: string;
+    emails?: Array<{ value?: string; primary?: boolean }>;
+  };
+  error?: string;
+}
+
+export interface PipedrivePersonInfo {
+  id: number;
+  name: string;
+  email: string | null;
+}
+
+export async function getPerson(
+  personId: number,
+): Promise<PipedrivePersonInfo | null> {
+  const baseUrl = getPipedriveV2BaseUrl();
+  const token = getPipedriveApiToken();
+  const url = `${baseUrl}/persons/${personId}`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { "x-api-token": token },
+    cache: "no-store",
+  });
+
+  let data: PipedriveV2PersonGetResponse;
+  try {
+    data = (await res.json()) as PipedriveV2PersonGetResponse;
+  } catch (parseErr) {
+    console.error("[Pipedrive] getPerson response parse error", parseErr);
+    return null;
+  }
+  if (!res.ok || data.error || !data.data) {
+    console.error("[Pipedrive] getPerson failed", {
+      status: res.status,
+      personId,
+      response: data.error ?? data,
+    });
+    return null;
+  }
+
+  const emails = data.data.emails ?? [];
+  const primary = emails.find((e) => e.primary && e.value?.trim());
+  const fallback = emails.find((e) => e.value?.trim());
+  const email = (primary?.value ?? fallback?.value ?? "").trim() || null;
+
+  return {
+    id: data.data.id,
+    name: (data.data.name ?? "").trim() || email || `person-${personId}`,
+    email,
+  };
+}
+
 export async function createPerson(
   params: CreatePersonParams
 ): Promise<number | null> {

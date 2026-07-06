@@ -1,37 +1,50 @@
-const NEXT_DOMAIN = (process.env.NEXT_PIPEDRIVE_DOMAIN ?? '').trim();
-const NEXT_TOKEN = process.env.NEXT_PIPEDRIVE_API_TOKEN ?? '';
-
-const PIPEDRIVE_DOMAIN = NEXT_DOMAIN
-  .replace(/^https?:\/\//i, '')
-  .replace(/\/.*$/, '')
-  .replace(/\.pipedrive\.com.*$/i, '')
-  .toLowerCase() || NEXT_DOMAIN;
-
-const PIPEDRIVE_PIPELINE_ID = parseInt(process.env.NEXT_PIPEDRIVE_PIPELINE_ID ?? '1', 10) || 1;
-const PIPEDRIVE_STAGE_ID = process.env.NEXT_PIPEDRIVE_STAGE_ID
-  ? parseInt(process.env.NEXT_PIPEDRIVE_STAGE_ID, 10)
-  : undefined;
-
-export function isPipedriveConfigured(): boolean {
-  return !!PIPEDRIVE_DOMAIN && !!NEXT_TOKEN;
+function readEnv(key: string): string {
+  return (process.env[key] ?? "").trim();
 }
 
-export function getPipedriveV2BaseUrl(): string {
-  return `https://${PIPEDRIVE_DOMAIN}.pipedrive.com/api/v2`;
+/** Akceptuje `euvicsa` albo pełny URL `https://euvicsa.pipedrive.com`. */
+export function normalizePipedriveDomain(raw: string): string {
+  let d = raw.trim();
+  if (!d) return "";
+
+  d = d.replace(/^https?:\/\//i, "");
+  d = d.replace(/\/.*$/, "");
+  d = d.replace(/\.pipedrive\.com.*$/i, "");
+  return d.toLowerCase();
 }
 
-export function getPipedriveApiToken(): string {
-  return NEXT_TOKEN;
+function getDomainRaw(): string {
+  return readEnv("NEXT_PIPEDRIVE_DOMAIN");
 }
 
-export function getPipedrivePipelineId(): number {
-  return PIPEDRIVE_PIPELINE_ID;
-}
-
-export function getPipedriveStageId(): number | undefined {
-  return PIPEDRIVE_STAGE_ID;
+function getTokenRaw(): string {
+  return readEnv("NEXT_PIPEDRIVE_API_TOKEN");
 }
 
 export function getPipedriveCompanyDomain(): string {
-  return PIPEDRIVE_DOMAIN;
+  return normalizePipedriveDomain(getDomainRaw());
+}
+
+export function isPipedriveConfigured(): boolean {
+  return !!getPipedriveCompanyDomain() && !!getTokenRaw();
+}
+
+export function getPipedriveV2BaseUrl(): string {
+  return `https://${getPipedriveCompanyDomain()}.pipedrive.com/api/v2`;
+}
+
+export function getPipedriveApiToken(): string {
+  return getTokenRaw();
+}
+
+export function getPipedrivePipelineId(): number {
+  const n = parseInt(readEnv("NEXT_PIPEDRIVE_PIPELINE_ID") || "1", 10);
+  return Number.isFinite(n) ? n : 1;
+}
+
+export function getPipedriveStageId(): number | undefined {
+  const raw = readEnv("NEXT_PIPEDRIVE_STAGE_ID");
+  if (!raw) return undefined;
+  const n = parseInt(raw, 10);
+  return Number.isFinite(n) ? n : undefined;
 }

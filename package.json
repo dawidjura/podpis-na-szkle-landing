@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "mail:pre:fetch": "tsx scripts/fetch-prewebinar-recipients.ts",
+    "mail:pre:preview": "tsx scripts/preview-prewebinar.ts",
+    "mail:pre:self": "tsx scripts/send-prewebinar.ts --send --self=karol.legut@euvic.pl"
   },
   "dependencies": {
     "@azure/identity": "^4.13.1",
@@ -21,6 +24,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.3",
     "typescript": "^5"
   }
 }

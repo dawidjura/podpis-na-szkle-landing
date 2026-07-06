@@ -253,3 +253,48 @@ export async function registerClickMeetingParticipant(
   const joinUrl = await createAutologinJoinUrl(apiKey, roomId, participant, roomUrl);
   return { joinUrl };
 }
+
+export type AutologinParticipant = {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+};
+
+function resolveParticipantNames(p: AutologinParticipant): ClickMeetingParticipant {
+  if (p.firstName || p.lastName) {
+    return {
+      email: p.email.trim().toLowerCase(),
+      firstName: p.firstName?.trim() ?? "",
+      lastName: p.lastName?.trim() ?? "",
+    };
+  }
+  const full = (p.name ?? "").trim();
+  if (full) {
+    const parts = full.split(/\s+/);
+    return {
+      email: p.email.trim().toLowerCase(),
+      firstName: parts[0] ?? "",
+      lastName: parts.slice(1).join(" "),
+    };
+  }
+  const local = p.email.split("@")[0] ?? p.email;
+  return {
+    email: p.email.trim().toLowerCase(),
+    firstName: local,
+    lastName: "",
+  };
+}
+
+/**
+ * Osobisty link auto-login dla już zarejestrowanego uczestnika (bez ponownej rejestracji).
+ */
+export async function getAutologinJoinUrl(
+  participant: AutologinParticipant,
+): Promise<string> {
+  const { apiKey, roomId } = getClickMeetingConfig();
+  const conference = await fetchConference(apiKey, roomId);
+  const roomUrl = resolveConferenceRoomUrl(conference);
+  const resolved = resolveParticipantNames(participant);
+  return createAutologinJoinUrl(apiKey, roomId, resolved, roomUrl);
+}

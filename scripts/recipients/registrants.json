@@ -1,0 +1,15 @@
+{
+  "fetchedAt": "2026-07-02T10:55:09.107Z",
+  "source": {
+    "pipeline": "Webinar",
+    "pipelineId": 8
+  },
+  "count": 188,
+  "stats": {
+    "dealsMatched": 200,
+    "skippedNoPerson": 0,
+    "skippedNoEmail": 0,
+    "uniquePersons": 200
+  },
+  "recipients": []
+}
